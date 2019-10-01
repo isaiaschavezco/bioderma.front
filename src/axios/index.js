@@ -1,8 +1,7 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-    //baseURL: 'http://localhost:3000/',
-    baseURL: 'https://api.drenarm.com/',
+    baseURL: 'http://localhost:3000/',
     // headers: {
     //     Authorization: {
     //         toString() {
