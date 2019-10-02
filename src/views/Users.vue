@@ -4,7 +4,7 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
-            <a-tab-pane tab="Usuarios" key="1">
+            <a-tab-pane tab="USUARIOS" key="1">
               <a-input-search placeholder="Buscar usuario" enterButton />
               <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
@@ -14,7 +14,7 @@
                 </span>
               </a-table>
             </a-tab-pane>
-            <a-tab-pane tab="Cadenas" key="2" style="padding-bottom: 2rem;">
+            <a-tab-pane tab="CADENAS" key="2">
               <a-input-search placeholder="Buscar cadena" @search="onSearchChains" enterButton />
               <a-table
                 :columns="chainColumns"

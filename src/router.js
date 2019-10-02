@@ -20,6 +20,11 @@ export default new Router({
         path: 'Users',
         name: 'users',
         component: () => import(/* webpackChunkName: "Plataforma" */ './views/Users.vue')
+      },
+      {
+        path: 'Training',
+        name: 'training',
+        component: () => import(/* webpackChunkName: "Plataforma" */ './views/Training.vue')
       }
       ]
       // beforeEnter(to, from, next) {

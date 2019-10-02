@@ -41,7 +41,6 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: transparent; padding: 0"></a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }">
         <router-view />
       </a-layout-content>
@@ -60,6 +59,9 @@ export default {
       switch (e.key) {
         case "1":
           this.$router.push({ name: "users" });
+          break;
+        case "2":
+          this.$router.push({ name: "training" });
           break;
         default:
           break;
