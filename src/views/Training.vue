@@ -55,11 +55,10 @@
     <a-modal
       title="CARGAR NUEVO PDF"
       v-model="loadFileModal"
-      @ok="handleOk"
-      :confirmLoading="confirmLoading"
+      :confirmLoading="loadingFileForm"
       centered
     >
-      <a-form :form="fileForm" @submit="handleSubmit">
+      <a-form :form="fileForm">
         <a-form-item>
           <a-input
             placeholder="Ingresa un título para el archivo"
@@ -101,11 +100,14 @@
         <a-form-item>
           <div class="dropbox">
             <a-upload-dragger
-              v-decorator="['file', {rules: [{ required: true, message: 'Favor de cargar un archivo PDF' }]
+              v-decorator="['upload', {rules: [{ required: true, message: 'Favor de cargar un archivo PDF' }]
           }]"
-              name="files"
-              :action="uploadFile"
+              name="upload"
+              action="http://localhost:3000/upload/1"
               accept=".pdf"
+              @change="handleChangeFileUpload"
+              :beforeUpload="beforeUpload"
+              :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
                 <a-icon type="inbox" />
@@ -150,7 +152,9 @@ export default {
       showLoadingMore: true,
       loadFileModal: false,
       fileForm: this.$form.createForm(this),
-      submenuItems: []
+      submenuItems: [],
+      fileList: [],
+      loadingFileForm: false
     };
   },
   methods: {
@@ -168,12 +172,36 @@ export default {
       this.fileForm.validateFields(async (err, values) => {
         if (!err) {
           try {
-            console.log("form: ", values);
+            const response = await this.$axios.post("submenu", {
+              menu: values.menu,
+              submenu: values.submenu,
+              title: values.title,
+              fileUrl: values.upload.fileList[0].response
+            });
+
+            this.loadFileModal = false;
+            this.fileForm.resetFields();
+            this.fileList = [];
+
+            if (response.data == 0) {
+              this.getFiles(this.activeTab);
+              this.showNotification(
+                "success",
+                "Archivo cargado",
+                "Se ha cargado el archivo correctamente."
+              );
+            } else {
+              this.showNotification(
+                "warning",
+                "Archivo existente",
+                "La sección ya cuenta con un archivo, si desea registrar uno nuevo elimine el archivo actual."
+              );
+            }
           } catch (err) {
             this.showNotification(
               "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
+              "Error al realizar el registro",
+              "Ha ocurrido un error al registrar esta sección."
             );
           }
         }
@@ -186,8 +214,27 @@ export default {
       const response = await this.$axios(`submenu/items/${menuId}`);
       this.submenuItems = response.data;
     },
-    uploadFile(file) {
-      console.log("file: ", file);
+    handleChangeFileUpload(info) {
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      this.fileList = fileList;
+    },
+    beforeUpload(file) {
+      let status = true;
+      this.fileForm.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
+      });
+      return status;
+    },
+    showNotification(type, title, message) {
+      this.$notification[type]({
+        message: title,
+        description: message
+      });
     }
   },
   mounted() {
