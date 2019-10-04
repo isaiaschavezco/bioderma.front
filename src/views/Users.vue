@@ -49,7 +49,7 @@
                 shape="circle"
                 icon="user-add"
                 size="large"
-                @click="() => modal2Visible = true"
+                @click="() => inviteUserModal = true"
               />
             </a-col>
             <a-col>Nuevo usuario</a-col>
@@ -73,24 +73,37 @@
     <a-modal
       title="Invita a un nuevo miembro a ser parte de Bioderma"
       centered
-      v-model="modal2Visible"
-      @ok="() => modal2Visible = false"
-      okText="INVITAR"
+      v-model="inviteUserModal"
     >
-      <p>
-        <a-input placeholder="Ingresa el correo electrónico del nuevo usuario" />
-      </p>
-      <p>
-        <a-radio-group v-model="value">
-          <a-radio :value="1">NAOS</a-radio>
-          <a-radio :value="2">Farmacia</a-radio>
-        </a-radio-group>
-      </p>
+      <a-form :form="inviteUserForm">
+        <a-form-item>
+          <a-input
+            placeholder="Ingresa el correo electrónico del nuevo usuario"
+            v-decorator="[
+          'email',
+          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
+        ]"
+          />
+        </a-form-item>
+        <a-form-item>
+          <a-radio-group
+            v-decorator="[
+          'type',
+          {rules: [{ required: true, message: 'Favor de seleccionar un tipo de usuario' }]}
+        ]"
+          >
+            <a-radio :value="1">NAOS</a-radio>
+            <a-radio :value="2">Farmacia</a-radio>
+          </a-radio-group>
+        </a-form-item>
+      </a-form>
       <template slot="footer">
         <a-button
           key="submit"
           type="primary"
           style="background-color:#001529; border: 1px solid #001529;"
+          :loading="inviteUserLoading"
+          @click="onSubmitInvitationForm"
         >INVITAR</a-button>
       </template>
     </a-modal>
@@ -231,13 +244,16 @@ export default {
       data,
       columns,
       chainColumns,
-      modal2Visible: false,
+      inviteUserModal: false,
       value: 1,
       activeTab: 1,
       chainModal: false,
       chainForm: this.$form.createForm(this),
+      inviteUserForm: this.$form.createForm(this),
       chains: [],
-      tableChains: []
+      tableChains: [],
+      inviteUserModal: false,
+      inviteUserLoading: false
     };
   },
   methods: {
@@ -346,6 +362,36 @@ export default {
       } else {
         this.tableChains = newChain;
       }
+    },
+    onSubmitInvitationForm() {
+      this.inviteUserForm.validateFields(async (err, values) => {
+        if (!err) {
+          this.inviteUserLoading = true;
+          try {
+            const response = await this.$axios.post("user/invite", {
+              email: values.email.trim(),
+              type: values.type
+            });
+            this.inviteUserLoading = false;
+            this.inviteUserForm.resetFields();
+            this.inviteUserModal = false;
+            if (response.data == 0) {
+              this.showNotification(
+                "success",
+                "Invitación enviada",
+                "La invitación ha sido enviada correctamente."
+              );
+            }
+          } catch (err) {
+            this.inviteUserLoading = false;
+            this.showNotification(
+              "error",
+              "Error al agregar cadena",
+              "Ha ocurrido un error al registrar la cadena."
+            );
+          }
+        }
+      });
     }
   }
 };

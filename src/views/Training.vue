@@ -110,7 +110,7 @@
               :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
+                <a-icon type="file-pdf" />
               </p>
               <p class="ant-upload-text">Selecciona o suelta un archivo en esta área para cargarlo</p>
               <p class="ant-upload-hint">Únicamente archivos .pdf</p>
@@ -132,20 +132,6 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          value: "ANATOMÍA DE LA PIEL",
-          label: "1"
-        },
-        {
-          value: "ANATOMÍA DE LA PIEL",
-          label: "2"
-        },
-        {
-          value: "ANATOMÍA DE LA PIEL",
-          label: "3"
-        }
-      ],
       activeTab: 1,
       files: [],
       loadingMore: false,
