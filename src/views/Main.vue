@@ -66,6 +66,9 @@ export default {
         case "4":
           this.$router.push({ name: "campaing" });
           break;
+        case "5":
+          this.$router.push({ name: "club" });
+          break;
         default:
           break;
       }
