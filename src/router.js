@@ -16,7 +16,7 @@ export default new Router({
       component: Login
     },
     {
-      path: "/Forms",
+      path: "/Register",
       name: "forms",
       component: Forms
     },
