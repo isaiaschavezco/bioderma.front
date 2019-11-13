@@ -21,20 +21,20 @@
             :defaultSelectedKeys="['1']"
             @click="onMenuSelect"
           >
-            <a-menu-item key="1">
+            <a-menu-item class="menu-item" key="1">
               <img src="../assets/icons/Usuarios_Inactivo.png" class="icon" alt />
               <span>Usuarios</span>
             </a-menu-item>
-            <a-menu-item class="item" key="2">
+            <a-menu-item class="menu-item" key="2">
               <img src="../assets/icons/Capacitacion_Inactivo.png" class="icon" alt />
               <span>Capacitación</span>
             </a-menu-item>
-            <a-menu-item class="item" key="3">
+            <a-menu-item class="menu-item" key="3">
               <img src="../assets/icons/Blog_Inactivo.png" class="icon" alt />
               <span>Blog</span>
             </a-menu-item>
             <a-menu-item class="item" key="4">
-              <img src="../assets/icons/Temas_Inactivo.png" class="icon" alt />
+              <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
               <span>Trivia</span>
             </a-menu-item>
             <a-menu-item class="item" key="5">
@@ -50,7 +50,7 @@
               <span>Mensajeria</span>
             </a-menu-item>
             <a-menu-item class="item" key="8">
-              <img src="../assets/icons/Club_Bioderma_Inactivo.png" class="icon" alt />
+              <img src="../assets/icons/Temas_Inactivo.png" class="icon" alt />
               <span>Temas</span>
             </a-menu-item>
           </a-menu>
@@ -116,11 +116,14 @@ export default {
   background: #fff;
 }
 
+/* [class~="menu-item"]:hover {
+  background: #fff;
+} */
+
 .icon {
   width: 22px;
   margin-right: 10px;
 }
-
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
   background-color: #fff;

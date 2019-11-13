@@ -70,6 +70,7 @@
         </div>
       </a-col>
     </a-row>
+
     <a-modal
       title="Invita a un nuevo miembro a ser parte de Bioderma"
       centered
@@ -92,8 +93,12 @@
           {rules: [{ required: true, message: 'Favor de seleccionar un tipo de usuario' }]}
         ]"
           >
-            <a-radio :value="1">NAOS</a-radio>
-            <a-radio :value="2">Farmacia</a-radio>
+            <a-radio :value="1">
+              <span class="item-modal">NAOS</span>
+            </a-radio>
+            <a-radio :value="2">
+              <span class="item-modal">Farmacia</span>
+            </a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>
@@ -101,12 +106,13 @@
         <a-button
           key="submit"
           type="primary"
-          style="background-color:#001529; border: 1px solid #001529;"
+          style="background-color:##009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           :loading="inviteUserLoading"
           @click="onSubmitInvitationForm"
         >INVITAR</a-button>
       </template>
     </a-modal>
+
     <a-modal title="Registrar cadena" centered v-model="chainModal">
       <p>
         <a-form :form="chainForm">
@@ -123,9 +129,10 @@
       </p>
       <template slot="footer">
         <a-button
+          class="btn-center"
           @click="onSubmitChainForm"
           type="primary"
-          style="background-color:#001529; border: 1px solid #001529;"
+          style="background-color:##009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
         >REGISTRAR</a-button>
       </template>
     </a-modal>
@@ -428,5 +435,11 @@ export default {
 
 .column-right {
   margin-top: 65px;
+}
+
+.item-modal {
+  margin-right: 30px;
+  color: #526987;
+  font-weight: 500;
 }
 </style>
