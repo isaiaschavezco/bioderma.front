@@ -43,7 +43,7 @@
           </a-list>
         </div>
       </a-col>
-      <a-col :xs="{ span: 2 }" style="text-align:center;">
+      <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <a-row>
           <a-col>
             <a-button shape="circle" icon="file-add" size="large" @click="loadFileModal = true" />

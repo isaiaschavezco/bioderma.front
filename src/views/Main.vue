@@ -1,45 +1,62 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider collapsible v-model="collapsed">
-      <div class="logo" />
-      <!-- <div style="text-align:center; margin: 2rem 0rem;">
-        <img alt="logo" src="../assets/logo.png" slot="cover" width="80%" height="70rem" />
-      </div>-->
-      <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']" @click="onMenuSelect">
-        <a-menu-item key="1">
-          <a-icon type="user" />
-          <span>Usuarios</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera" />
-          <span>Capacitación</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload" />
-          <span>Blog</span>
-        </a-menu-item>
-        <a-menu-item key="4">
-          <a-icon type="upload" />
-          <span>Trivia</span>
-        </a-menu-item>
-        <a-menu-item key="5">
-          <a-icon type="upload" />
-          <span>Club Bioderma</span>
-        </a-menu-item>
-        <a-menu-item key="6">
-          <a-icon type="upload" />
-          <span>Notificaciones</span>
-        </a-menu-item>
-        <a-menu-item key="7">
-          <a-icon type="upload" />
-          <span>Mensajeria</span>
-        </a-menu-item>
-        <a-menu-item key="8">
-          <a-icon type="upload" />
-          <span>Temas</span>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-sider>
+    <div class="side">
+      <a-layout-sider>
+        <div style="text-align:center; padding: 2rem 0rem;" class="side">
+          <img
+            alt="logo"
+            src="../assets/Logo_NAOS_l_blanca.svg"
+            class="naos-logo"
+            slot="cover"
+            width="184"
+          />
+          <img alt="logo" src="../assets/Bioderma_Logo_blanco.svg" slot="cover" width="75" />
+        </div>
+
+        <div class="side">
+          <a-menu
+            style="background: #526987; "
+            theme="dark"
+            mode="inline"
+            :defaultSelectedKeys="['1']"
+            @click="onMenuSelect"
+          >
+            <a-menu-item key="1">
+              <img src="../assets/icons/Usuarios_Inactivo.png" class="icon" alt />
+              <span>Usuarios</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="2">
+              <img src="../assets/icons/Capacitacion_Inactivo.png" class="icon" alt />
+              <span>Capacitación</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="3">
+              <img src="../assets/icons/Blog_Inactivo.png" class="icon" alt />
+              <span>Blog</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="4">
+              <img src="../assets/icons/Temas_Inactivo.png" class="icon" alt />
+              <span>Trivia</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="5">
+              <img src="../assets/icons/Club_Bioderma_Inactivo.png" class="icon" alt />
+              <span>Club Bioderma</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="6">
+              <img src="../assets/icons/Notificacion_Inactivo.png" class="icon" alt />
+              <span>Notificaciones</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="7">
+              <img src="../assets/icons/Mensajeria_Inactivo.png" class="icon" alt />
+              <span>Mensajeria</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="8">
+              <img src="../assets/icons/Club_Bioderma_Inactivo.png" class="icon" alt />
+              <span>Temas</span>
+            </a-menu-item>
+          </a-menu>
+        </div>
+      </a-layout-sider>
+    </div>
     <a-layout>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }">
         <router-view />
@@ -69,6 +86,9 @@ export default {
         case "5":
           this.$router.push({ name: "club" });
           break;
+        case "7":
+          this.$router.push({ name: "messaging" });
+          break;
         default:
           break;
       }
@@ -85,5 +105,24 @@ export default {
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+}
+
+.side {
+  max-width: 100%;
+  background: #526987;
+}
+
+.main-content {
+  background: #fff;
+}
+
+.icon {
+  width: 22px;
+  margin-right: 10px;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+  background-color: #fff;
 }
 </style>

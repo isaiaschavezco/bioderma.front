@@ -1,0 +1,234 @@
+<template>
+  <div>
+    <a-row>
+      <a-col :xs="{ span: 19 } ">
+        <div style="margin-right:20px">
+          <a-card title="Nombre" class="container">
+            <div class="container-chat">
+              <a-card>
+                <span>Hola</span>
+              </a-card>
+            </div>
+          </a-card>
+          <a-card>
+            <div class>
+              <a-input placeholder="Escribe un mensaje" style="width: 95%; margin-right:10px" />
+              <a-button type="primary" shape="circle" icon="right-circle" :size="size" />
+              <!-- <a-input-search placeholder="input search text" @search="onSearch" size="large">
+                <a-button slot="enterButton">
+                  <a-icon type="right-circle" />
+                </a-button>
+              </a-input-search>-->
+            </div>
+          </a-card>
+        </div>
+      </a-col>
+      <a-col :xs="{ span: 5 }">
+        <div class="container-contacts" style>
+          <a-card title="CHAT" style="text-align:center; height: 38rem;">
+            <a-list
+              :grid="{ gutter: 2, column: 1 }"
+              :style="{ overflow: 'scroll'}"
+              style="height: 32rem;"
+              :dataSource="data"
+            >
+              <a-list-item slot="renderItem" slot-scope="item, index">
+                <span>{{item.name}}</span>
+                <a-icon type="phone" />
+              </a-list-item>
+            </a-list>
+          </a-card>
+        </div>
+      </a-col>
+    </a-row>
+  </div>
+</template>
+<script>
+const data = [
+  {
+    key: "1",
+    name: "John Brown",
+    email: "prueba@inmersys.com",
+    profile: "NAOS",
+    position: "Gerente",
+    points: 500
+  },
+  {
+    key: "2",
+    name: "Jim Green",
+    email: "prueba@inmersys.com",
+    profile: "NAOS",
+    position: "Gerente",
+    points: 500
+  },
+  {
+    key: "3",
+    name: "Joe Black",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "4",
+    name: "Sam Fisher",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "5",
+    name: "Master Chief",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "6",
+    name: "Ella no te ama",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "7",
+    name: "Josh Nicols",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "8",
+    name: "Pantera Rosa",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "9",
+    name: "Jefferson Gutierritos",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "10",
+    name: "Alvin Yakitori",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "1",
+    name: "John Brown",
+    email: "prueba@inmersys.com",
+    profile: "NAOS",
+    position: "Gerente",
+    points: 500
+  },
+  {
+    key: "2",
+    name: "Jim Green",
+    email: "prueba@inmersys.com",
+    profile: "NAOS",
+    position: "Gerente",
+    points: 500
+  },
+  {
+    key: "3",
+    name: "Joe Black",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "4",
+    name: "Sam Fisher",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "5",
+    name: "Master Chief",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "6",
+    name: "Ella no te ama",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "7",
+    name: "Josh Nicols",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "8",
+    name: "Pantera Rosa",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "9",
+    name: "Jefferson Gutierritos",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  },
+  {
+    key: "10",
+    name: "Alvin Yakitori",
+    email: "prueba@inmersys.com",
+    profile: "Farmacia",
+    position: "-",
+    points: 500
+  }
+];
+const chat = [];
+export default {
+  data() {
+    return {
+      data,
+      chat
+    };
+  },
+  methods: {
+    selectUser() {
+      alert("Usuario Seleccionado: ");
+    }
+  }
+};
+</script>
+<style>
+.container-chat {
+  background: #fff;
+  overflow: hidden;
+  margin-right: 10px;
+  height: 30em;
+}
+.container-contacts {
+  background: #fff;
+}
+</style>

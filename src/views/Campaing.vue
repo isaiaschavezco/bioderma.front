@@ -42,7 +42,7 @@
           </a-list>
         </div>
       </a-col>
-      <a-col :xs="{ span: 2 }" style="text-align:center;">
+      <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
         <a-row>
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="loadFileModal = true" />
@@ -286,4 +286,7 @@ export default {
 };
 </script>
 <style>
+.column-right-cam {
+  margin-top: 78px;
+}
 </style>

@@ -3,14 +3,13 @@ import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
 import Forms from "./views/Forms";
-import {
-  Form
-} from "ant-design-vue";
+import { Form } from "ant-design-vue";
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: "/",
       name: "login",
       component: Login
@@ -24,25 +23,36 @@ export default new Router({
       path: "/Main",
       name: "main",
       component: Main,
-      children: [{
-          path: 'Users',
-          name: 'users',
-          component: () => import( /* webpackChunkName: "Plataforma" */ './views/Users.vue')
+      children: [
+        {
+          path: "Users",
+          name: "users",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Users.vue")
         },
         {
-          path: 'Training',
-          name: 'training',
-          component: () => import( /* webpackChunkName: "Plataforma" */ './views/Training.vue')
+          path: "Training",
+          name: "training",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Training.vue")
         },
         {
-          path: 'Campaing',
-          name: 'campaing',
-          component: () => import( /* webpackChunkName: "Plataforma" */ './views/Campaing.vue')
+          path: "Campaing",
+          name: "campaing",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Campaing.vue")
         },
         {
-          path: 'Club',
-          name: 'club',
-          component: () => import( /* webpackChunkName: "Plataforma" */ './views/Club.vue')
+          path: "Club",
+          name: "club",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Club.vue")
+        },
+        {
+          path: "Messaging",
+          name: "messaging",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Messaging.vue")
         }
       ]
       // beforeEnter(to, from, next) {
@@ -52,6 +62,6 @@ export default new Router({
       //     next({ name: "login" });
       //   }
       // }
-    },
+    }
   ]
 });

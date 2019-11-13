@@ -35,7 +35,7 @@
           </a-tabs>
         </div>
       </a-col>
-      <a-col :xs="{ span: 2 }" style="text-align:center;">
+      <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <div v-if="activeTab == 1">
           <a-row>
             <a-col>
@@ -424,5 +424,9 @@ export default {
 .card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
   border-color: #fff;
   background: #fff;
+}
+
+.column-right {
+  margin-top: 65px;
 }
 </style>

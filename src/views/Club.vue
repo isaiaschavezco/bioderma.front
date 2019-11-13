@@ -30,7 +30,7 @@
           </a-list>
         </div>
       </a-col>
-      <a-col :xs="{ span: 2 }" style="text-align:center;">
+      <a-col class="column-right-club" :xs="{ span: 2 }" style="text-align:center;">
         <a-row>
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />
@@ -221,5 +221,8 @@ export default {
 }
 .center {
   text-align: center;
+}
+.column-right-club {
+  margin-top: 25px;
 }
 </style>
