@@ -430,7 +430,8 @@ export default {
 
 .card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
   border-color: #fff;
-  background: #fff;
+  background: #526987;
+  color: #fff;
 }
 
 .column-right {

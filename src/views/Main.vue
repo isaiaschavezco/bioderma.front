@@ -116,16 +116,8 @@ export default {
   background: #fff;
 }
 
-/* [class~="menu-item"]:hover {
-  background: #fff;
-} */
-
 .icon {
   width: 22px;
   margin-right: 10px;
-}
-.ant-menu.ant-menu-dark .ant-menu-item-selected,
-.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
-  background-color: #fff;
 }
 </style>
