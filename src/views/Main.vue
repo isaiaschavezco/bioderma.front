@@ -80,11 +80,17 @@ export default {
         case "2":
           this.$router.push({ name: "training" });
           break;
+        case "3":
+          this.$router.push({ name: "blog" });
+          break;
         case "4":
           this.$router.push({ name: "campaing" });
           break;
         case "5":
           this.$router.push({ name: "club" });
+          break;
+        case "6":
+          this.$router.push({ name: "notification" });
           break;
         case "7":
           this.$router.push({ name: "messaging" });

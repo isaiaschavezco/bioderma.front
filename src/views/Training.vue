@@ -44,7 +44,7 @@
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
-        <a-row>
+        <a-row style="margin-right:-28px">
           <a-col>
             <a-button shape="circle" icon="file-add" size="large" @click="loadFileModal = true" />
           </a-col>

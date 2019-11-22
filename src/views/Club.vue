@@ -61,7 +61,7 @@
         </a-form-item>
         <a-form-item>
           <a-textarea
-            placeholder="Ingresa la descrupcion del producto"
+            placeholder="Ingresa la descripcion del producto"
             :rows="4"
             v-decorator="[
           'description',

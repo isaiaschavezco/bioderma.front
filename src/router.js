@@ -37,6 +37,12 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Training.vue")
         },
         {
+          path: "Blog",
+          name: "blog",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Blog.vue")
+        },
+        {
           path: "Campaing",
           name: "campaing",
           component: () =>
@@ -53,6 +59,14 @@ export default new Router({
           name: "messaging",
           component: () =>
             import(/* webpackChunkName: "Plataforma" */ "./views/Messaging.vue")
+        },
+        {
+          path: "Notification",
+          name: "notification",
+          component: () =>
+            import(
+              /* webpackChunkName: "Plataforma" */ "./views/Notification.vue"
+            )
         }
       ]
       // beforeEnter(to, from, next) {
