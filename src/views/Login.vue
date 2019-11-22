@@ -1,7 +1,7 @@
 <template>
   <a-layout id="components-layout-demo-top" class="layout">
     <a-layout-content>
-      <a-row type="flex" justify="left" style="height: 100%;">
+      <a-row type="flex" justify="center" style="height: 100%;">
         <a-col :xs="{ span: 11 }" style="height: 100%;">
           <a-card
             class="container-logos"
@@ -10,7 +10,7 @@
             align="middle"
           >
             <img class="logo-naos" alt="logo-naos" src="../assets/Logo_NAOS.png" width="300" />
-            <img class="logo-bioderma" alt="example" src="../assets/logo.png" />
+            <img class="logo-bioderma" alt="example" src="../assets/logo.png" width="130" />
             <div class="form-login">
               <a-form
                 id="components-form-demo-normal-login"
@@ -107,13 +107,15 @@ export default {
 
 .container-logo-pretty {
   width: 100%;
+  height: 100%;
   background: #ccc;
+  /* background-size: cover; */
 }
 
 .logo-pretty {
-  /* width: 1056px; */
-  height: 932px;
-  margin-top: -107px;
+  width: 100%;
+  height: 100%;
+  /* margin-top: -147px; */
   margin-left: -1px;
 }
 .logo-naos {

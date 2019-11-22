@@ -106,7 +106,7 @@
         <a-button
           key="submit"
           type="primary"
-          style="background-color:##009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           :loading="inviteUserLoading"
           @click="onSubmitInvitationForm"
         >INVITAR</a-button>
@@ -132,7 +132,7 @@
           class="btn-center"
           @click="onSubmitChainForm"
           type="primary"
-          style="background-color:##009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
         >REGISTRAR</a-button>
       </template>
     </a-modal>

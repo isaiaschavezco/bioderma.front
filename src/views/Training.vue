@@ -121,7 +121,7 @@
       <template slot="footer">
         <a-button
           type="primary"
-          style="background-color:#001529; border: 1px solid #001529;"
+          style="background-color:#009FD1; border: none; margin-bottom: 20px; border-radius: 24px; width: 200px;"
           @click="onSubmitFileForm"
         >SUBIR</a-button>
       </template>

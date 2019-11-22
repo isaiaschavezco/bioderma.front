@@ -107,7 +107,7 @@
         >Cancelar</a-button>-->
         <a-button
           type="primary"
-          style="background-color:#001529; border: 1px solid #001529;"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitPictureForm"
         >Publicar</a-button>
       </template>
