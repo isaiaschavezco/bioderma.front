@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-row>
-      <a-col :xs="{ span: 15 } ">
+      <a-col :xs="{ span: 15 }" style="margin-top: 30px; margin-left: 24px">
         <div style="margin-right:25px; margin-bottom:20px">
           <a-card title="NUEVA NOTIFICACIÓN" class="container">
             <a-form :form="fileForm">
@@ -9,9 +9,13 @@
                 <a-input
                   placeholder="Ingresa el titulo de la notificación"
                   v-decorator="[
-                        'name',
-                        {rules: [{ required: true, message: 'Favor de llenar el campo'}]}
-                        ]"
+                    'name',
+                    {
+                      rules: [
+                        { required: true, message: 'Favor de llenar el campo' }
+                      ]
+                    }
+                  ]"
                 />
               </a-form-item>
               <a-form-item>
@@ -19,9 +23,13 @@
                   placeholder="Ingresa la descripcion de la notificación"
                   :rows="4"
                   v-decorator="[
-          'description',
-          {rules: [{required: true, message: 'Favor de llenar el campo'}]}
-          ]"
+                    'description',
+                    {
+                      rules: [
+                        { required: true, message: 'Favor de llenar el campo' }
+                      ]
+                    }
+                  ]"
                 />
               </a-form-item>
             </a-form>
@@ -63,7 +71,11 @@
                       </a-row>
                       <a-row class="select-item">
                         <!-- Row checkbox -->
-                        <a-checkbox @click="ableItem" @change="onChange" style="margin-right:7px; "></a-checkbox>
+                        <a-checkbox
+                          @click="ableItem"
+                          @change="onChange"
+                          style="margin-right:7px; "
+                        ></a-checkbox>
                         <a-select
                           showSearch
                           placeholder="Estado"
@@ -144,7 +156,10 @@
                       </a-row>
                       <!-- Row checkbox -->
                       <a-row class="select-item">
-                        <a-checkbox @click="ableItemFour" @change="onChange"></a-checkbox>
+                        <a-checkbox
+                          @click="ableItemFour"
+                          @change="onChange"
+                        ></a-checkbox>
                         <span>Edad</span>
                         <a-input-number
                           :min="18"
@@ -166,7 +181,8 @@
                     <a-button
                       type="primary"
                       style="background-color:#009FD1; border: none; margin-top:15px"
-                    >Agregar filtro a la lista</a-button>
+                      >Agregar filtro a la lista</a-button
+                    >
                   </div>
                 </a-card>
               </div>
@@ -182,18 +198,23 @@
                 type="primary"
                 style="background-color:#009FD1; border: none; "
                 @click="onSubmitNotificationForm"
-              >Enviar</a-button>
+                >Enviar</a-button
+              >
             </div>
           </a-card>
         </div>
       </a-col>
-      <a-col :xs="{ span: 7 }">
+      <a-col :xs="{ span: 7 }" style="margin-top: 30px">
         <div class="container-notification" style>
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
             <a-list :dataSource="data">
-              <div slot="renderItem" slot-scope="item, index" style="padding: 15px">
-                <span style="font-weight: bold;">{{item.date}}</span>
-                <p style="margin-bottom:30px">{{item.description}}</p>
+              <div
+                slot="renderItem"
+                slot-scope="item, index"
+                style="padding: 15px"
+              >
+                <span style="font-weight: bold;">{{ item.date }}</span>
+                <p style="margin-bottom:30px">{{ item.description }}</p>
                 <a-divider class="divider" />
               </div>
             </a-list>

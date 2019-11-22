@@ -2,7 +2,7 @@
   <div>
     <a-row>
       <a-col :xs="{ span: 22 }">
-        <div class="card-container" style="height: 50rem;">
+        <div class="card-container" style="height: 50rem; margin-top: 54px;">
           <a-list
             :grid="{ gutter: 16, column: 3 }"
             :dataSource="data"
@@ -30,7 +30,11 @@
           </a-list>
         </div>
       </a-col>
-      <a-col class="column-right-club" :xs="{ span: 2 }" style="text-align:center;">
+      <a-col
+        class="column-right-club"
+        :xs="{ span: 2 }"
+        style="text-align:center; margin-top: 78px"
+      >
         <a-row>
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />

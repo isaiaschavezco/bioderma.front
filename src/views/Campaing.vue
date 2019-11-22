@@ -2,15 +2,19 @@
   <div>
     <a-row>
       <a-col :xs="{ span: 22 }">
-        <div class="card-container" style="height: 50rem;">
-          <a-tabs type="card" @change="onChangeTab" style="height: 2.4rem; margin-bottom:1rem;">
+        <div class="card-container" style="height: 50rem; margin-top: 4px;">
+          <a-tabs
+            type="card"
+            @change="onChangeTab"
+            style="height: 2.4rem; margin-bottom:1rem; border-bottom:  .5px solid rgba(0, 0, 0, 0.8);"
+          >
             <a-tab-pane tab="CAMPAÑAS" key="1"></a-tab-pane>
             <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
           </a-tabs>
           <a-list
             :grid="{ gutter: 16, column: 3 }"
             :dataSource="data"
-            :style="{ overflow: 'scroll'}"
+            :style="{ overflow: 'scroll' }"
             style="height: 100%;"
           >
             <a-list-item slot="renderItem" slot-scope="item, index">
@@ -20,14 +24,27 @@
               >
                 <a-card
                   :title="item.name"
-                  :headStyle="bioGamesTab ? { background: '#6e6e6e', color: '#d9d9d9' } : {  }"
-                  :bodyStyle="bioGamesTab ? { background: '#6e6e6e', color: '#d9d9d9' } : {  }"
+                  :headStyle="
+                    bioGamesTab
+                      ? { background: '#6e6e6e', color: '#d9d9d9' }
+                      : {}
+                  "
+                  :bodyStyle="
+                    bioGamesTab
+                      ? { background: '#6e6e6e', color: '#d9d9d9' }
+                      : {}
+                  "
                 >
                   <img alt="example" :src="item.portrait" slot="cover" />
                   <span style="font-weight: 700;">FILTROS</span>
                   <br />
-                  <span>{{item.filter[0]}}</span>
-                  <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
+                  <span>{{ item.filter[0] }}</span>
+                  <a-divider
+                    :style="{
+                      margin: '10px 0px',
+                      border: '1px solid rgba(0,0,0,0.1)'
+                    }"
+                  />
                   <span style="font-weight: 700;">ESTATUS</span>
                   <br />
                   <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
@@ -42,10 +59,19 @@
           </a-list>
         </div>
       </a-col>
-      <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
-        <a-row>
+      <a-col
+        class="column-right-cam"
+        :xs="{ span: 2 }"
+        style="text-align:center;"
+      >
+        <a-row style="margin-top: -13px; margin-left: 27px;">
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="loadFileModal = true" />
+            <a-button
+              shape="circle"
+              icon="plus"
+              size="large"
+              @click="loadFileModal = true"
+            />
           </a-col>
           <a-col>AÑADIR CAMPAÑA</a-col>
         </a-row>
@@ -62,17 +88,28 @@
           <a-input
             placeholder="Ingresa un nombre para la campaña"
             v-decorator="[
-          'name',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
+              'name',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />
         </a-form-item>
 
         <a-form-item>
           <div class="dropbox">
             <a-upload-dragger
-              v-decorator="['upload', {rules: [{ required: true, message: 'Favor de cargar un archivo PDF' }]
-          }]"
+              v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Favor de cargar un archivo PDF'
+                    }
+                  ]
+                }
+              ]"
               name="upload"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
@@ -83,20 +120,27 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
-              <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
+              <p class="ant-upload-text">
+                Selecciona o suelta una imagen para la campaña
+              </p>
+              <p class="ant-upload-hint">
+                Únicamente archivos .png, .jpg o .jpge
+              </p>
             </a-upload-dragger>
           </div>
         </a-form-item>
       </a-form>
-      <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
+      <a-divider
+        :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }"
+      />
       <FormFilter />
       <template slot="footer">
         <a-button
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitFileForm"
-        >SUBIR</a-button>
+          >SUBIR</a-button
+        >
       </template>
     </a-modal>
   </div>
@@ -286,6 +330,13 @@ export default {
 };
 </script>
 <style>
+.card-container
+  > .ant-tabs
+  > .ant-tabs-top
+  > .ant-tabs-card
+  > .ant-tabs-no-animation {
+  border-bottom: 1px solid;
+}
 .column-right-cam {
   margin-top: 78px;
 }

@@ -49,7 +49,7 @@
                 shape="circle"
                 icon="user-add"
                 size="large"
-                @click="() => inviteUserModal = true"
+                @click="() => (inviteUserModal = true)"
               />
             </a-col>
             <a-col>Nuevo usuario</a-col>
@@ -62,7 +62,7 @@
                 shape="circle"
                 icon="user-add"
                 size="large"
-                @click="() => chainModal = true"
+                @click="() => (chainModal = true)"
               />
             </a-col>
             <a-col>Nueva cadena</a-col>
@@ -81,17 +81,26 @@
           <a-input
             placeholder="Ingresa el correo electrónico del nuevo usuario"
             v-decorator="[
-          'email',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
+              'email',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />
         </a-form-item>
         <a-form-item>
           <a-radio-group
             v-decorator="[
-          'type',
-          {rules: [{ required: true, message: 'Favor de seleccionar un tipo de usuario' }]}
-        ]"
+              'type',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Favor de seleccionar un tipo de usuario'
+                  }
+                ]
+              }
+            ]"
           >
             <a-radio :value="1">
               <span class="item-modal">NAOS</span>
@@ -120,9 +129,13 @@
             <a-input
               placeholder="Ingresa el nombre de la cadena"
               v-decorator="[
-          'chain',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
+                'chain',
+                {
+                  rules: [
+                    { required: true, message: 'Favor de llenar el campo' }
+                  ]
+                }
+              ]"
             />
           </a-form-item>
         </a-form>
@@ -418,7 +431,7 @@ export default {
 .card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
   background: #fff;
   padding: 16px;
-  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.8);
   box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
 }
 
