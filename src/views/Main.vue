@@ -95,6 +95,9 @@ export default {
         case "7":
           this.$router.push({ name: "messaging" });
           break;
+        case "8":
+          this.$router.push({ name: "themes" });
+          break;
         default:
           break;
       }

@@ -55,18 +55,24 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Club.vue")
         },
         {
-          path: "Messaging",
-          name: "messaging",
-          component: () =>
-            import(/* webpackChunkName: "Plataforma" */ "./views/Messaging.vue")
-        },
-        {
           path: "Notification",
           name: "notification",
           component: () =>
             import(
               /* webpackChunkName: "Plataforma" */ "./views/Notification.vue"
             )
+        },
+        {
+          path: "Messaging",
+          name: "messaging",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Messaging.vue")
+        },
+        {
+          path: "Themes",
+          name: "themes",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
         }
       ]
       // beforeEnter(to, from, next) {
