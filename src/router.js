@@ -73,6 +73,12 @@ export default new Router({
           name: "themes",
           component: () =>
             import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
+        },
+        {
+          path: "NewBlog",
+          name: "newblog",
+          component: () =>
+            import(/* webpackChunkName: "Plataforma" */ "./views/NewBlog.vue")
         }
       ]
       // beforeEnter(to, from, next) {

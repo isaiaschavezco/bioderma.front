@@ -4,11 +4,12 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container" style="height: 50rem;">
           <a-tabs type="card" @change="onChangeTab" style="height: 4rem;">
-            <a-tab-pane tab="PATOLOGÍA" key="1"></a-tab-pane>
-            <a-tab-pane tab="PRODUCTOS" key="2"></a-tab-pane>
-            <a-tab-pane tab="VADEMECUM" key="3"></a-tab-pane>
+            <a-tab-pane tab="BIODERMA PATOLOGÍA" key="1"></a-tab-pane>
+            <a-tab-pane tab="BIODERMA PRODUCTOS" key="2"></a-tab-pane>
+            <a-tab-pane tab="VADEMÉCUM" key="3"></a-tab-pane>
             <a-tab-pane tab="TÉCNICA DE VENTAS" key="4"></a-tab-pane>
             <a-tab-pane tab="INSTITUT ESTHEDERM" key="5"></a-tab-pane>
+            <a-tab-pane tab="¿QUIENES SOMOS?" key="6"></a-tab-pane>
           </a-tabs>
           <a-list
             class="demo-loadmore-list"

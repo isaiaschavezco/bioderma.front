@@ -83,6 +83,9 @@ export default {
         case "3":
           this.$router.push({ name: "blog" });
           break;
+        // case "3":
+        //   this.$router.push({ name: "newblog" });
+        //   break;
         case "4":
           this.$router.push({ name: "campaing" });
           break;
@@ -119,6 +122,8 @@ export default {
 .side {
   max-width: 100%;
   background: #526987;
+  padding-right: 12px;
+  padding-left: 8px;
 }
 
 .main-content {

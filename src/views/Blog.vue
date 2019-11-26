@@ -3,21 +3,26 @@
     <a-row>
       <a-col :xs="{ span: 22 }">
         <div class="card-container">
-          <a-input-search placeholder="Buscar blog" enterButton />
-          <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
-            <span slot="tags" slot-scope="tags">
-              <a-tag
-                v-for="tag in tags"
-                :color="tag==='loser' ? 'volcano' : (tag.length > 5 ? 'geekblue' : 'green')"
-                :key="tag"
-              >{{tag.toUpperCase()}}</a-tag>
-            </span>
-            <span slot="action" slot-scope="text, record">
-              <a-button shape="circle" icon="info" size="large" />
-              <a-divider type="vertical" />
-              <a-button shape="circle" icon="delete" size="large" />
-            </span>
-          </a-table>
+          <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
+            <a-tab-pane tab="USUARIOS" key="1">
+              <a-input-search placeholder="Buscar blog" enterButton />
+              <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
+                <span slot="tags" slot-scope="tags">
+                  <a-tag
+                    v-for="tag in tags"
+                    :color="tag==='loser' ? 'volcano' : (tag.length > 5 ? 'geekblue' : 'green')"
+                    :key="tag"
+                  >{{tag.toUpperCase()}}</a-tag>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                  <a-button shape="circle" icon="info" size="large" />
+                  <a-divider type="vertical" />
+                  <a-button shape="circle" icon="delete" size="large" />
+                </span>
+              </a-table>
+            </a-tab-pane>
+            <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
+          </a-tabs>
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
@@ -50,24 +55,18 @@
         </a-form-item>
         <a-form-item>
           <a-form-item>
-            <div class="dropbox">
-              <a-upload-dragger
-                v-decorator="['upload', {rules: [{ required: true, message: 'Favor de cargar un archivo PDF' }]
-          }]"
-                name="upload"
-                action="http://localhost:3000/upload/1"
-                accept=".pdf"
-                @change="handleChangeFileUpload"
-                :beforeUpload="beforeUpload"
-                :fileList="fileList"
-              >
-                <p class="ant-upload-drag-icon">
-                  <a-icon type="file-pdf" />
-                </p>
-                <p class="ant-upload-text">Selecciona o suelta un archivo en esta área para cargarlo</p>
-                <p class="ant-upload-hint">Únicamente archivos .pdf</p>
-              </a-upload-dragger>
-            </div>
+            <a-upload-dragger
+              name="file"
+              :multiple="true"
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              @change="handleChange"
+            >
+              <p class="ant-upload-drag-icon">
+                <a-icon type="inbox" />
+              </p>
+              <p class="ant-upload-text">Click or drag file to this area to upload</p>
+              <p class="ant-upload-hint">Seleccione una imagen THUMBNAIL</p>
+            </a-upload-dragger>
           </a-form-item>
         </a-form-item>
       </a-form>
@@ -185,6 +184,17 @@ export default {
     };
   },
   methods: {
+    handleChange(info) {
+      const status = info.file.status;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        this.$message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
     callback(key) {
       console.log(key);
     },
