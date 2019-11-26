@@ -83,9 +83,6 @@ export default {
         case "3":
           this.$router.push({ name: "blog" });
           break;
-        // case "3":
-        //   this.$router.push({ name: "newblog" });
-        //   break;
         case "4":
           this.$router.push({ name: "campaing" });
           break;

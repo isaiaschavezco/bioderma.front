@@ -75,6 +75,22 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
         },
         {
+          path: "ViewCampaing",
+          name: "ViewCampaing",
+          component: () =>
+            import(
+              /* webpackChunkName: "Plataforma" */ "./views/ViewCampaing.vue"
+            )
+        },
+        {
+          path: "EditCampaing",
+          name: "editcampaing",
+          component: () =>
+            import(
+              /* webpackChunkName: "Plataforma" */ "./views/EditCampaing.vue"
+            )
+        },
+        {
           path: "NewBlog",
           name: "newblog",
           component: () =>

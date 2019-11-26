@@ -71,11 +71,7 @@
                       </a-row>
                       <a-row class="select-item">
                         <!-- Row checkbox -->
-                        <a-checkbox
-                          @click="ableItem"
-                          @change="onChange"
-                          style="margin-right:7px; "
-                        ></a-checkbox>
+                        <a-checkbox @click="ableItem" @change="onChange" style="margin-right:7px; "></a-checkbox>
                         <a-select
                           showSearch
                           placeholder="Estado"
@@ -156,10 +152,7 @@
                       </a-row>
                       <!-- Row checkbox -->
                       <a-row class="select-item">
-                        <a-checkbox
-                          @click="ableItemFour"
-                          @change="onChange"
-                        ></a-checkbox>
+                        <a-checkbox @click="ableItemFour" @change="onChange"></a-checkbox>
                         <span>Edad</span>
                         <a-input-number
                           :min="18"
@@ -181,8 +174,7 @@
                     <a-button
                       type="primary"
                       style="background-color:#009FD1; border: none; margin-top:15px"
-                      >Agregar filtro a la lista</a-button
-                    >
+                    >Agregar filtro a la lista</a-button>
                   </div>
                 </a-card>
               </div>
@@ -198,8 +190,7 @@
                 type="primary"
                 style="background-color:#009FD1; border: none; "
                 @click="onSubmitNotificationForm"
-                >Enviar</a-button
-              >
+              >Enviar</a-button>
             </div>
           </a-card>
         </div>
@@ -208,11 +199,7 @@
         <div class="container-notification" style>
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
             <a-list :dataSource="data">
-              <div
-                slot="renderItem"
-                slot-scope="item, index"
-                style="padding: 15px"
-              >
+              <div slot="renderItem" slot-scope="item, index" style="padding: 15px">
                 <span style="font-weight: bold;">{{ item.date }}</span>
                 <p style="margin-bottom:30px">{{ item.description }}</p>
                 <a-divider class="divider" />
