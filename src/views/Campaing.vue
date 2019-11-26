@@ -59,19 +59,10 @@
           </a-list>
         </div>
       </a-col>
-      <a-col
-        class="column-right-cam"
-        :xs="{ span: 2 }"
-        style="text-align:center;"
-      >
+      <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
         <a-row style="margin-top: -13px; margin-left: 27px;">
           <a-col>
-            <a-button
-              shape="circle"
-              icon="plus"
-              size="large"
-              @click="loadFileModal = true"
-            />
+            <a-button shape="circle" icon="plus" size="large" @click="loadFileModal = true" />
           </a-col>
           <a-col>AÑADIR CAMPAÑA</a-col>
         </a-row>
@@ -120,27 +111,20 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">
-                Selecciona o suelta una imagen para la campaña
-              </p>
-              <p class="ant-upload-hint">
-                Únicamente archivos .png, .jpg o .jpge
-              </p>
+              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
+              <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
           </div>
         </a-form-item>
       </a-form>
-      <a-divider
-        :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }"
-      />
+      <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
       <FormFilter />
       <template slot="footer">
         <a-button
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitFileForm"
-          >SUBIR</a-button
-        >
+        >SUBIR</a-button>
       </template>
     </a-modal>
   </div>
@@ -158,7 +142,7 @@ export default {
           id: 1,
           name: "Nombre campaña",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           filter: ["NAOS, Mexicalli"]
         },
@@ -166,7 +150,7 @@ export default {
           id: 2,
           name: "Nombre campaña 2",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           filter: ["NAOS, Mexicalli"]
         },
@@ -174,7 +158,7 @@ export default {
           id: 3,
           name: "Nombre campaña 3",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: false,
           filter: ["NAOS, Mexicalli"]
         },
@@ -182,7 +166,7 @@ export default {
           id: 1,
           name: "Nombre campaña",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           filter: ["NAOS, Mexicalli"]
         },
@@ -190,7 +174,7 @@ export default {
           id: 2,
           name: "Nombre campaña 2",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           filter: ["NAOS, Mexicalli"]
         },
@@ -198,7 +182,7 @@ export default {
           id: 3,
           name: "Nombre campaña 3",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: false,
           filter: ["NAOS, Mexicalli"]
         },
@@ -206,7 +190,7 @@ export default {
           id: 1,
           name: "Nombre campaña",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           filter: ["NAOS, Mexicalli"]
         },
@@ -214,16 +198,8 @@ export default {
           id: 2,
           name: "Nombre campaña 2",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 3,
-          name: "Nombre campaña 3",
-          portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
-          isActive: false,
           filter: ["NAOS, Mexicalli"]
         }
       ],

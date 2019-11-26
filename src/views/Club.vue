@@ -131,7 +131,7 @@ export default {
           name: "Nombre producto 1",
           points: "100 PTS",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convallis non. "
@@ -141,7 +141,7 @@ export default {
           name: "Nombre producto 2",
           points: "100 PTS",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convall"
@@ -151,7 +151,7 @@ export default {
           name: "Nombre producto 3",
           points: "100 PTS",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convallis n"
@@ -161,30 +161,10 @@ export default {
           name: "Nombre producto 4",
           points: "100 PTS",
           portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
           isActive: true,
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convalli."
-        },
-        {
-          id: 5,
-          name: "Nombre producto 5",
-          points: "100 PTS",
-          portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus conva."
-        },
-        {
-          id: 6,
-          name: "Nombre producto 6",
-          points: "100 PTS",
-          portrait:
-            "https://lh3.googleusercontent.com/proxy/DrjDlKlu9YonKbj3iNCJNJ3DGqzy9GjeXXSUv-TcVV4UN9PMCAM5yIkGLPG7wYo3UeA4sq5OmUWM8M6K5hy2KOAhf8SOL3zPH3axb2Xo3HX2XTU8M2xW4X6lVg=w720-h405-rw",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus ."
         }
       ],
       fileForm: this.$form.createForm(this),

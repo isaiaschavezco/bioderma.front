@@ -108,16 +108,14 @@ export default {
 .container-logo-pretty {
   width: 100%;
   height: 100%;
-  background: #ccc;
-  /* background-size: cover; */
 }
 
 .logo-pretty {
   width: 100%;
+  object-fit: cover;
   height: 100%;
-  /* margin-top: -147px; */
-  margin-left: -1px;
 }
+
 .logo-naos {
   display: flex;
   justify-content: center;
