@@ -50,7 +50,9 @@
                   <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
                   <template class="ant-card-actions" slot="actions">
                     <a-icon type="close-circle" />
-                    <a-icon type="edit" />
+                    <router-link to="ViewCampaing">
+                      <a-icon type="edit" />
+                    </router-link>
                     <a-icon type="delete" />
                   </template>
                 </a-card>
