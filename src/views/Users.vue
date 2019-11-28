@@ -294,8 +294,13 @@ export default {
       }
     },
     async getChains() {
-      const responseChains = await this.$axios("chain");
-      this.chains = responseChains.data;
+      // const responseChains = await this.$axios("chain");
+      // this.chains = responseChains.data;
+      // console.log(responseChains.data);
+      this.chains = [
+        { id: 5, name: "GUADALAJARA", isDeleted: false },
+        { id: 18, name: "SAN PABLO", isDeleted: false }
+      ];
       this.tableChains = this.chains;
     },
     onSubmitChainForm() {
