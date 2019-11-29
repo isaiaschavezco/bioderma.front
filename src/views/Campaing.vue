@@ -12,7 +12,7 @@
             <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
           </a-tabs>
           <a-list
-            :grid="{ gutter: 16, column: 3 }"
+            :grid="{ gutter: 16, column: 4 }"
             :dataSource="data"
             :style="{ overflow: 'scroll' }"
             style="height: 100%;"
@@ -50,7 +50,7 @@
                   <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
                   <template class="ant-card-actions" slot="actions">
                     <a-icon type="close-circle" />
-                    <router-link to="ViewCampaing">
+                    <router-link to="campaingDetail">
                       <a-icon type="edit" />
                     </router-link>
                     <a-icon type="delete" />

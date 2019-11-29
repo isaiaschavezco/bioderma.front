@@ -75,19 +75,19 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
         },
         {
-          path: "ViewCampaing",
-          name: "ViewCampaing",
+          path: "CampaingDetail",
+          name: "campaingDetail",
           component: () =>
             import(
-              /* webpackChunkName: "Plataforma" */ "./views/ViewCampaing.vue"
+              /* webpackChunkName: "Plataforma" */ "./views/CampaingDetail.vue"
             )
         },
         {
-          path: "EditCampaing",
-          name: "editcampaing",
+          path: "QuizzDetail",
+          name: "quizzDetail",
           component: () =>
             import(
-              /* webpackChunkName: "Plataforma" */ "./views/EditCampaing.vue"
+              /* webpackChunkName: "Plataforma" */ "./views/QuizzDetail.vue"
             )
         },
         {

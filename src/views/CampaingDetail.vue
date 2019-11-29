@@ -2,27 +2,25 @@
   <div class="container-blog">
     <a-row>
       <a-col :xs="{ span: 15 }">
-        <div class="card-container">
-          <a-card title="CAMPAÑA PHOTODERM">
-            <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
-              <span slot="action" slot-scope="text, record">
-                <router-link to="EditCampaing">
-                  <a-button shape="circle" icon="edit" size="large" />
-                </router-link>
-                <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" />
-                <a-divider type="vertical" />
-                <a-button shape="circle" icon="caret-right" size="large" />
-              </span>
-            </a-table>
-          </a-card>
-        </div>
+        <a-card title="CAMPAÑA PHOTODERM">
+          <a-table :columns="columns" :dataSource="data" style="margin-top: 0rem;">
+            <span slot="action" slot-scope="text, record">
+              <router-link to="EditCampaing">
+                <a-button shape="circle" icon="edit" size="large" />
+              </router-link>
+              <a-divider type="vertical" />
+              <a-button shape="circle" icon="delete" size="large" />
+              <a-divider type="vertical" />
+              <a-button shape="circle" icon="caret-right" size="large" />
+            </span>
+          </a-table>
+        </a-card>
       </a-col>
-      <a-col :xs="{ span: 5 }" style="margin-top: 30px">
-        <div class="container-notification" style>
+      <a-col :xs="{ span: 6 }" style="margin-left: 30px;">
+        <div class="container-notification">
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
             <a-list :dataSource="data">
-              <div slot="renderItem" slot-scope="item, index" style="padding: 15px">
+              <div slot="renderItem" slot-scope="item, index" style="padding: 0px">
                 <span style="font-weight: bold;">{{ item.date }}</span>
                 <p style="margin-bottom:30px">{{ item.description }}</p>
                 <a-divider class="divider" />
@@ -31,7 +29,7 @@
           </a-card>
         </div>
       </a-col>
-      <a-col class="column-right" :xs="{ span: 3 }" style="text-align:center;">
+      <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <div v-if="activeTab == 1">
           <a-row style>
             <a-col>
@@ -42,7 +40,7 @@
                 @click="() => inviteUserModal = true"
               />
             </a-col>
-            <a-col>Crear nueva entrada</a-col>
+            <a-col>Añadi trivia</a-col>
           </a-row>
         </div>
       </a-col>
