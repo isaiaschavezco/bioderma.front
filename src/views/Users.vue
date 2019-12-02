@@ -8,7 +8,7 @@
               <a-input-search placeholder="Buscar usuario" enterButton />
               <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
-                  <a-button shape="circle" icon="info" size="large" />
+                  <a-button @click="onShowUserInfo" shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
                   <a-button shape="circle" icon="delete" size="large" />
                 </span>
@@ -149,9 +149,24 @@
         >REGISTRAR</a-button>
       </template>
     </a-modal>
+        <a-modal
+      :footer=null
+      centered
+      width=80%
+      v-model="infoUserModal"
+      @cancel="onCloseInfoUser"
+    >
+      <a-row style="margin-top: 1rem;">
+        <SidebarUserInfo/>
+        <UserPointsInfo/>
+      </a-row>
+    </a-modal>
   </div>
 </template>
 <script>
+import SidebarUserInfo from './SidebarUserInfo.vue';
+import UserPointsInfo from './UserPointsInfo.vue';
+
 const columns = [
   {
     dataIndex: "name",
@@ -258,13 +273,16 @@ const data = [
   }
 ];
 export default {
+  components: {
+    SidebarUserInfo,
+    UserPointsInfo,
+  },
   data() {
     return {
       collapsed: false,
       data,
       columns,
       chainColumns,
-      inviteUserModal: false,
       value: 1,
       activeTab: 1,
       chainModal: false,
@@ -273,7 +291,8 @@ export default {
       chains: [],
       tableChains: [],
       inviteUserModal: false,
-      inviteUserLoading: false
+      inviteUserLoading: false,
+      infoUserModal: true,
     };
   },
   methods: {
@@ -417,8 +436,14 @@ export default {
           }
         }
       });
+    },
+    onShowUserInfo() {
+      this.infoUserModal = true;
+    },
+    onCloseInfoUser() {
+      this.infoUserModal = false;
     }
-  }
+  },
 };
 </script>
 <style>
@@ -463,5 +488,28 @@ export default {
   margin-right: 30px;
   color: #526987;
   font-weight: 500;
+}
+
+/* .ant-modal-close-x {
+  color: white;
+  margin: 1rem 1rem 0 0;
+  background-color: #1790FF;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px rgb(0, 0, 0, 0.6);
+  transition-delay: 0ms;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.ant-modal-close-x:active {
+  transform: scale(0.8);
+} */
+
+.total-points-user {
+  font-weight: bold;
+}
+
+.points-info-user-amount {
+  font-size: 2.5rem;
 }
 </style>
