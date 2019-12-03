@@ -49,6 +49,14 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Campaing.vue")
         },
         {
+          path: "EditCampaing",
+          name: "editcampaing",
+          component: () =>
+            import(
+              /* webpackChunkName: "Plataforma" */ "./views/EditCampaing.vue"
+            )
+        },
+        {
           path: "Club",
           name: "club",
           component: () =>
