@@ -149,23 +149,19 @@
         >REGISTRAR</a-button>
       </template>
     </a-modal>
-        <a-modal
-      :footer=null
+    <a-modal
+      v-model="showUserInfoModal"
+      :footer="null"
       centered
-      width=80%
-      v-model="infoUserModal"
+      width="70%"
       @cancel="onCloseInfoUser"
     >
-      <a-row style="margin-top: 1rem;">
-        <SidebarUserInfo/>
-        <UserPointsInfo/>
-      </a-row>
+      <ModalUserInfo :userInfo="userInfoModal" />
     </a-modal>
   </div>
 </template>
 <script>
-import SidebarUserInfo from './SidebarUserInfo.vue';
-import UserPointsInfo from './UserPointsInfo.vue';
+import ModalUserInfo from "../components/modals/UserInfo/ModalUserInfo.vue";
 
 const columns = [
   {
@@ -274,8 +270,7 @@ const data = [
 ];
 export default {
   components: {
-    SidebarUserInfo,
-    UserPointsInfo,
+    ModalUserInfo
   },
   data() {
     return {
@@ -292,7 +287,58 @@ export default {
       tableChains: [],
       inviteUserModal: false,
       inviteUserLoading: false,
-      infoUserModal: true,
+      showUserInfoModal: true,
+      userInfoModal: {
+        name: "Nombre",
+        lastName: "Apellidos",
+        birthday: "12 Ago",
+        gender: "Mujer",
+        city: "Mi ciudad",
+        pharmacy: "Nombre farmacia",
+        chain: "Mi cadena",
+        address: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
+        position: "Mi cargo",
+        phone: "555-5555-555",
+        email: "user@user.com",
+        totalPoints: "2570",
+        pointsHistory: [
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -438,12 +484,66 @@ export default {
       });
     },
     onShowUserInfo() {
-      this.infoUserModal = true;
+      this.userInfoModal = {
+        name: "Nombre",
+        lastName: "Apellidos",
+        birthday: "12 Ago",
+        gender: "Mujer",
+        city: "Mi ciudad",
+        pharmacy: "Nombre farmacia",
+        chain: "Mi cadena",
+        address: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
+        position: "Mi cargo",
+        phone: "555-5555-555",
+        email: "user@user.com",
+        totalPoints: "2570",
+        pointsHistory: [
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          }
+        ]
+      };
+
+      console.log("%cObteniendo informacion usuario.", "color:green;font-size:0.7rem;")
+
+      this.showUserInfoModal = true;
     },
     onCloseInfoUser() {
-      this.infoUserModal = false;
+      this.showUserInfoModal = false;
     }
-  },
+  }
 };
 </script>
 <style>
