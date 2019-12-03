@@ -5,13 +5,13 @@
     </a-row>
     <a-row class="main-phones">
       <div>
+        <!-- Spring -->
         <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/cel.jpg" alt />
+          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
           <a-row class="container-palette">
-            <div class="color-palette" style="background: #93FF00"></div>
-            <div class="color-palette" style="background: #55FF00"></div>
-            <div class="color-palette" style="background: #E4FF00"></div>
-            <div class="color-palette" style="background: #D4FF00"></div>
+            <div class="color-palette" style="background: #95DB95"></div>
+            <div class="color-palette" style="background: #449C44"></div>
+            <div class="color-palette" style="background: #1C541C"></div>
           </a-row>
           <a-button
             key="submit"
@@ -23,13 +23,13 @@
         </a-row>
       </div>
       <div>
+        <!-- Summer -->
         <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/cel.jpg" alt />
+          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
           <a-row class="container-palette">
-            <div class="color-palette" style="background: #FFB900"></div>
-            <div class="color-palette" style="background: #FFCA3D"></div>
-            <div class="color-palette" style="background: #FF7515"></div>
-            <div class="color-palette" style="background: #FF2E15"></div>
+            <div class="color-palette" style="background: #EEC795"></div>
+            <div class="color-palette" style="background: #F99F28"></div>
+            <div class="color-palette" style="background: #AF6B11"></div>
           </a-row>
           <a-button
             key="submit"
@@ -41,13 +41,13 @@
         </a-row>
       </div>
       <div>
+        <!-- Autumn -->
         <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/cel.jpg" alt />
+          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
           <a-row class="container-palette">
-            <div class="color-palette" style="background: #15F4FF"></div>
-            <div class="color-palette" style="background: #15B1FF"></div>
-            <div class="color-palette" style="background: #1563FF"></div>
-            <div class="color-palette" style="background: #152EFF"></div>
+            <div class="color-palette" style="background: #A31A29"></div>
+            <div class="color-palette" style="background: #AB6870"></div>
+            <div class="color-palette" style="background: #E89DA6"></div>
           </a-row>
           <a-button
             key="submit"
@@ -59,13 +59,13 @@
         </a-row>
       </div>
       <div>
+        <!-- Winter -->
         <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/cel.jpg" alt />
+          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
           <a-row class="container-palette">
-            <div class="color-palette" style="background: #93FF00"></div>
-            <div class="color-palette" style="background: #55FF00"></div>
-            <div class="color-palette" style="background: #E4FF00"></div>
-            <div class="color-palette" style="background: #D4FF00"></div>
+            <div class="color-palette" style="background: #80C7E5"></div>
+            <div class="color-palette" style="background: #009DE0"></div>
+            <div class="color-palette" style="background: #0077AA"></div>
           </a-row>
           <a-button
             key="submit"
@@ -99,17 +99,15 @@ export default {
 }
 .main-phones {
   display: flex;
-  justify-content: center;
+  margin-top: 20px;
 }
 .container-phone {
-  margin: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .img-phone {
-  width: 100%;
+  width: 55%;
   margin: 0 auto;
 }
 
@@ -124,12 +122,12 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 .color-palette {
   width: 12%;
   height: 30px;
-  background: red;
   margin: 10px;
   padding: 4px;
   border-radius: 5px;
