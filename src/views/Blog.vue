@@ -29,12 +29,7 @@
         <div v-if="activeTab == 1">
           <a-row style>
             <a-col>
-              <a-button
-                shape="circle"
-                icon="plus"
-                size="large"
-                @click="() => inviteUserModal = true"
-              />
+              <a-button shape="circle" icon="plus" size="large" @click="() => blogNewModal = true" />
             </a-col>
             <a-col>Crear nueva entrada</a-col>
           </a-row>
@@ -42,68 +37,62 @@
       </a-col>
     </a-row>
 
-    <a-modal title="NUEVA ENTRADA" centered v-model="inviteUserModal">
-      <a-form :form="inviteUserForm">
+    <a-modal title="NUEVA ENTRADA" centered v-model="blogNewModal">
+      <a-form :form="fileBlogForm">
         <a-form-item>
           <a-input
-            placeholder="Titulo de la entrada"
+            placeholder="Ingresa un nombre para la campaña"
             v-decorator="[
-          'input',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
+              'name',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />
         </a-form-item>
+
         <a-form-item>
-          <a-form-item>
+          <div class="dropbox">
             <a-upload-dragger
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
+              v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Favor de cargar un archivo PDF'
+                    }
+                  ]
+                }
+              ]"
+              name="upload"
+              action="http://localhost:3000/upload/1"
+              accept=".png, .jpg, jpge"
+              @change="handleChangeFileUpload"
+              :beforeUpload="beforeUpload"
+              :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
+                <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Click or drag file to this area to upload</p>
-              <p class="ant-upload-hint">Seleccione una imagen THUMBNAIL</p>
+              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
+              <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
-          </a-form-item>
+          </div>
         </a-form-item>
       </a-form>
+      <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
+      <FormFilter />
       <template slot="footer">
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
-          @click="onSubmitInvitationForm"
-        >SIGUIENTE</a-button>
+        <router-link to="NewBlog">
+          <a-button
+            type="primary"
+            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+            @click="onSubmitInvitationForm"
+          >SIGUIENTE</a-button>
+        </router-link>
       </template>
     </a-modal>
-
-    <!-- <a-modal title="Registrar cadena" centered v-model="chainModal">
-      <p>
-        <a-form :form="chainForm">
-          <a-form-item>
-            <a-input
-              placeholder="Ingresa el nombre de la cadena"
-              v-decorator="[
-          'chain',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-form>
-      </p>
-      <template slot="footer">
-        <a-button
-          class="btn-center"
-          @click="onSubmitChainForm"
-          type="primary"
-          style="background-color:##009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-        >SIGUIENTE</a-button>
-      </template>
-    </a-modal>-->
   </div>
 </template>
 <script>
@@ -171,150 +160,24 @@ export default {
       collapsed: false,
       data,
       columns,
-      inviteUserModal: false,
       value: 1,
       activeTab: 1,
       chainModal: false,
       chainForm: this.$form.createForm(this),
-      inviteUserForm: this.$form.createForm(this),
+      fileBlogForm: this.$form.createForm(this),
       chains: [],
       tableChains: [],
-      inviteUserModal: false,
+
+      blogNewModal: false,
       inviteUserLoading: false
     };
   },
   methods: {
-    handleChange(info) {
-      const status = info.file.status;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        this.$message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        this.$message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    callback(key) {
-      console.log(key);
-    },
-    async getChains() {
-      const responseChains = await this.$axios("chain");
-      this.chains = responseChains.data;
-      this.tableChains = this.chains;
-    },
-    onSubmitChainForm() {
-      this.chainForm.validateFields(async (err, values) => {
-        if (!err) {
-          try {
-            const response = await this.$axios.post("chain", {
-              name: values.chain.toUpperCase().trim(),
-              isDeleted: false
-            });
-            this.chainModal = false;
-            if (response.data == 1) {
-              this.getChains();
-              this.showNotification(
-                "success",
-                "Cadena registrada",
-                "La cadena ha sido registrada correctamente."
-              );
-            } else if (response.data == 2) {
-              this.showNotification(
-                "info",
-                "Esta cadena ya existe",
-                "La cadena que ha intentando registrar, ya existe."
-              );
-            }
-          } catch (err) {
-            this.showNotification(
-              "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
-            );
-          }
-        }
-      });
-    },
-    showNotification(type, title, message) {
-      this.$notification[type]({
-        message: title,
-        description: message
-      });
-    },
-    async onDeleteChain(chaindId) {
-      try {
-        const response = await this.$axios.delete(`chain/${chaindId}`);
-        if (response.data == 1) {
-          this.getChains();
-          this.showNotification(
-            "success",
-            "Cadena eliminada",
-            "La cadena ha sido eliminada exitosamente."
-          );
-        }
-      } catch (err) {
-        this.showNotification(
-          "error",
-          "Error al eliminar cadena",
-          "Ha ocurrido un error al intentar eliminar la cadena."
-        );
-      }
-    },
-    showDeleteConfirm(chaindId, onDelete) {
-      this.$confirm({
-        title: "¿Estás seguro que deseas eliminar esta cadena?",
-        okText: "ELIMINAR",
-        okType: "danger",
-        cancelText: "CANCELAR",
-        centered: true,
-        onOk() {
-          onDelete(chaindId);
-        },
-        onCancel() {}
-      });
-    },
-    onSearchChains(value) {
-      const newChain = this.chains.filter(element => {
-        return element.name.indexOf(value.toUpperCase()) >= 0;
-      });
-      if (newChain.length === 0) {
-        this.showNotification(
-          "info",
-          "No se encontraron coincidencias",
-          "No se encontraron registros para esta búsqueda."
-        );
-      } else {
-        this.tableChains = newChain;
-      }
-    },
     onSubmitInvitationForm() {
-      this.inviteUserForm.validateFields(async (err, values) => {
+      this.fileBlogForm.validateFields(async (err, values) => {
         if (!err) {
-          this.inviteUserLoading = true;
-          try {
-            const response = await this.$axios.post("user/invite", {
-              email: values.email.trim(),
-              type: values.type
-            });
-            this.inviteUserLoading = false;
-            this.inviteUserForm.resetFields();
-            this.inviteUserModal = false;
-            if (response.data == 0) {
-              this.showNotification(
-                "success",
-                "Invitación enviada",
-                "La invitación ha sido enviada correctamente."
-              );
-            }
-          } catch (err) {
-            this.inviteUserLoading = false;
-            this.showNotification(
-              "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
-            );
-          }
+          alert("Exito");
+          console.log(values);
         }
       });
     }
