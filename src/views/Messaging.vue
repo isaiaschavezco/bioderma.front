@@ -2,25 +2,29 @@
   <div>
     <a-row>
       <a-col :xs="{ span: 19 } ">
-        <div style="margin-right:20px">
-          <a-card title="Nombre" class="container">
-            <div class="container-chat">
-              <a-card>
-                <span>Hola</span>
-              </a-card>
+        <div class="main-chat">
+          <div class="container-chat">
+            <div class="container-chat-header">
+              <div class="title-chat">Dr Strange</div>
+              <div class="end-chat">
+                <button class="btn-end-chat">
+                  <span>Finalizar Conversación</span>
+                  <img class="img-chat" src="../assets/chat/Fin_de_conversacion.png" alt />
+                </button>
+              </div>
             </div>
-          </a-card>
-          <a-card>
-            <div class>
+          </div>
+          <div class="container-chat-inputs">
+            <div class="inputs-chat">
               <a-input placeholder="Escribe un mensaje" style="width: 95%; margin-right:10px" />
               <a-button type="primary" shape="circle" icon="right-circle" :size="size" />
-              <!-- <a-input-search placeholder="input search text" @search="onSearch" size="large">
+            </div>
+            <!-- <a-input-search placeholder="input search text" @search="onSearch" size="large">
                 <a-button slot="enterButton">
                   <a-icon type="right-circle" />
                 </a-button>
-              </a-input-search>-->
-            </div>
-          </a-card>
+            </a-input-search>-->
+          </div>
         </div>
       </a-col>
       <a-col :xs="{ span: 5 }">
@@ -222,12 +226,53 @@ export default {
 };
 </script>
 <style>
+.main-chat {
+  margin-right: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
 .container-chat {
   background: #fff;
   overflow: hidden;
-  margin-right: 10px;
-  height: 30em;
+  height: 45em;
+  display: flex;
+  flex-direction: column;
 }
+
+.container-chat-header {
+  background: #526987;
+  height: 4em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 20px;
+}
+
+.end-chat,
+.title-chat {
+  margin: 0 4em;
+}
+
+.img-chat {
+  width: 30px;
+  margin-left: 10px;
+}
+
+.btn-end-chat {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.container-chat-inputs {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.inputs-chat {
+  margin: 20px 20px;
+}
+
 .container-contacts {
   background: #fff;
 }
