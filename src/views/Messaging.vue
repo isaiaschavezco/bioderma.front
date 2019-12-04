@@ -19,29 +19,31 @@
               <a-input placeholder="Escribe un mensaje" style="width: 95%; margin-right:10px" />
               <a-button type="primary" shape="circle" icon="right-circle" :size="size" />
             </div>
-            <!-- <a-input-search placeholder="input search text" @search="onSearch" size="large">
-                <a-button slot="enterButton">
-                  <a-icon type="right-circle" />
-                </a-button>
-            </a-input-search>-->
           </div>
         </div>
       </a-col>
       <a-col :xs="{ span: 5 }">
         <div class="container-contacts" style>
-          <a-card title="CHAT" style="text-align:center; height: 38rem;">
-            <a-list
-              :grid="{ gutter: 2, column: 1 }"
-              :style="{ overflow: 'scroll'}"
-              style="height: 32rem;"
-              :dataSource="data"
-            >
-              <a-list-item slot="renderItem" slot-scope="item, index">
-                <span>{{item.name}}</span>
-                <a-icon type="phone" />
-              </a-list-item>
-            </a-list>
-          </a-card>
+          <div class="container-contacts-title">
+            <span>CHATS</span>
+          </div>
+          <a-list
+            :grid="{ gutter: 2 }"
+            :style="{ overflow: 'scroll'}"
+            style="height: 38.5rem;"
+            :dataSource="data"
+          >
+            <a-list-item slot="renderItem" slot-scope="item, index">
+              <div class="container-contacts-name">
+                <div>
+                  <span>{{item.name}}</span>
+                </div>
+                <div>
+                  <img class="img-chat" src="../assets/chat/Fin_de_conversacion.png" alt />
+                </div>
+              </div>
+            </a-list-item>
+          </a-list>
         </div>
       </a-col>
     </a-row>
@@ -192,22 +194,6 @@ const data = [
     profile: "Farmacia",
     position: "-",
     points: 500
-  },
-  {
-    key: "9",
-    name: "Jefferson Gutierritos",
-    email: "prueba@inmersys.com",
-    profile: "Farmacia",
-    position: "-",
-    points: 500
-  },
-  {
-    key: "10",
-    name: "Alvin Yakitori",
-    email: "prueba@inmersys.com",
-    profile: "Farmacia",
-    position: "-",
-    points: 500
   }
 ];
 const chat = [];
@@ -270,10 +256,28 @@ export default {
 }
 
 .inputs-chat {
-  margin: 20px 20px;
+  padding: 17px 20px;
 }
 
 .container-contacts {
   background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  height: 50em;
+}
+
+.container-contacts-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4em;
+  background: #526987;
+  color: #fff;
+  font-size: 20px;
+}
+
+.container-contacts-name {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3em;
 }
 </style>
