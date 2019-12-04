@@ -287,7 +287,7 @@ export default {
       tableChains: [],
       inviteUserModal: false,
       inviteUserLoading: false,
-      showUserInfoModal: true,
+      showUserInfoModal: false,
       userInfoModal: {
         name: "Nombre",
         lastName: "Apellidos",
@@ -302,6 +302,69 @@ export default {
         email: "user@user.com",
         totalPoints: "2570",
         pointsHistory: [
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
           {
             date: "15/Ago/2019",
             product: {
@@ -484,58 +547,6 @@ export default {
       });
     },
     onShowUserInfo() {
-      this.userInfoModal = {
-        name: "Nombre",
-        lastName: "Apellidos",
-        birthday: "12 Ago",
-        gender: "Mujer",
-        city: "Mi ciudad",
-        pharmacy: "Nombre farmacia",
-        chain: "Mi cadena",
-        address: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
-        position: "Mi cargo",
-        phone: "555-5555-555",
-        email: "user@user.com",
-        totalPoints: "2570",
-        pointsHistory: [
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          }
-        ]
-      };
-
       console.log("%cObteniendo informacion usuario.", "color:green;font-size:0.7rem;")
 
       this.showUserInfoModal = true;

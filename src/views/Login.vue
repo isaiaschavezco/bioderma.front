@@ -21,7 +21,7 @@
                 <a-form-item>
                   <a-input
                     v-decorator="[
-          'User',
+          'user',
           { rules: [{ required: true, message: 'Favor de ingresar su usuario.' }] }
         ]"
                     placeholder="Usuario"
@@ -75,10 +75,42 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => {
+      this.form.validateFields(async (err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
-          this.$router.push({ name: "users" });
+
+          try {
+            const loginInfo = {
+              email: values.user,
+              password: values.password
+            };
+
+            const response = await this.$axios.post("sesion/admin", loginInfo);
+            const responseLogin = response.data;
+
+            if (responseLogin.status === 1) {
+              const messageLogin = "Usuario incorrecto";
+              console.log(messageLogin);
+            }
+            else if (responseLogin.status === 2) {
+              const messageLogin = "Contraseña incorrecta";
+              console.log(messageLogin);
+            }
+            else {
+              localStorage.clear();
+
+              const {token, name, image, email} = responseLogin.profile;
+              
+              localStorage.setItem('token', token);
+              localStorage.setItem('name', name);
+              localStorage.setItem('image', image);
+              localStorage.setItem('email', email);
+              
+              this.$router.push({ name: "users" });
+            } 
+          } catch(err) {
+            console.log("%cHubo un error.", "color:red;font-size:1rem");
+          }
         }
       });
     }

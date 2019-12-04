@@ -1,7 +1,7 @@
 <template>
 	<a-row class="user-points-history">
 		<h3>HISTORIAL DE PUNTOS</h3>
-		<a-list size="large" :dataSource="history">
+		<a-list size="large" :dataSource="history" class="scroll">
 			<a-list-item class="points-history" slot="renderItem" slot-scope="record, index" :key="index">
 				<a-row style="width: 100%;">
 					<a-col class="main-history-info" span="10" offset="2">
@@ -43,6 +43,11 @@ h3 {
 
 p {
 	margin: 0;
+}
+
+.scroll {
+	overflow-y: scroll;
+	max-height: 400px;
 }
 
 .points-history {

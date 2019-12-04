@@ -84,7 +84,8 @@ export default {
 }
 
 .points-info-label {
-	margin: auto;
+	padding-left: 6rem;
+	width: 100%;
 	display: block;
 	font-weight: bold;
 	font-size: 1rem;
