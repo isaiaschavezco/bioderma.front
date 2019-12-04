@@ -23,7 +23,7 @@
               <a-button shape="circle" icon="arrow-left" size="large" />
             </router-link>
           </a-col>
-          <a-col class="description-icon">Regresar a Campaña</a-col>
+          <a-col class="description-icon title-span-tag">Regresar a Campaña</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -34,7 +34,7 @@
               @click="() => multipleOptionModal = true"
             />
           </a-col>
-          <a-col class="description-icon">Agregar Opcion Multiple</a-col>
+          <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -45,7 +45,7 @@
               @click="() => columnRelationModal = true"
             />
           </a-col>
-          <a-col class="description-icon">Agregar Relacion de Columnas</a-col>
+          <a-col class="description-icon title-span-tag">Agregar Relacion de Columnas</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -56,7 +56,7 @@
               @click="() => phraseCompleteModal = true"
             />
           </a-col>
-          <a-col class="description-icon">Agregar Completa la Frase</a-col>
+          <a-col class="description-icon title-span-tag">Agregar Completa la Frase</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -67,7 +67,7 @@
               @click="() => phraseOrderModal = true"
             />
           </a-col>
-          <a-col class="description-icon">Agregar Ordena la Frase</a-col>
+          <a-col class="description-icon title-span-tag">Agregar Ordena la Frase</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -78,7 +78,7 @@
               @click="() => multipleOptionImageModal = true"
             />
           </a-col>
-          <a-col class="description-icon">Agregar Opcion Multiple Imagen</a-col>
+          <a-col class="description-icon title-span-tag">Agregar Opcion Multiple Imagen</a-col>
         </a-row>
       </a-col>
     </a-row>
@@ -102,51 +102,62 @@
           ESCRIBE TU RESPUESTAS Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES ESCRIBIR 2 A 5
           POSIBLES REPUESTAS
         </span>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta A"
-            v-decorator="[
+        <a-checkbox-group @change="onChange">
+          <a-checkbox value="A-OM"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta A"
+              v-decorator="[
           'questionA',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta B"
-            v-decorator="[
+            />
+          </a-form-item>
+
+          <a-checkbox value="B-OM"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta B"
+              v-decorator="[
           'questionB',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta C"
-            v-decorator="[
+            />
+          </a-form-item>
+
+          <a-checkbox value="C-OM"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta C"
+              v-decorator="[
           'questionC',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta D"
-            v-decorator="[
+            />
+          </a-form-item>
+
+          <a-checkbox value="D-OM"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta D"
+              v-decorator="[
           'questionD',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta E"
-            v-decorator="[
+            />
+          </a-form-item>
+
+          <a-checkbox value="E-OM"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta E"
+              v-decorator="[
           'questionE',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
+            />
+          </a-form-item>
+        </a-checkbox-group>
         <a-divider />
         <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
         <a-form-item>
@@ -181,14 +192,11 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
-          @click="onSubmitOptionMultiple"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitOptionMultiple"
         >CREAR</a-button>
       </template>
@@ -336,14 +344,12 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitColumnRelationForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitColumnRelationForm"
         >CREAR</a-button>
       </template>
@@ -369,51 +375,58 @@
           ESCRIBE TU RESPUESTAS Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES ESCRIBIR 2 A 5
           POSIBLES REPUESTAS
         </span>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta A"
-            v-decorator="[
+        <a-checkbox-group @change="onChange">
+          <a-checkbox value="A-CP"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta A"
+              v-decorator="[
           'questionAPhrase',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta B"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-checkbox value="B-CP"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta B"
+              v-decorator="[
           'questionBPhrase',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta C"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-checkbox value="C-CP"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta C"
+              v-decorator="[
           'questionCPhrase',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta D"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-checkbox value="D-CP"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta D"
+              v-decorator="[
           'questionDPhrase',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-input
-            placeholder="Respuesta E"
-            v-decorator="[
+            />
+          </a-form-item>
+          <a-checkbox value="E-CP"></a-checkbox>
+          <a-form-item>
+            <a-input
+              placeholder="Respuesta E"
+              v-decorator="[
           'questionEPhrase',
           {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
         ]"
-          />
-        </a-form-item>
+            />
+          </a-form-item>
+        </a-checkbox-group>
         <a-divider />
         <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
         <a-form-item>
@@ -448,14 +461,12 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitPhraseCompleteForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitPhraseCompleteForm"
         >CREAR</a-button>
       </template>
@@ -510,14 +521,12 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitPhraseOrderForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitPhraseOrderForm"
         >CREAR</a-button>
       </template>
@@ -539,7 +548,10 @@
         ]"
           />
         </a-form-item>
-
+        <span>
+          CARGA TUS IMAGENES Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES CARGAR HASTA
+          5 POSIBLES RESPUESTAS
+        </span>
         <a-row class="container-row-img-option">
           <a-form-item class="img-upload">
             <a-upload-dragger
@@ -652,14 +664,12 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitOptionMultipleForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          :loading="inviteUserLoading"
           @click="onSubmitOptionMultipleForm"
         >CREAR</a-button>
       </template>
@@ -748,11 +758,13 @@ export default {
       columnRelationModal: false,
       phraseCompleteModal: false,
       phraseOrderModal: false,
-      multipleOptionImageModal: false,
-      inviteUserLoading: false
+      multipleOptionImageModal: false
     };
   },
   methods: {
+    onChange(checkedValues) {
+      console.log("checked = ", checkedValues);
+    },
     onSubmitOptionMultiple() {
       this.optionMultiForm.validateFields(async (err, values) => {
         if (!err) {

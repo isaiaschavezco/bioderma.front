@@ -131,4 +131,8 @@ export default {
   width: 22px;
   margin-right: 10px;
 }
+
+.title-span-tag {
+  color: #526987;
+}
 </style>

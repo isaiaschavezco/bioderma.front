@@ -41,7 +41,7 @@
             <a-col>
               <a-button shape="circle" icon="reload" size="large" />
             </a-col>
-            <a-col>Resetear puntos</a-col>
+            <a-col class="title-span-tag">Resetear puntos</a-col>
           </a-row>
           <a-row style="margin-top:2rem;">
             <a-col>
@@ -52,7 +52,7 @@
                 @click="() => (inviteUserModal = true)"
               />
             </a-col>
-            <a-col>Nuevo usuario</a-col>
+            <a-col class="title-span-tag">Nuevo usuario</a-col>
           </a-row>
         </div>
         <div v-if="activeTab == 2">

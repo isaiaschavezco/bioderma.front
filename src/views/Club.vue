@@ -39,7 +39,7 @@
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />
           </a-col>
-          <a-col>AÑADIR PRODUCTO</a-col>
+          <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
         <br />
         <a-row>
@@ -47,7 +47,7 @@
             <a-icon type="check" slot="checkedChildren" />
             <a-icon type="close" slot="unCheckedChildren" />
           </a-switch>
-          <a-row>Activar/Desactivar Tienda</a-row>
+          <a-row class="title-span-tag">Activar/Desactivar Tienda</a-row>
         </a-row>
       </a-col>
     </a-row>

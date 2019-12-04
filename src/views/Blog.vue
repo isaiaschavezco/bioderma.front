@@ -31,7 +31,7 @@
             <a-col>
               <a-button shape="circle" icon="plus" size="large" @click="() => blogNewModal = true" />
             </a-col>
-            <a-col>Crear nueva entrada</a-col>
+            <a-col class="title-span-tag">Crear nueva entrada</a-col>
           </a-row>
         </div>
       </a-col>

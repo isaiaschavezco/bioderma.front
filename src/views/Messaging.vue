@@ -17,7 +17,13 @@
           <div class="container-chat-inputs">
             <div class="inputs-chat">
               <a-input placeholder="Escribe un mensaje" style="width: 95%; margin-right:10px" />
-              <a-button type="primary" shape="circle" icon="right-circle" :size="size" />
+              <a-button
+                type="primary"
+                shape="circle"
+                icon="right-circle"
+                :size="size"
+                @click="chatMsg"
+              />
             </div>
           </div>
         </div>
@@ -207,6 +213,10 @@ export default {
   methods: {
     selectUser() {
       alert("Usuario Seleccionado: ");
+    },
+
+    chatMsg() {
+      alert("send a msg");
     }
   }
 };
@@ -237,12 +247,12 @@ export default {
 
 .end-chat,
 .title-chat {
-  margin: 0 4em;
+  margin: 0 2em;
 }
 
 .img-chat {
-  width: 30px;
-  margin-left: 10px;
+  width: 20px;
+  margin-left: 20px;
 }
 
 .btn-end-chat {
@@ -279,5 +289,6 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0 3em;
+  margin-top: 1em;
 }
 </style>

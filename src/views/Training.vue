@@ -49,7 +49,7 @@
           <a-col>
             <a-button shape="circle" icon="file-add" size="large" @click="loadFileModal = true" />
           </a-col>
-          <a-col>AGREGAR PDF</a-col>
+          <a-col class="title-span-tag">AGREGAR PDF</a-col>
         </a-row>
       </a-col>
     </a-row>

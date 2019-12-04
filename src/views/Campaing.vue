@@ -66,7 +66,7 @@
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="loadFileModal = true" />
           </a-col>
-          <a-col>AÑADIR CAMPAÑA</a-col>
+          <a-col class="title-span-tag">AÑADIR CAMPAÑA</a-col>
         </a-row>
       </a-col>
     </a-row>

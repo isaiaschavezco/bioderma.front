@@ -18,7 +18,6 @@
             type="primary"
             style="background: #449C44; border: none;"
             class="btn-cel"
-            :loading="sessionColorLoading"
             @click="changeSessionColor"
           >APLICAR</a-button>
         </a-row>
@@ -37,7 +36,6 @@
             type="primary"
             style="background: #F99F28; border: none;"
             class="btn-cel"
-            :loading="sessionColorLoading"
             @click="changeSessionColor"
           >APLICAR</a-button>
         </a-row>
@@ -56,7 +54,6 @@
             type="primary"
             style="background: #AB6870; border: none;"
             class="btn-cel"
-            :loading="sessionColorLoading"
             @click="changeSessionColor"
           >APLICAR</a-button>
         </a-row>
@@ -75,7 +72,6 @@
             type="primary"
             style="background: #0077AA; border: none;"
             class="btn-cel"
-            :loading="sessionColorLoading"
             @click="changeSessionColor"
           >APLICAR</a-button>
         </a-row>
@@ -93,7 +89,14 @@ export default {
   },
   methods: {
     changeSessionColor() {
-      alert("Edit HERE");
+      this.$confirm({
+        title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
+        content: "",
+        onOk() {
+          alert("Theme Actived");
+        },
+        onCancel() {}
+      });
     }
   }
 };

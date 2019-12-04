@@ -57,6 +57,14 @@ export default new Router({
             )
         },
         {
+          path: "ViewCampaing",
+          name: "viewcampaing",
+          component: () =>
+            import(
+              /* webpackChunkName: "Plataforma" */ "./views/ViewCampaing.vue"
+            )
+        },
+        {
           path: "Club",
           name: "club",
           component: () =>
