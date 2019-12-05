@@ -4,7 +4,7 @@
 			Alias de usuario
 		</h2>
 		
-		<img src="../../../assets/icons/Usuarios_Activo.png" id="sidebar-user-img" alt="Usuario">
+		<img src="../../../assets/icons/Usuarios_Inactivo.png" id="sidebar-user-img" alt="Usuario">
 		
 		<div id="sidebar-total-points">
 			<h4 class="title-points">PUNTOS TOTALES</h4>

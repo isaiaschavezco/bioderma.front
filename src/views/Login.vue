@@ -48,6 +48,7 @@
                       html-type="submit"
                       class="login-form-button"
                       style="background-color:#526987; border: 1px solid #707070;"
+                      :loading="loadingSignIn"
                     >ENTRAR</a-button>
                   </a-row>
                 </a-form-item>
@@ -69,16 +70,17 @@ export default {
   data() {
     return {
       collapsed: false,
-      form: null
+      form: null,
+      loadingSignIn: false
     };
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
+      this.loadingSignIn = true;
+
       this.form.validateFields(async (err, values) => {
         if (!err) {
-          console.log("Received values of form: ", values);
-
           try {
             const loginInfo = {
               email: values.user,
@@ -88,13 +90,14 @@ export default {
             const response = await this.$axios.post("sesion/admin", loginInfo);
             const responseLogin = response.data;
 
-            if (responseLogin.status === 1) {
-              const messageLogin = "Usuario incorrecto";
-              console.log(messageLogin);
-            }
-            else if (responseLogin.status === 2) {
-              const messageLogin = "Contraseña incorrecta";
-              console.log(messageLogin);
+            if (responseLogin.status === 1 || responseLogin.status == 2) {
+              let messageLogin = "Usuario incorrecto";
+              
+              if (responseLogin.status == 2)
+                messageLogin = "Contraseña incorrecta";
+              
+              this.loadingSignIn = false;
+              this.$message.error(messageLogin);
             }
             else {
               localStorage.clear();
@@ -110,6 +113,7 @@ export default {
             } 
           } catch(err) {
             console.log("%cHubo un error.", "color:red;font-size:1rem");
+            this.$message.error("Hubo un error");
           }
         }
       });
