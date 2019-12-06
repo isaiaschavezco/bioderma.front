@@ -101,34 +101,12 @@ export default {
         }
       ],
       fileForm: this.$form.createForm(this),
-      disabledItem: true,
-      disabledItemOne: true,
-      disabledItemTwo: true,
-      disabledItemThree: true,
-      disabledItemFour: true
-
       // checked: true,
       // disabled: false
     };
   },
   computed: {},
   methods: {
-    ableItem() {
-      this.disabledItem = !this.disabledItem;
-    },
-    ableItemOne() {
-      this.disabledItemOne = !this.disabledItemOne;
-    },
-    ableItemTwo() {
-      this.disabledItemTwo = !this.disabledItemTwo;
-    },
-    ableItemThree() {
-      this.disabledItemThree = !this.disabledItemThree;
-    },
-    ableItemFour() {
-      this.disabledItemFour = !this.disabledItemFour;
-    },
-
     onSubmitNotificationForm() {
       //alert("Subir");
       this.fileForm.validateFields((err, values) => {
@@ -167,7 +145,7 @@ export default {
       console.log(`selected ${value}`);
     },
     // handleBlur() {
-    //   console.log("blur");
+    //   console.log("blur");  
     // },
     // handleFocus() {
     //   console.log("focus");
