@@ -230,6 +230,7 @@ export default {
     async getFiles(menuId) {
       this.loadingMore = true;
       const response = await this.$axios(`submenu/${menuId}`);
+      console.log("Response: ",response);
       this.files = response.data;
       this.loadingMore = false;
     },
