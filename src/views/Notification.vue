@@ -168,10 +168,6 @@ export default {
 .group-filter {
   display: flex;
 }
-.filter {
-  width: 50%;
-  padding: 8px;
-}
 .mycard {
   border: none;
   border-bottom: none;
