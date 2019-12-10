@@ -267,6 +267,9 @@ export default {
 			else {
 				const arrFormatedFilter = [filter.type];
 
+				if (filter.position !== null)
+					arrFormatedFilter.push(filter.position);
+
 				if (filter.chain !== null)
 					arrFormatedFilter.push(filter.chain);
 
@@ -329,6 +332,9 @@ export default {
 					filterData.initAge = -1;
 					filterData.finalAge = -1;
 				}
+
+				if(this.disabledPosition)
+					filterData.naosPosition = -1;
 			}
 
 			console.log("%cNew filter: ", "color:green;", filterData)
@@ -341,7 +347,7 @@ export default {
 			try {
 				const response = await this.$axios.post(urlRegisterFilter, filter);
 				this.filters.push(response.data.target);
-
+				this.$emit('filterAdded', this.filters.slice(-1)[0]);
 				// this.$notification["success"]({
 				// 	message: "Registro exitoso",
         //   description:
