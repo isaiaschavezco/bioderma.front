@@ -8,7 +8,7 @@
               setFieldsValue="photo"
               v-decorator="[
               'photo',
-              {rules:[{ required: true, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
               name="upload"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
@@ -170,6 +170,8 @@
               <a-col :span="20" :offset="2">
                 <a-form-item>
                   <a-input
+                    type="tel"
+                    pattern="[0-9]{10}"
                     setFieldsValue="phone"
                     v-decorator="[
                       'phone',
@@ -203,9 +205,10 @@
               </a-col>
 
               <a-col :span="9" :offset="2">
-                <a-form-item>
+                <a-form-item help="Contraseña al menos 8 caracteres">
                   <a-input
-                    placeholder="CONTRASEÑA DE ACCESO"
+                    pattern=".{8,}"
+                    placeholder="CONTRASEÑA"
                     setFieldsValue="password"
                     v-decorator="[
                         'password',
@@ -264,7 +267,7 @@
             <a-upload-dragger
               v-decorator="[
               'upload',
-              {rules:[{ required: true, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
               name="photo"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
@@ -371,7 +374,7 @@
                       @change="handleSelectChange"
                     >
                       <a-select-option
-                        :value="chains.name"
+                        :value="chains.id"
                         v-for="chains in chains"
                         :key="chains.id"
                       >{{chains.name}}</a-select-option>
@@ -451,23 +454,6 @@
                       />
                     </a-form-item>
                   </a-col>
-                  <!-- Farmacia -->
-                  <!--a-col :span="6" :offset="1">
-                  <a-form-item style="margin-bottom: 15px">
-                    <a-select
-                      v-decorator="[
-                    'pharmacy',
-                    { rules: [{ required: true, message: 'Seleccione su farmacia' }] },
-                  ]"
-                      placeholder="Farmacia"
-                      @change="handleSelectChange"
-                    >
-                      <a-select-option value="Del ahorro">Del ahorro</a-select-option>
-                      <a-select-option value="Similares">Similares</a-select-option>
-                    </a-select>
-                  </a-form-item>
-                  </a-col-->
-
                   <!-- Colonia -->
                   <a-col :span="9" :offset="2">
                     <a-form-item>
@@ -487,6 +473,7 @@
                   <a-col :span="9" :offset="2">
                     <a-form-item>
                       <a-input
+                        pattern="[0-9]{5}"
                         setFieldsValue="postalCode"
                         placeholder="Código Postal"
                         v-decorator="[
@@ -517,6 +504,7 @@
                 <a-col :span="9" :offset="2">
                   <a-form-item>
                     <a-input
+                      pattern="[0-9]{10}"
                       setFieldsValue="phone"
                       v-decorator="[
                       'phone',
@@ -540,18 +528,19 @@
                     {
                       rules: [{
                         type: 'email', message: 'Correo electronico no valido',
-                      }, {
-                        required: true, message: 'Ingrese su correo electronico',
-                      }]
-                    }
-                  ]"
+                        }, {
+                          required: true, message: 'Ingrese su correo electronico',
+                        }]
+                      }
+                    ]"
                     />
                   </a-form-item>
                 </a-col>
                 <a-col :span="9" :offset="2">
-                  <a-form-item>
+                  <a-form-item help="Contraseña al menos 8 caracteres">
                     <a-input
-                      placeholder="CONTRASEÑA DE ACCESO"
+                      pattern=".{8,}"
+                      placeholder="CONTRASEÑA"
                       setFieldsValue="password"
                       v-decorator="[
                     'password',
@@ -684,6 +673,35 @@ export default {
         )
       });
     },
+    failEmail() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            ERROR AL COMPLETAR TU REGISTRO, INTRODUCE UN CORREO DIFERENTE
+          </p>
+        )
+      });
+    },
+    failIncorrect() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            ERROR AL COMPLETAR TU REGISTRO, UN CAMPO NO TIENE EL FORMATO
+            CORRECTO
+          </p>
+        )
+      });
+    },
+    fail() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            HA OCURRIDO UN ERROR DURANTE EL REGISTRO, FAVOR DE INTENTARLO MÁS
+            TARDE
+          </p>
+        )
+      });
+    },
     async getStates() {
       const responseStates = await this.$axios("state");
       this.states = responseStates.data.states;
@@ -729,12 +747,16 @@ export default {
                 naosPosition: values.naosPosition
               }
             );
-            console.log(response.data);
-            if (response.data == 0) {
+            console.log(response.data.status);
+            if (response.data.status == 0) {
               this.success();
+            } else if (response.data.status == 5) {
+              this.failEmail();
+            } else if (response.data.status == 3) {
+              this.failIncorrect();
             }
           } catch (error) {
-            console.log(error);
+            this.fail();
           }
         } else {
           console.log(err);
@@ -743,14 +765,42 @@ export default {
     },
     handleSubmit2(e) {
       e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
+      this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
-          this.$axios.post(
-            "https://bioderma-api-inmersys.herokuapp.com/user/drugstore",
-            values
-          );
-          this.success();
+          try {
+            const response = await this.$axios.post(
+              "https://bioderma-api-inmersys.herokuapp.com/user/drugstore",
+              {
+                name: values.name,
+                lastName: values.lastName,
+                nickName: values.nickName,
+                photo: "URL",
+                birthDate: values.birthDate,
+                gender: values.gender,
+                phone: values.phone,
+                email: values.email,
+                password: values.password,
+                postalCode: values.postalCode,
+                state: values.state,
+                city: values.city,
+                chain: values.chain,
+                drugStore: values.drugStore,
+                town: values.town,
+                mayoralty: values.mayoralty,
+                charge: values.charge
+              }
+            );
+            if (response.data.status == 0) {
+              this.success();
+            } else if (response.data.status == 5) {
+              this.failEmail();
+            } else if (response.data.status == 3) {
+              this.failIncorrect();
+            }
+          } catch (error) {
+            THIS.fail();
+          }
         } else {
           console.log(err);
         }
