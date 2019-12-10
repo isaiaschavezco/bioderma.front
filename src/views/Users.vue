@@ -8,7 +8,7 @@
               <a-input-search placeholder="Buscar usuario" enterButton />
               <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
-                  <a-button shape="circle" icon="info" size="large" />
+                  <a-button @click="onShowUserInfo" shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
                   <a-button shape="circle" icon="delete" size="large" />
                 </span>
@@ -149,9 +149,20 @@
         >REGISTRAR</a-button>
       </template>
     </a-modal>
+    <a-modal
+      v-model="showUserInfoModal"
+      :footer="null"
+      centered
+      width="70%"
+      @cancel="onCloseInfoUser"
+    >
+      <ModalUserInfo :userInfo="userInfoModal" />
+    </a-modal>
   </div>
 </template>
 <script>
+import ModalUserInfo from "../components/modals/UserInfo/ModalUserInfo.vue";
+
 const columns = [
   {
     dataIndex: "name",
@@ -258,13 +269,15 @@ const data = [
   }
 ];
 export default {
+  components: {
+    ModalUserInfo
+  },
   data() {
     return {
       collapsed: false,
       data,
       columns,
       chainColumns,
-      inviteUserModal: false,
       value: 1,
       activeTab: 1,
       chainModal: false,
@@ -273,7 +286,122 @@ export default {
       chains: [],
       tableChains: [],
       inviteUserModal: false,
-      inviteUserLoading: false
+      inviteUserLoading: false,
+      showUserInfoModal: false,
+      userInfoModal: {
+        name: "Nombre",
+        lastName: "Apellidos",
+        birthday: "12 Ago",
+        gender: "Mujer",
+        city: "Mi ciudad",
+        pharmacy: "Nombre farmacia",
+        chain: "Mi cadena",
+        address: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
+        position: "Mi cargo",
+        phone: "555-5555-555",
+        email: "user@user.com",
+        totalPoints: "2570",
+        pointsHistory: [
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          },
+          {
+            date: "15/Ago/2019",
+            product: {
+              name: "Producto X",
+              points: 500
+            }
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -417,6 +545,14 @@ export default {
           }
         }
       });
+    },
+    onShowUserInfo() {
+      console.log("%cObteniendo informacion usuario.", "color:green;font-size:0.7rem;")
+
+      this.showUserInfoModal = true;
+    },
+    onCloseInfoUser() {
+      this.showUserInfoModal = false;
     }
   }
 };
@@ -463,5 +599,28 @@ export default {
   margin-right: 30px;
   color: #526987;
   font-weight: 500;
+}
+
+/* .ant-modal-close-x {
+  color: white;
+  margin: 1rem 1rem 0 0;
+  background-color: #1790FF;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px rgb(0, 0, 0, 0.6);
+  transition-delay: 0ms;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.ant-modal-close-x:active {
+  transform: scale(0.8);
+} */
+
+.total-points-user {
+  font-weight: bold;
+}
+
+.points-info-user-amount {
+  font-size: 2.5rem;
 }
 </style>
