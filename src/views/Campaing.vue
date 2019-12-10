@@ -75,6 +75,7 @@
       v-model="loadFileModal"
       :confirmLoading="loadingFileForm"
       centered
+      width="50%"
     >
       <a-form :form="fileForm">
         <a-form-item>
@@ -120,7 +121,9 @@
         </a-form-item>
       </a-form>
       <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
-      <FormFilter />
+      
+      <CampaingFilter/>
+
       <template slot="footer">
         <a-button
           type="primary"
@@ -132,10 +135,11 @@
   </div>
 </template>
 <script>
-import FormFilter from "../components/FormFilter";
+import CampaingFilter from "../components/forms/filters/CampaingFilter.vue";
+
 export default {
   components: {
-    FormFilter
+    CampaingFilter
   },
   data() {
     return {
@@ -209,7 +213,7 @@ export default {
       files: [],
       loadingMore: false,
       showLoadingMore: true,
-      loadFileModal: false,
+      loadFileModal: true,
       fileForm: this.$form.createForm(this),
       submenuItems: [],
       fileList: [],
