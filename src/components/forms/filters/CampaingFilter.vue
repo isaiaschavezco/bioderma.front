@@ -17,7 +17,7 @@
 								</a-checkbox>
 							</a-row>
 							
-							<a-row class="select-item">
+							<a-row class="select-item" :class="(filterToSend.userType==2)?'hidden':''">
 								<!-- Row checkbox -->
 								<a-checkbox :checked="!disabledFilters && !disabledPosition" @click="togglePosition" :disabled="disabledFilters" style="margin-right:7px; "></a-checkbox>
 								<a-select
@@ -365,7 +365,6 @@ export default {
 					"targetId": idFilter
 				});
 				
-
 				this.filters = this.filters.filter(filter => filter.id !== idFilter);
 
 
