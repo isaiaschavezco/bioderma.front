@@ -5,24 +5,25 @@
         <div class="card-container" style="height: 50rem; margin-top: 54px;">
           <a-list
             :grid="{ gutter: 16, column: 3 }"
-            :dataSource="data"
+            :dataSource="proudcts"
             :style="{ overflow: 'scroll'}"
             style="height: 100%;"
           >
-            <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item slot="renderItem" slot-scope="item">
               <a-tooltip
                 placement="topLeft"
                 title="Da click en la imágen para ver las los productos"
               >
-                <a-card :title="item.name">
+                <a-card :title="item.title">
                   <p class="center">{{item.points}}</p>
-                  <img alt="example" :src="item.portrait" slot="cover" />
-                  <span style="font-weight: 700;">DESCRIPCION</span>
+                  <img />
+                  {{item.image}}
+                  <span style="font-weight: 700;">{{item.description}}</span>
                   <br />
                   <span>{{item.description}}</span>
                   <template class="ant-card-actions" slot="actions">
                     <a-icon type="edit" />
-                    <a-icon type="delete" />
+                    <a-icon type="delete" @click="deleteConfirm" />
                   </template>
                 </a-card>
               </a-tooltip>
@@ -51,20 +52,22 @@
         </a-row>
       </a-col>
     </a-row>
-    <a-modal v-model="confirmClose"></a-modal>
+    <a-modal v-modal="confirmClose"></a-modal>
     <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" centered>
       <a-form :form="fileForm">
         <a-form-item>
           <a-input
+            setFieldsValue="title"
             placeholder="Ingresa el nombre del producto"
             v-decorator="[
-          'name',
+          'title',
           {rules: [{ required: true, message: 'Favor de llenar el campo'}]}
           ]"
           />
         </a-form-item>
         <a-form-item>
           <a-textarea
+            setFieldsValue="description"
             placeholder="Ingresa la descripcion del producto"
             :rows="4"
             v-decorator="[
@@ -77,8 +80,8 @@
           <div class="dropbox">
             <a-upload-dragger
               v-decorator="[
-              'upload',
-              {rules:[{ required: true, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+              'image',
+              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
               name="upload"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
@@ -95,6 +98,7 @@
         <a-form-item class="center">
           Costo
           <a-input
+            setFieldsValue="points"
             class="input-cost"
             size="small"
             v-decorator="[
@@ -104,11 +108,6 @@
         </a-form-item>
       </a-form>
       <template slot="footer">
-        <!--  <a-button
-          type="primary"
-          style="background-color:#001529; border: 1px solid #001529;"
-          @click="cancelPictureForm"
-        >Cancelar</a-button>-->
         <a-button
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
@@ -125,62 +124,89 @@ export default {
   },
   data() {
     return {
-      data: [
+      title: "",
+      image:
+        "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
+      description: "",
+      points: "",
+      proudcts: [
         {
-          id: 1,
-          name: "Nombre producto 1",
-          points: "100 PTS",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convallis non. "
-        },
-        {
-          id: 2,
-          name: "Nombre producto 2",
-          points: "100 PTS",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convall"
-        },
-        {
-          id: 3,
-          name: "Nombre producto 3",
-          points: "100 PTS",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convallis n"
-        },
-        {
-          id: 4,
-          name: "Nombre producto 4",
-          points: "100 PTS",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nisl ex, hendrerit eget fermentum in, iaculis ac turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras vitae commodo nisl. Morbi et luctus magna. Phasellus semper facilisis eleifend. Fusce non nulla leo. Etiam tristique rhoncus eros sodales rutrum. Donec lobortis auctor lacus, at mattis metus convalli."
+          id: 0,
+          title: "",
+          image: "",
+          description: "",
+          points: 100,
+          isActive: true
         }
       ],
       fileForm: this.$form.createForm(this),
       addProductModal: false
     };
   },
+  mounted() {
+    this.getListProducts();
+  },
   methods: {
+    async getListProducts() {
+      const responseList = await this.$axios("product");
+      //console.log(responseList.data.products);
+      this.proudcts = responseList.data.products;
+    },
+    handleChange() {},
+    confirmClose() {},
     cancelPictureForm() {
       alert("Cancelar");
     },
+    successAddingProduct() {
+      this.$success({
+        content: (
+          <p style="text-align:center">
+            SE HA AÑADIDO EL PRODUCTO CORRECTAMENTE
+          </p>
+        )
+      });
+    },
+    failAddingProduct() {
+      this.$success({
+        content: (
+          <p style="text-align:center">
+            SE HA PRODUCIDO UN ERROR AÑADIENDO EL PRODUCTO, INTENTALO MÁS TARDE
+          </p>
+        )
+      });
+    },
     onSubmitPictureForm() {
       //alert("Subir");
-      this.fileForm.validateFields(err => {
+      this.fileForm.validateFields(async (err, values) => {
         if (!err) {
-          alert("Exito");
+          console.log("Datos recibidos: ", values);
+          try {
+            const response = await this.$axios.post(
+              "https://bioderma-api-inmersys.herokuapp.com/product",
+              {
+                title: values.title,
+                image: this.image,
+                description: values.description,
+                points: values.points
+              }
+            );
+            if (response.data.status == 0) {
+              this.successAddingProduct();
+            } else {
+              this.failAddingProduct();
+            }
+          } catch (error) {
+            alert(error);
+          }
         }
+      });
+    },
+    deleteConfirm() {
+      this.$confirm({
+        title: "¿ESTAS SEGURO DE ELIMINAR ESTE PRODUCTO?",
+        content: "",
+        async onOK() {},
+        onCancel() {}
       });
     },
     showConfirm() {
