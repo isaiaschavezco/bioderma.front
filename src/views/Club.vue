@@ -21,8 +21,11 @@
                   <br />
                   <span></span>
                   <template class="ant-card-actions" slot="actions">
-                    <a-icon type="edit" />
-                    <a-icon type="delete" @click="deleteConfirm" />
+                    <a-icon
+                      type="edit"
+                      @click="(editProductModal = true), gettingId(item.id)"
+                    />
+                    <a-icon type="delete" @click="deleteProduct(item.id)" />
                   </template>
                 </a-card>
               </a-tooltip>
@@ -57,6 +60,89 @@
       </a-col>
     </a-row>
     <a-modal v-modal="confirmClose"></a-modal>
+    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" centered>
+      <a-form :form="fileForm">
+        <a-form-item>
+          <a-input
+            setFieldsValue="title"
+            placeholder="Ingresa el nombre del producto"
+            v-decorator="[
+              'title',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item>
+          <a-textarea
+            setFieldsValue="description"
+            placeholder="Ingresa la descripcion del producto"
+            :rows="4"
+            v-decorator="[
+              'description',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item>
+          <div class="dropbox">
+            <a-upload-dragger
+              v-decorator="[
+                'image',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
+              name="upload"
+              action="http://localhost:3000/upload/1"
+              accept=".png, .jpg, jpge"
+              @change="handleChange"
+            >
+              <p class="ant-upload-drag-icon">
+                <a-icon type="picture" />
+              </p>
+              <p class="ant-upload-text">
+                Selecciona o suelta una imagen para tu producto
+              </p>
+              <p class="ant-upload-hint">
+                Unicamente archivos .png, .jpg o .jpge
+              </p>
+            </a-upload-dragger>
+          </div>
+        </a-form-item>
+        <a-form-item class="center">
+          Costo
+          <a-input
+            type="number"
+            setFieldsValue="points"
+            class="input-cost"
+            size="small"
+            v-decorator="[
+              'points',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+          />Pts
+        </a-form-item>
+      </a-form>
+      <template slot="footer">
+        <a-button
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          @click="onSubmitEditProduct"
+          >Aceptar</a-button
+        >
+      </template>
+    </a-modal>
     <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" centered>
       <a-form :form="fileForm">
         <a-form-item>
@@ -143,6 +229,7 @@
   </div>
 </template>
 <script>
+import { ok } from "assert";
 export default {
   components: {
     //  FormFilter
@@ -154,6 +241,8 @@ export default {
         "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
       description: "",
       points: "",
+      id: "",
+      newId: "",
       proudcts: [
         {
           id: 0,
@@ -165,7 +254,8 @@ export default {
         }
       ],
       fileForm: this.$form.createForm(this),
-      addProductModal: false
+      addProductModal: false,
+      editProductModal: false
     };
   },
   mounted() {
@@ -173,9 +263,49 @@ export default {
   },
   methods: {
     async getListProducts() {
-      const responseList = await this.$axios("product");
+      const responseList = await this.$axios.get("product");
       //console.log(responseList.data.products);
       this.proudcts = responseList.data.products;
+    },
+    gettingId(id) {
+      console.log((this.newId = id));
+    },
+    async deleteProduct(id) {
+      const responseDelete = await this.$axios.delete(`product/${id}`);
+      if (responseDelete.data.status == 0) {
+        this.successDeletingProduct();
+      } else {
+        this.failDeletingProduct();
+      }
+    },
+    onSubmitEditProduct(id) {
+      console.log(this.newId);
+      this.fileForm.validateFields(async (err, values) => {
+        if (!err) {
+          console.log("Datos recibidos: ", values);
+          try {
+            const response = await this.$axios.put(
+              "https://bioderma-api-inmersys.herokuapp.com/product",
+              {
+                id: this.newId,
+                title: values.title,
+                image: this.image,
+                description: values.description,
+                points: values.points
+              }
+            );
+            console.log(response.data);
+            if (response.data.status == 0) {
+              this.successEditingProduct();
+            } else {
+              this.failEditingProduct();
+            }
+            this.addProductModal = false;
+          } catch (error) {
+            alert(error);
+          }
+        }
+      });
     },
     handleChange() {},
     confirmClose() {},
@@ -190,12 +320,53 @@ export default {
           </p>
         )
       });
+      this.getListProducts();
     },
     failAddingProduct() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            SE HA PRODUCIDO UN ERROR AÑADIENDO EL PRODUCTO, FAVOR INTENTARLO MÁS
+            TARDE
+          </p>
+        )
+      });
+    },
+    successEditingProduct() {
       this.$success({
         content: (
           <p style="text-align:center">
-            SE HA PRODUCIDO UN ERROR AÑADIENDO EL PRODUCTO, INTENTALO MÁS TARDE
+            SE HA EDITADO EL PRODUCTO CORRECTAMENTE
+          </p>
+        )
+      });
+    },
+    failEditingProduct() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            SE HA PRODUCIDO UN ERROR EDITANDO EL PRODUCTO, FAVOR INTENTARLO MÁS
+            TARDE
+          </p>
+        )
+      });
+    },
+    successDeletingProduct() {
+      this.$success({
+        content: (
+          <p style="text-align:center">
+            SE HA ELIMINADO EL PRODUCTO CORRECTAMENTE
+          </p>
+        )
+      });
+      this.getListProducts();
+    },
+    failDeletingProduct() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            SE HA PRODUCIDO UN ERROR ELIMINANDO EL PRODUCTO, FAVOR INTENTARLO
+            MÁS TARDE
           </p>
         )
       });
@@ -220,21 +391,10 @@ export default {
             } else {
               this.failAddingProduct();
             }
+            this.addProductModal = false;
           } catch (error) {
             alert(error);
           }
-        }
-      });
-    },
-    deleteConfirm() {
-      this.$confirm({
-        title: "¿ESTAS SEGURO DE ELIMINAR ESTE PRODUCTO?",
-        content: "",
-        onOk() {
-          console.log(this.value);
-        },
-        onCancel() {
-          console.log("Huevos");
         }
       });
     },
