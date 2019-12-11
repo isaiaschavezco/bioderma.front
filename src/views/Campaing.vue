@@ -11,60 +11,65 @@
             <a-tab-pane tab="CAMPAÑAS" key="1"></a-tab-pane>
             <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
           </a-tabs>
-          <a-list
-            :grid="{ gutter: 16, column: 4 }"
-            :dataSource="data"
-            :style="{ overflow: 'scroll' }"
-            style="height: 100%;"
+
+          <section
+            :style="{ overflow: 'scroll', height: '88vh'}"
           >
-            <a-list-item slot="renderItem" slot-scope="item, index">
-              <a-tooltip
-                placement="topLeft"
-                title="Da click en la imágen para ver las trivias de esta campaña"
-              >
-                <a-card
-                  :title="item.name"
-                  :headStyle="
-                    bioGamesTab
-                      ? { background: '#6e6e6e', color: '#d9d9d9' }
-                      : {}
-                  "
-                  :bodyStyle="
-                    bioGamesTab
-                      ? { background: '#6e6e6e', color: '#d9d9d9' }
-                      : {}
-                  "
-                >
-                  <img alt="example" :src="item.portrait" slot="cover" />
-                  <span style="font-weight: 700;">FILTROS</span>
-                  <br />
-                  <span>{{ item.filter[0] }}</span>
-                  <a-divider
-                    :style="{
-                      margin: '10px 0px',
-                      border: '1px solid rgba(0,0,0,0.1)'
-                    }"
-                  />
-                  <span style="font-weight: 700;">ESTATUS</span>
-                  <br />
-                  <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
-                  <template class="ant-card-actions" slot="actions">
-                    <a-icon type="close-circle" />
-                    <router-link to="campaingDetail">
-                      <a-icon type="edit" />
-                    </router-link>
-                    <a-icon type="delete" />
-                  </template>
-                </a-card>
-              </a-tooltip>
-            </a-list-item>
-          </a-list>
+            <a-row :gutter="16" :style="{ 'margin-top': '16px' }" v-for="row in groupedCampaings">
+              <a-col span="6" v-for="item in row">
+                <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
+                  <a-card
+                    :title="item.name"
+                    :headStyle="
+                      bioGamesTab
+                        ? { background: '#6e6e6e', color: '#d9d9d9' }
+                        : {}
+                    "
+                    :bodyStyle="
+                      bioGamesTab
+                        ? { background: '#6e6e6e', color: '#d9d9d9' }
+                        : {}
+                    "
+                  >
+                    <img alt="example" :src="item.portrait" slot="cover" class="campaing__img"/>
+                    <span style="font-weight: 700;">FILTROS</span>
+
+                    <div class="campaing__filters">
+                        <div class="campaing__filter" v-if="item.target.length > 0">
+                          <p v-for="filter in item.target" :key="filter.id">
+                            {{ FilterHelper.toString(filter) }}
+                          </p>
+                        </div>
+                    </div>
+                    
+                    
+                    <a-divider
+                      :style="{
+                        margin: '10px 0px',
+                        border: '1px solid rgba(0,0,0,0.1)'
+                      }"
+                    />
+                    <span style="font-weight: 700;">ESTATUS</span>
+                    <br />
+                    <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
+                    <template class="ant-card-actions" slot="actions">
+                      <a-icon type="close-circle" />
+                      <router-link to="campaingDetail">
+                        <a-icon type="edit" />
+                      </router-link>
+                      <a-icon type="delete" />
+                    </template>
+                  </a-card>
+                </a-tooltip>
+              </a-col>
+            </a-row>
+          </section>
         </div>
       </a-col>
       <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
         <a-row style="margin-top: -13px; margin-left: 27px;">
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="loadFileModal = true" />
+            <a-button shape="circle" icon="plus" size="large" @click="openModal" />
           </a-col>
           <a-col class="title-span-tag">AÑADIR CAMPAÑA</a-col>
         </a-row>
@@ -74,154 +79,70 @@
       title="NUEVA CAMPAÑA"
       v-model="loadFileModal"
       :confirmLoading="loadingFileForm"
+      :afterClose="closeModal"
       centered
       width="50%"
+      :footer="null"
     >
-      <a-form :form="fileForm">
-        <a-form-item>
-          <a-input
-            placeholder="Ingresa un nombre para la campaña"
-            v-decorator="[
-              'name',
-              {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-
-        <a-form-item>
-          <div class="dropbox">
-            <a-upload-dragger
-              v-decorator="[
-                'upload',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Favor de cargar un archivo PDF'
-                    }
-                  ]
-                }
-              ]"
-              name="upload"
-              action="http://localhost:3000/upload/1"
-              accept=".png, .jpg, jpge"
-              @change="handleChangeFileUpload"
-              :beforeUpload="beforeUpload"
-              :fileList="fileList"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="picture" />
-              </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
-              <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
-            </a-upload-dragger>
-          </div>
-        </a-form-item>
-      </a-form>
-      <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
-      
-      <CampaingFilter/>
-
-      <template slot="footer">
-        <a-button
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-          @click="onSubmitFileForm"
-        >SUBIR</a-button>
-      </template>
+      <ModalCampaingRegister
+        :biodermaGames="bioGamesTab"
+        @campaingAdded="updateCampaings"
+        @closeModal="closeModal"
+      />
     </a-modal>
   </div>
 </template>
 <script>
-import CampaingFilter from "../components/forms/filters/CampaingFilter.vue";
+import ModalCampaingRegister from "../components/modals/Campaing/ModalCampaingRegister.vue";
+import Filter from "../components/forms/filters/FilterHelper";
 
 export default {
   components: {
-    CampaingFilter
+    ModalCampaingRegister
   },
   data() {
     return {
-      data: [
-        {
-          id: 1,
-          name: "Nombre campaña",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 2,
-          name: "Nombre campaña 2",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 3,
-          name: "Nombre campaña 3",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: false,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 1,
-          name: "Nombre campaña",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 2,
-          name: "Nombre campaña 2",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 3,
-          name: "Nombre campaña 3",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: false,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 1,
-          name: "Nombre campaña",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        },
-        {
-          id: 2,
-          name: "Nombre campaña 2",
-          portrait:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQvZBYT2ojOnMqeyDX0rtMtzObcawQSug5-C4n7fASfjpnSu_Yx",
-          isActive: true,
-          filter: ["NAOS, Mexicalli"]
-        }
-      ],
+      FilterHelper: Filter,
+      campaings: [],
+      groupedCampaings: [],
+      loadingFileForm: false,
       activeTab: 1,
       files: [],
       loadingMore: false,
       showLoadingMore: true,
-      loadFileModal: true,
-      fileForm: this.$form.createForm(this),
+      loadFileModal: false,
       submenuItems: [],
-      fileList: [],
-      loadingFileForm: false,
       bioGamesTab: false
     };
   },
+  mounted: function() {
+    this.getFiles(1);
+    this.getCamapings();
+  },
   methods: {
+    async getCamapings() {
+      const urlCamapaings = `https://bioderma-api-inmersys.herokuapp.com/campaing/${this.bioGamesTab}`;
+
+      try {
+        const response = await this.$axios(urlCamapaings);
+        this.campaings = response.data;
+        this.groupedCampaings = this.groupCampaings(); 
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    },
+    openModal() {
+      this.loadFileModal = true;
+      console.log("Open", this.loadFileModal);
+    },
+    closeModal() {
+      this.loadFileModal = false;
+      console.log(this.loadFileModal);
+    },
+    updateCampaings() {
+      this.getCamapings();
+      this.getFiles(this.activeTab);
+    },
     onChangeTab(activeTabKey) {
       this.activeTab = activeTabKey;
       if (activeTabKey == "1") {
@@ -229,6 +150,7 @@ export default {
       } else {
         this.bioGamesTab = true;
       }
+      this.getCamapings();
       this.getFiles(this.activeTab);
     },
     async getFiles(menuId) {
@@ -238,45 +160,6 @@ export default {
       this.files = response.data;
       this.loadingMore = false;
     },
-    onSubmitFileForm() {
-      this.fileForm.validateFields(async (err, values) => {
-        if (!err) {
-          try {
-            const response = await this.$axios.post("submenu", {
-              menu: values.menu,
-              submenu: values.submenu,
-              title: values.title,
-              fileUrl: values.upload.fileList[0].response
-            });
-
-            this.loadFileModal = false;
-            this.fileForm.resetFields();
-            this.fileList = [];
-
-            if (response.data == 0) {
-              this.getFiles(this.activeTab);
-              this.showNotification(
-                "success",
-                "Archivo cargado",
-                "Se ha cargado el archivo correctamente."
-              );
-            } else {
-              this.showNotification(
-                "warning",
-                "Archivo existente",
-                "La sección ya cuenta con un archivo, si desea registrar uno nuevo elimine el archivo actual."
-              );
-            }
-          } catch (err) {
-            this.showNotification(
-              "error",
-              "Error al realizar el registro",
-              "Ha ocurrido un error al registrar esta sección."
-            );
-          }
-        }
-      });
-    },
     handleChangeMenu(value) {
       this.getSubMenuItems(value);
     },
@@ -284,41 +167,42 @@ export default {
       const response = await this.$axios(`submenu/items/${menuId}`);
       this.submenuItems = response.data;
     },
-    handleChangeFileUpload(info) {
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      this.fileList = fileList;
-    },
-    beforeUpload(file) {
-      let status = true;
-      this.fileForm.validateFields((err, values) => {
-        if (err) {
-          if (err.menu || err.submenu || err.title) {
-            status = false;
-          }
-        }
-      });
-      return status;
-    },
-    showNotification(type, title, message) {
-      this.$notification[type]({
-        message: title,
-        description: message
-      });
+    groupCampaings() {
+      const totalGroups = Math.ceil(this.campaings.length / 4);
+      const groupsCampaings = [];
+
+      for (let i = 0; i < totalGroups; ++i) {
+        const currGroup = [];
+
+        for (let j = 4 * i; j < 4 * (i + 1) && j < this.campaings.length; ++j)
+          currGroup.push(this.campaings[j]);
+
+        groupsCampaings.push(currGroup);
+      }
+
+      console.log("Grouped:", groupsCampaings);
+
+      return groupsCampaings;
     }
-  },
-  mounted() {
-    this.getFiles(1);
   }
 };
 </script>
-<style>
+<style scoped>
 .card-container
   > .ant-tabs
   > .ant-tabs-top
   > .ant-tabs-card
   > .ant-tabs-no-animation {
   border-bottom: 1px solid;
+}
+.campaing__img {
+  min-height: 150px;
+}
+.campaing__filters {
+  height: 15rem;
+}
+.campaing__filters p {
+  margin: 0.2rem 0 0 0;
 }
 .column-right-cam {
   margin-top: 78px;
