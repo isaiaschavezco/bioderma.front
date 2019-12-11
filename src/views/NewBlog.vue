@@ -1,28 +1,15 @@
 <template>
   <div>
     <a-row>
-      <a-col :xs="{ span: 15 }" style="margin-top: 30px; margin-left: 24px">
+      <a-col :xs="{ span: 15 }" style="margin-top: 30px;">
         <div style="margin-right:25px; margin-bottom:20px">
           <a-card title="TITULO DEL BLOG" class="container">
             <a-form :form="fileForm">
               <a-form-item>
                 <a-input
-                  placeholder="SECCION ASIGNADA (BIODERMA GAMES / CAPACITACION)"
-                  v-decorator="[
-                    'name',
-                    {
-                      rules: [
-                        { required: true, message: 'Favor de llenar el campo' }
-                      ]
-                    }
-                  ]"
-                />
-              </a-form-item>
-              <a-form-item>
-                <a-input
                   placeholder="Subtitulo"
                   v-decorator="[
-                    'name',
+                    'subtitle',
                     {
                       rules: [
                         { required: true, message: 'Favor de llenar el campo' }
@@ -32,7 +19,8 @@
                 />
               </a-form-item>
               <a-form-item>
-                <a-textarea placeholder="Articulo" :rows="20" />
+                <!-- <a-textarea placeholder="Articulo" :rows="20" /> -->
+                <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </a-form-item>
             </a-form>
 
@@ -44,67 +32,137 @@
         <div class="header-gallery-img">GALERIA DE IMAGENES</div>
         <div class="container-imgs" style>
           <a-row class="container-imgs">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">Upload</div>
-              </div>
-            </a-upload>
+            <div class="dropbox">
+              <a-upload-dragger
+                v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Favor de cargar un archivo PDF'
+                    }
+                  ]
+                }
+              ]"
+                name="upload"
+                action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                accept=".png, .jpg, jpge"
+                @change="handleChangeFileUpload"
+                :beforeUpload="beforeUpload"
+                :fileList="fileList"
+              >
+                <p class="ant-upload-drag-icon">
+                  <a-icon type="picture" />
+                </p>
+                <p class="ant-upload-text">Selecciona o suelta una imagen para el carrete</p>
+                <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
+              </a-upload-dragger>
+            </div>
           </a-row>
           <a-row class="container-imgs">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">Upload</div>
-              </div>
-            </a-upload>
+            <div class="dropbox">
+              <a-upload-dragger
+                v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Favor de cargar un archivo PDF'
+                    }
+                  ]
+                }
+              ]"
+                name="upload"
+                action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                accept=".png, .jpg, jpge"
+                @change="handleChangeFileUpload"
+                :beforeUpload="beforeUpload"
+                :fileList="fileList"
+              >
+                <p class="ant-upload-drag-icon">
+                  <a-icon type="picture" />
+                </p>
+                <p class="ant-upload-text">Selecciona o suelta una imagen para el carrete</p>
+                <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
+              </a-upload-dragger>
+            </div>
           </a-row>
           <a-row class="container-imgs">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              :beforeUpload="beforeUpload"
-              @change="handleChange"
-            >
-              <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">Upload</div>
-              </div>
-            </a-upload>
+            <div class="dropbox">
+              <a-upload-dragger
+                v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Favor de cargar un archivo PDF'
+                    }
+                  ]
+                }
+              ]"
+                name="upload"
+                action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                accept=".png, .jpg, jpge"
+                @change="handleChangeFileUpload"
+                :beforeUpload="beforeUpload"
+                :fileList="fileList"
+              >
+                <p class="ant-upload-drag-icon">
+                  <a-icon type="picture" />
+                </p>
+                <p class="ant-upload-text">Selecciona o suelta una imagen para el carrete</p>
+                <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
+              </a-upload-dragger>
+            </div>
           </a-row>
         </div>
-        <a-form>
-          <a-input placeholder="Escribe un mensaje" style="width: 95%; margin-right:10px" />
-          <a-button type="primary" shape="circle" icon="right-circle" :size="size" />
-          <a-button shape="circle" icon="plus" @click="() => inviteUserModal = true" />
-        </a-form>
+        <div class="container-imgs">
+          <a-form>
+            <a-input placeholder="Nombre de etiqueta" style="width: 80%; margin: 0 10;">
+              <a-button slot="addonAfter">
+                <a-icon type="plus" />
+              </a-button>
+            </a-input>
+            <div style="margin-top: 10px;">
+              <a-tag
+                v-for="tag in tags"
+                color="cyan"
+                :key="tag"
+                closable
+                @close="log"
+              >{{tag.toUpperCase()}}</a-tag>
+            </div>
+          </a-form>
+        </div>
+      </a-col>
+    </a-row>
+    <a-row>
+      <a-col
+        :xs="{ span: 7, offset: 15 }"
+        style="margin-top: 10px;"
+        justify="space-around"
+        align="middle"
+      >
+        <a-button size="large" style="border-radius: 24px;">CANCELAR</a-button>
+        <a-button
+          type="primary"
+          size="large"
+          style="margin-left:3rem; background-color:#009FD1; border-radius: 24px;"
+        >PUBLICAR</a-button>
       </a-col>
     </a-row>
   </div>
 </template>
 <script>
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import ClassicEditor from "@ckeditor/ckeditor5-editor-classic/src/classiceditor";
+// import Alignment from "@ckeditor/ckeditor5-alignment/src/alignment";
+// import Bold from "@ckeditor/ckeditor5-basic-styles/src/bold";
+// import Italic from "@ckeditor/ckeditor5-basic-styles/src/italic";
+
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener("load", () => callback(reader.result));
@@ -147,7 +205,15 @@ export default {
       disabledItemOne: true,
       disabledItemTwo: true,
       disabledItemThree: true,
-      disabledItemFour: true
+      disabledItemFour: true,
+      editor: ClassicEditor,
+      editorData: "<p>Content of the editor.</p>",
+      editorConfig: {
+        alignment: {
+          options: ["left", "right"]
+        }
+      },
+      tags: ["seca", "piel"]
     };
   },
   computed: {},
@@ -176,6 +242,9 @@ export default {
       }
       return isJPG && isLt2M;
     }
+  },
+  mounted() {
+    console.log(this.$route.params);
   },
   ableItem() {
     this.disabledItem = !this.disabledItem;
@@ -250,6 +319,8 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 10px auto;
+  width: 95%;
+  text-align: center;
 }
 
 .divider {
@@ -272,5 +343,9 @@ export default {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+}
+
+.ck-editor__editable {
+  min-height: 30rem;
 }
 </style>

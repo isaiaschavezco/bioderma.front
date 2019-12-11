@@ -41,9 +41,9 @@
       <a-form :form="fileBlogForm">
         <a-form-item>
           <a-input
-            placeholder="Ingresa un nombre para la campaña"
+            placeholder="Ingresa el título de la entrada"
             v-decorator="[
-              'name',
+              'title',
               {
                 rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
@@ -66,7 +66,7 @@
                 }
               ]"
               name="upload"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
               accept=".png, .jpg, jpge"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
@@ -75,7 +75,9 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
+              <p
+                class="ant-upload-text"
+              >Selecciona o suelta una imagen para el thumbnail de la entrada</p>
               <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
           </div>
@@ -84,13 +86,11 @@
       <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
       <FormFilter />
       <template slot="footer">
-        <router-link to="NewBlog">
-          <a-button
-            type="primary"
-            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="onSubmitInvitationForm"
-          >SIGUIENTE</a-button>
-        </router-link>
+        <a-button
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          @click="onSubmitBlog"
+        >SIGUIENTE</a-button>
       </template>
     </a-modal>
   </div>
@@ -167,19 +167,40 @@ export default {
       fileBlogForm: this.$form.createForm(this),
       chains: [],
       tableChains: [],
-
+      fileList: [],
       blogNewModal: false,
       inviteUserLoading: false
     };
   },
   methods: {
-    onSubmitInvitationForm() {
+    onSubmitBlog() {
       this.fileBlogForm.validateFields(async (err, values) => {
         if (!err) {
-          alert("Exito");
-          console.log(values);
+          this.$router.push({
+            name: "newblog",
+            params: {
+              title: values.title,
+              image: values.upload.fileList[0].response
+            }
+          });
         }
       });
+    },
+    handleChangeFileUpload(info) {
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      this.fileList = fileList;
+    },
+    beforeUpload(file) {
+      let status = true;
+      this.fileBlogForm.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
+      });
+      return status;
     }
   }
 };
