@@ -12,58 +12,48 @@
             <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
           </a-tabs>
 
-          <section
-            :style="{ overflow: 'scroll', height: '88vh'}"
-          >
-            <a-row :gutter="16" :style="{ 'margin-top': '16px' }" v-for="row in groupedCampaings">
-              <a-col span="6" v-for="item in row">
-                <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
-                  <a-card
-                    :title="item.name"
-                    :headStyle="
-                      bioGamesTab
-                        ? { background: '#6e6e6e', color: '#d9d9d9' }
-                        : {}
-                    "
-                    :bodyStyle="
-                      bioGamesTab
-                        ? { background: '#6e6e6e', color: '#d9d9d9' }
-                        : {}
-                    "
-                  >
-                    <img alt="example" :src="item.portrait" slot="cover" class="campaing__img"/>
-                    <span style="font-weight: 700;">FILTROS</span>
+          <a-skeleton :loading="loadingCampaings" active>
+            <section :style="{ overflow: 'auto', height: '88vh'}">
+              <a-row :gutter="16" :style="{ 'margin-top': '16px' }" v-for="(row, i) in groupedCampaings" :key="i">
+                <a-col span="6" v-for="(item, j) in row" :key="j">
+                  <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
+                    <a-card
+                      :title="item.name"
+                    >
+                      <img alt="example" :src="item.portrait" slot="cover" class="campaing__img"/>
+                      <span style="font-weight: 700;">FILTROS</span>
 
-                    <div class="campaing__filters">
-                        <div class="campaing__filter" v-if="item.target.length > 0">
-                          <p v-for="filter in item.target" :key="filter.id">
-                            {{ FilterHelper.toString(filter) }}
-                          </p>
-                        </div>
-                    </div>
-                    
-                    
-                    <a-divider
-                      :style="{
-                        margin: '10px 0px',
-                        border: '1px solid rgba(0,0,0,0.1)'
-                      }"
-                    />
-                    <span style="font-weight: 700;">ESTATUS</span>
-                    <br />
-                    <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
-                    <template class="ant-card-actions" slot="actions">
-                      <a-icon type="close-circle" />
-                      <router-link to="campaingDetail">
-                        <a-icon type="edit" />
-                      </router-link>
-                      <a-icon type="delete" />
-                    </template>
-                  </a-card>
-                </a-tooltip>
-              </a-col>
-            </a-row>
-          </section>
+                      <div class="campaing__filters">
+                          <div class="campaing__filter" v-if="item.target.length > 0">
+                            <p v-for="filter in item.target" :key="filter.id">
+                              {{ FilterHelper.toString(filter) }}
+                            </p>
+                          </div>
+                      </div>
+                      
+                      
+                      <a-divider
+                        :style="{
+                          margin: '10px 0px',
+                          border: '1px solid rgba(0,0,0,0.1)'
+                        }"
+                      />
+                      <span style="font-weight: 700;">ESTATUS</span>
+                      <br />
+                      <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
+                      <template class="ant-card-actions" slot="actions">
+                        <a-icon type="close-circle" />
+                        <a-icon type="edit" @click="() => editCampaing(item.id)"/>
+                        <a-icon type="delete" />
+                      </template>
+                    </a-card>
+                  </a-tooltip>
+                </a-col>
+              </a-row>
+            </section>
+          </a-skeleton>
+          <a-skeleton :loading="loadingCampaings" active>
+          </a-skeleton>
         </div>
       </a-col>
       <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
@@ -102,6 +92,7 @@ export default {
   },
   data() {
     return {
+      loadingCampaings: true,
       FilterHelper: Filter,
       campaings: [],
       groupedCampaings: [],
@@ -121,6 +112,7 @@ export default {
   },
   methods: {
     async getCamapings() {
+      this.loadingCampaings = true;
       const urlCamapaings = `https://bioderma-api-inmersys.herokuapp.com/campaing/${this.bioGamesTab}`;
 
       try {
@@ -130,6 +122,8 @@ export default {
       } catch (err) {
         console.log("Error: ", err);
       }
+
+      this.loadingCampaings = false;
     },
     openModal() {
       this.loadFileModal = true;
@@ -183,6 +177,10 @@ export default {
       console.log("Grouped:", groupsCampaings);
 
       return groupsCampaings;
+    },
+    editCampaing(campaingId) {
+      const campaingName = `campaingDetail/${campaingId}`;
+      this.$router.push({ path: campaingName });
     }
   }
 };
@@ -196,10 +194,13 @@ export default {
   border-bottom: 1px solid;
 }
 .campaing__img {
-  min-height: 150px;
+  height: 200px;
+  object-fit: cover;
 }
 .campaing__filters {
-  height: 15rem;
+  height: 3.5rem;
+  overflow-y: auto;
+  margin: 1rem 0 2rem 0;
 }
 .campaing__filters p {
   margin: 0.2rem 0 0 0;

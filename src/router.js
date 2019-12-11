@@ -91,8 +91,9 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
         },
         {
-          path: "CampaingDetail",
+          path: "CampaingDetail/:id",
           name: "campaingDetail",
+          props: true,
           component: () =>
             import(
               /* webpackChunkName: "Plataforma" */ "./views/CampaingDetail.vue"
