@@ -6,7 +6,7 @@
           <a-list
             :grid="{ gutter: 16, column: 3 }"
             :dataSource="proudcts"
-            :style="{ overflow: 'scroll'}"
+            :style="{ overflow: 'scroll' }"
             style="height: 100%;"
           >
             <a-list-item slot="renderItem" slot-scope="item">
@@ -15,11 +15,11 @@
                 title="Da click en la imágen para ver las los productos"
               >
                 <a-card :title="item.title">
-                  <p class="center">{{item.points}}</p>
+                  <p class="center">{{ item.points }}</p>
                   <img alt="example" :src="item.image" slot="cover" />
-                  <span style="font-weight: 700;">{{item.description}}</span>
+                  <span style="font-weight: 700;">{{ item.description }}</span>
                   <br />
-                  <span>{{item.description}}</span>
+                  <span></span>
                   <template class="ant-card-actions" slot="actions">
                     <a-icon type="edit" />
                     <a-icon type="delete" @click="deleteConfirm" />
@@ -37,7 +37,12 @@
       >
         <a-row>
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />
+            <a-button
+              shape="circle"
+              icon="plus"
+              size="large"
+              @click="addProductModal = true"
+            />
           </a-col>
           <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
@@ -59,9 +64,11 @@
             setFieldsValue="title"
             placeholder="Ingresa el nombre del producto"
             v-decorator="[
-          'title',
-          {rules: [{ required: true, message: 'Favor de llenar el campo'}]}
-          ]"
+              'title',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />
         </a-form-item>
         <a-form-item>
@@ -70,17 +77,27 @@
             placeholder="Ingresa la descripcion del producto"
             :rows="4"
             v-decorator="[
-          'description',
-          {rules: [{required: true, message: 'Favor de llenar el campo'}]}
-          ]"
+              'description',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />
         </a-form-item>
         <a-form-item>
           <div class="dropbox">
             <a-upload-dragger
               v-decorator="[
-              'image',
-              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+                'image',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
               name="upload"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
@@ -89,20 +106,28 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
-              <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+              <p class="ant-upload-text">
+                Selecciona o suelta una imagen para tu producto
+              </p>
+              <p class="ant-upload-hint">
+                Unicamente archivos .png, .jpg o .jpge
+              </p>
             </a-upload-dragger>
           </div>
         </a-form-item>
         <a-form-item class="center">
           Costo
           <a-input
+            type="number"
             setFieldsValue="points"
             class="input-cost"
             size="small"
             v-decorator="[
-          'points',
-          {rules: [{ required:true, message: 'Favor de llenar el campo' }]}]"
+              'points',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
           />Pts
         </a-form-item>
       </a-form>
@@ -111,7 +136,8 @@
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitPictureForm"
-        >Publicar</a-button>
+          >Publicar</a-button
+        >
       </template>
     </a-modal>
   </div>
@@ -204,8 +230,12 @@ export default {
       this.$confirm({
         title: "¿ESTAS SEGURO DE ELIMINAR ESTE PRODUCTO?",
         content: "",
-        async onOK() {},
-        onCancel() {}
+        onOk() {
+          console.log(this.value);
+        },
+        onCancel() {
+          console.log("Huevos");
+        }
       });
     },
     showConfirm() {
