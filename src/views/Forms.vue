@@ -1,162 +1,548 @@
 <template>
   <div>
-    <div v-if="User">
-      <h1 style="text-align:center">Registro</h1>
-      <a-form :form="form" @submit="handleSubmit">
-        <a-row>
-          <a-col>
-            <a-col :span="9" :offset="2">
-              <a-form-item>
-                <a-input
-                  placeholder="NOMBRE"
-                  v-decorator="[
-                'name',
-                {
-                  rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
-                }
-              ]"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="10" :offset="1">
-              <a-form-item>
-                <a-input
-                  placeholder="APELLIDOS"
-                  v-decorator="[
-                'lastname',
-                {
-                  rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
-                }
-              ]"
-                />
-              </a-form-item>
-            </a-col>
-          </a-col>
-
-          <a-col :span="20" :offset="2">
-            <a-form-item>
-              <a-input
-                v-decorator="[
-                  'nickname',
-                  {
-                    rules: [{ required: true,
-                    message: 'Ingrese su nickname',
-                    whitespace: true
+    <div v-if="User" style="background:#f0f2f5; padding:80px 0">
+      <a-Row :gutter="1">
+        <a-col :span="8">
+          <a-card style="width:50%; height:260px; margin-left: 300px;">
+            <a-upload-dragger
+              setFieldsValue="photo"
+              v-decorator="[
+              'photo',
+              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+              name="upload"
+              action="http://localhost:3000/upload/1"
+              accept=".png, .jpg, jpge"
+              @change="handleChange"
+            >
+              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+            </a-upload-dragger>
+          </a-card>
+        </a-col>
+        <a-col :span="16">
+          <a-card title="Registro NAOS" style=" width: 70%; margin-left: 0px;">
+            <a-form :form="form" @submit="handleSubmit1">
+              <a-col>
+                <a-col :span="9" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      setFieldsValue="nickName"
+                      v-decorator="[
+                      'nickName',
+                      {
+                        rules: [{ required: true,
+                        message: 'Ingrese su nickname',
+                        whitespace: true
+                          }
+                        ]
                       }
-                    ]
-                  }
-                ]"
-                placeholder="NICKNAME"
-              />
-            </a-form-item>
-          </a-col>
-
-          <!-- <a-col :span="10" :offset="2">
-          </a-col>-->
-          <a-col :span="10" :offset="2">
-            <a-form-item>
-              <span>Fecha de cumpleaños</span>
-              <a-date-picker
-                v-decorator="[
-              'date',
-              {
-              rules: [{required: true,
-              message: 'Seleccione su fecha de nacimiento'
-              }]
-              }]
-              "
-                :defaultValue="moment('01-01-2000', dateFormat)"
-                :format="dateFormat"
-              />
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="22" :offset="2">
-            <a-form-item>
-              <a-radio-group
-                v-decorator="[
-                  'genero',
-                  { rules: [{ required: true, message: 'Seleccione su genero' }] },
-                ]"
-                name="radioGroup"
-              >
-                <span>GENERO&nbsp;</span>
-                <a-radio :value="1">Hombre</a-radio>
-                <a-radio :value="2">Mujer</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="20" :offset="2">
-            <a-form-item style="margin-botton: 15px">
-              <a-select
-                v-decorator="[
-                  'city',
-                  { rules: [{ required: true, message: 'Seleccione su ciudad' }] },
-                ]"
-                placeholder="Ciudad"
-                @change="handleSelectChange"
-              >
-                <a-select-option value="mexico">Mexico</a-select-option>
-                <a-select-option value="morelos">Morelos</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="20" :offset="2">
-            <a-form-item style="margin-botton: 15px">
-              <a-select
-                v-decorator="[
-                  'naos',
-                  { rules: [{ required: true, message: 'Seleccione su posicion NAOS' }] },
-                ]"
-                placeholder="Posicion naos"
-                @change="handleSelectChange"
-              >
-                <a-select-option value="naos1">Naos 1</a-select-option>
-                <a-select-option value="naos2">Naos 2</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="20" :offset="2">
-            <a-form-item>
-              <a-input
-                v-decorator="[
-                  'phonenumber',
+                    ]"
+                      placeholder="NICKNAME"
+                    />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="9" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      setFieldsValue="name"
+                      placeholder="NOMBRE"
+                      v-decorator="[
+                    'name',
                     {
-                      rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
+                      rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
                     }
                   ]"
-                placeholder="NUMERO TELEFONICO"
-              />
-            </a-form-item>
-          </a-col>
+                    />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="9" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      setFieldsValue="lastName"
+                      placeholder="APELLIDOS"
+                      v-decorator="[
+                    'lastName',
+                    {
+                      rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
+                    }
+                  ]"
+                    />
+                  </a-form-item>
+                </a-col>
+              </a-col>
+              <!-- <a-col :span="10" :offset="2">
+              </a-col>-->
+              <a-col :span="12" :offset="2">
+                <a-form-item>
+                  <span>Fecha de cumpleaños</span>
+                  <a-date-picker
+                    setFieldsValue="birthDate"
+                    v-decorator="[
+                  'birthDate',
+                  {
+                  rules: [{required: true,
+                  message: 'Seleccione su fecha de nacimiento'
+                  }]
+                  }]
+                  "
+                    option.initialValue="moment('01-01-2000', dateFormat)"
+                    :format="dateFormat"
+                  />
+                </a-form-item>
+              </a-col>
 
-          <!-- Email -->
-          <a-col :span="20" :offset="2">
-            <a-form-item>
-              <a-input
-                placeholder="EMAIL"
-                v-decorator="[
+              <a-col :span="22" :offset="2">
+                <a-form-item>
+                  <a-radio-group
+                    setFieldsValue="gender"
+                    v-decorator="[
+                      'gender',
+                      { rules: [{ required: true, message: 'Seleccione su genero' }] },
+                    ]"
+                    name="radioGroup"
+                  >
+                    <span>GENERO&nbsp;</span>
+                    <a-radio :value="1">Hombre</a-radio>
+                    <a-radio :value="2">Mujer</a-radio>
+                  </a-radio-group>
+                </a-form-item>
+              </a-col>
+              <a-col :span="5" :offset="2">
+                <a-form-item style="margin-bottom: 15px">
+                  <a-select
+                    setFieldsValue="state"
+                    optionFilterProp="children"
+                    v-decorator="[
+                    'state',
+                    { rules: [{ required: true, message: 'Seleccione su Estado' }] },
+                  ]"
+                    placeholder="Estado"
+                    @change="onStateChange"
+                  >
+                    <a-select-option
+                      :value="state.id"
+                      v-for="state in states"
+                      :key="state.id"
+                    >{{state.name}}</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="5" :offset="2">
+                <a-form-item style="margin-botton: 15px">
+                  <a-select
+                    optionFilterProp="children"
+                    setFieldsValue="city"
+                    v-decorator="[
+                      'city',
+                      { rules: [{ required: true, message: 'Seleccione su municipio' }] },
+                    ]"
+                    placeholder="Municipio"
+                    @change="handleSelectChange"
+                  >
+                    <a-select-option
+                      :value="city.id"
+                      v-for="city in cities"
+                      :key="city.id"
+                    >{{city.name}}</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col :span="5" :offset="2">
+                <a-form-item style="margin-botton: 15px">
+                  <a-select
+                    optionFilterProp="children"
+                    setFieldsValue="naosPosition"
+                    v-decorator="[
+                      'naosPosition',
+                      { rules: [{ required: true, message: 'Seleccione su posicición NAOS' }] },
+                    ]"
+                    placeholder="Posición NAOS"
+                    @change="handleSelectChange"
+                  >
+                    <a-select-option
+                      :value="position.id"
+                      v-for="position in workPositions"
+                      :key="position.id"
+                    >{{position.name}}</a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="20" :offset="2">
+                <a-form-item>
+                  <a-input
+                    type="tel"
+                    pattern="[0-9]{10}"
+                    setFieldsValue="phone"
+                    v-decorator="[
+                      'phone',
+                        {
+                          rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
+                        }
+                      ]"
+                    placeholder="NUMERO TELEFONICO"
+                  />
+                </a-form-item>
+              </a-col>
+
+              <!-- Email -->
+              <a-col :span="20" :offset="2">
+                <a-form-item>
+                  <a-input
+                    setFieldsValue="email"
+                    placeholder="EMAIL"
+                    v-decorator="[
+                        'email',
+                        {
+                          rules: [{
+                            type: 'email', message: 'Correo electronico no valido',
+                          }, {
+                            required: true, message: 'Ingrese su correo electronico',
+                          }]
+                        }
+                      ]"
+                  />
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="9" :offset="2">
+                <a-form-item help="Contraseña al menos 8 caracteres">
+                  <a-input
+                    pattern=".{8,}"
+                    placeholder="CONTRASEÑA"
+                    setFieldsValue="password"
+                    v-decorator="[
+                        'password',
+                        {
+                          rules: [{
+                            required: true, message: 'Ingrese su contraseña',
+                          }, {
+                            validator: validateToNextPassword,
+                          }],
+                        }
+                      ]"
+                    type="password"
+                  />
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="9" :offset="2">
+                <a-form-item>
+                  <a-input
+                    placeholder="CONFIRMAR CONTRASEÑA"
+                    v-decorator="[
+                        'confirm',
+                        {
+                          rules: [{
+                            required: true, message: 'Confirme su contraseña',
+                          }, {
+                            validator: compareToFirstPassword,
+                          }],
+                        }
+                      ]"
+                    type="password"
+                    @blur="handleConfirmBlur"
+                  />
+                </a-form-item>
+              </a-col>
+
+              <a-col :span="24">
+                <a-form-item>
+                  <a-button
+                    type="primary"
+                    style="background-color:#001529; border: 1px solid #001529; width: 100%"
+                    @click="onSubmitFileForm"
+                    html-type="submit"
+                  >Registrar</a-button>
+                </a-form-item>
+              </a-col>
+            </a-form>
+          </a-card>
+        </a-col>
+      </a-Row>
+    </div>
+    <div v-if="Pharmacy" style="background:#f0f2f5; padding:80px 0">
+      <a-Row :gutter="1">
+        <a-col :span="8">
+          <a-card style="width:50%; height:260px; margin-left: 300px;">
+            <a-upload-dragger
+              v-decorator="[
+              'upload',
+              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+              name="photo"
+              action="http://localhost:3000/upload/1"
+              accept=".png, .jpg, jpge"
+              @change="handleChange"
+            >
+              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+            </a-upload-dragger>
+          </a-card>
+        </a-col>
+        <a-col :span="16">
+          <a-card title="Registro de Farmacias" style="width: 70%; margin-left: 0px;">
+            <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
+            <a-form :form="form" @submit="handleSubmit2">
+              <a-row>
+                <a-col :span="20" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      setFieldsValue="nickName"
+                      placeholder="NICKNAME"
+                      v-decorator="[
+                  'nickName',
+                  {
+                    rules: [{ required: true, message: 'Ingrese su nickname', whitespace: true }]
+                  }
+                ]"
+                    />
+                  </a-form-item>
+                </a-col>
+                <a-col>
+                  <a-col :span="9" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        setFieldsValue="name"
+                        placeholder="NOMBRE"
+                        v-decorator="[
+                          'name',
+                          {
+                            rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
+                          }
+                        ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <a-col :span="10" :offset="1">
+                    <a-form-item>
+                      <a-input
+                        setFieldsValue="lastName"
+                        placeholder="APELLIDOS"
+                        v-decorator="[
+                          'lastName',
+                          {
+                            rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
+                          }
+                        ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                </a-col>
+
+                <a-col>
+                  <!-- Genero -->
+                  <a-col :span="12" :offset="2">
+                    <a-form-item>
+                      <a-radio-group
+                        setFieldsValue="gender"
+                        v-decorator="[
+                          'gender',
+                          { rules: [{ required: true, message: 'Seleccione su genero' }] },
+                        ]"
+                        name="radioGroup"
+                      >
+                        <span>GENERO&nbsp;</span>
+                        <a-radio :value="1">Hombre</a-radio>
+                        <a-radio :value="2">Mujer</a-radio>
+                      </a-radio-group>
+                    </a-form-item>
+                  </a-col>
+                  <!-- <a-col :span="10" :offset="2"></a-col> -->
+                  <a-col :span="18" :offset="2">
+                    <a-form-item>
+                      <span>Fecha de cumpleaños &nbsp;</span>
+                      <a-date-picker
+                        setFieldsValue="birthDate"
+                        v-decorator="[
+                    'birthDate',
+                    { rules: [{ required: true, message: 'Seleccione su fecha' }] },
+                  ]"
+                        option.initialValue="moment('01-01-2000', dateFormat)"
+                        :format="dateFormat"
+                      />
+                    </a-form-item>
+                  </a-col>
+                </a-col>
+                <!-- Cadena -->
+                <a-col :span="9" :offset="2">
+                  <a-form-item style="margin-bottom: 15px">
+                    <a-select
+                      setFieldsValue="chain"
+                      v-decorator="[
+                    'chain',
+                    { rules: [{ required: true, message: 'Seleccione su cadena' }] },
+                  ]"
+                      placeholder="Cadena"
+                      @change="handleSelectChange"
+                    >
+                      <a-select-option
+                        :value="chains.id"
+                        v-for="chains in chains"
+                        :key="chains.id"
+                      >{{chains.name}}</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <!-- Sucursal -->
+                <a-col :span="9" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      placeholder="Sucursal"
+                      setFieldsValue="drugStore"
+                      v-decorator="[
+                    'drugStore',
+                    {
+                      rules: [{ required: true, message: 'Ingrese su Sucursal', whitespace: true }]
+                    }
+                  ]"
+                    />
+                  </a-form-item>
+                </a-col>
+                <!-- Estado -->
+                <a-col :span="9" :offset="2">
+                  <a-form-item style="margin-bottom: 15px">
+                    <a-select
+                      optionFilterProp="children"
+                      setFieldsValue="state"
+                      v-decorator="[
+                    'state',
+                    { rules: [{ required: true, message: 'Seleccione su Estado' }] },
+                  ]"
+                      placeholder="Estado"
+                      @change="onStateChange"
+                    >
+                      <a-select-option
+                        :value="state.id"
+                        v-for="state in states"
+                        :key="state.id"
+                      >{{state.name}}</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </a-col>
+                <!-- Municipio -->
+                <a-col>
+                  <a-col :span="9" :offset="2">
+                    <a-form-item style="margin-bottom: 15px">
+                      <a-select
+                        optionFilterProp="children"
+                        setFieldsValue="city"
+                        v-decorator="[
+                    'city',
+                    { rules: [{ required: true, message: 'Seleccione su municipio' }] },
+                  ]"
+                        placeholder="Municipio"
+                        @change="handleSelectChange"
+                      >
+                        <a-select-option
+                          :value="city.id"
+                          v-for="city in cities"
+                          :key="city.id"
+                        >{{city.name}}</a-select-option>
+                      </a-select>
+                    </a-form-item>
+                  </a-col>
+                  <!-- Ciudad -->
+                  <a-col :span="20" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        placeholder="Ciudad"
+                        setFieldsValue="town"
+                        v-decorator="[
+                    'town',
+                    {
+                      rules: [{ required: true, message: 'Ingrese su Ciudad', whitespace: true }]
+                    }
+                  ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <!-- Colonia -->
+                  <a-col :span="9" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        placeholder="Colonia"
+                        setFieldsValue="mayoralty"
+                        v-decorator="[
+                    'mayoralty',
+                    {
+                      rules: [{ required: true, message: 'Ingrese su Colonia', whitespace: true }]
+                    }
+                  ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <!-- Codigo Postal -->
+                  <a-col :span="9" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        pattern="[0-9]{5}"
+                        setFieldsValue="postalCode"
+                        placeholder="Código Postal"
+                        v-decorator="[
+                    'postalCode',
+                    {
+                      rules: [{ required: true, message: 'Ingrese su Còdigo Postal', whitespace: true }]
+                    }
+                  ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                  <!-- Cargo -->
+                  <a-col :span="9" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        placeholder="Cargo"
+                        setFieldsValue="charge"
+                        v-decorator="[
+                    'charge',
+                    {
+                      rules: [{ required: true, message: 'Ingrese su Cargo', whitespace: true }]
+                    }
+                  ]"
+                      />
+                    </a-form-item>
+                  </a-col>
+                </a-col>
+                <a-col :span="9" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      pattern="[0-9]{10}"
+                      setFieldsValue="phone"
+                      v-decorator="[
+                      'phone',
+                        {
+                          rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
+                        }
+                      ]"
+                      placeholder="NUMERO TELEFONICO"
+                    />
+                  </a-form-item>
+                </a-col>
+
+                <!-- Email -->
+                <a-col :span="20" :offset="2">
+                  <a-form-item>
+                    <a-input
+                      placeholder="EMAIL"
+                      setFieldsValue="email"
+                      v-decorator="[
                     'email',
                     {
                       rules: [{
                         type: 'email', message: 'Correo electronico no valido',
-                      }, {
-                        required: true, message: 'Ingrese su correo electronico',
-                      }]
-                    }
-                  ]"
-              />
-            </a-form-item>
-          </a-col>
-
-          <a-col :span="20" :offset="2">
-            <a-form-item>
-              <a-input
-                placeholder="CONTRASEÑA DE ACCESO"
-                v-decorator="[
+                        }, {
+                          required: true, message: 'Ingrese su correo electronico',
+                        }]
+                      }
+                    ]"
+                    />
+                  </a-form-item>
+                </a-col>
+                <a-col :span="9" :offset="2">
+                  <a-form-item help="Contraseña al menos 8 caracteres">
+                    <a-input
+                      pattern=".{8,}"
+                      placeholder="CONTRASEÑA"
+                      setFieldsValue="password"
+                      v-decorator="[
                     'password',
                     {
                       rules: [{
@@ -166,16 +552,16 @@
                       }],
                     }
                   ]"
-                type="password"
-              />
-            </a-form-item>
-          </a-col>
+                      type="password"
+                    />
+                  </a-form-item>
+                </a-col>
 
-          <a-col :span="20" :offset="2">
-            <a-form-item>
-              <a-input
-                placeholder="CONFIRMAR CONTRASEÑA"
-                v-decorator="[
+                <a-col :span="9" :offset="2" style="margin-bottom:10px">
+                  <a-form-item>
+                    <a-input
+                      placeholder="CONFIRMAR CONTRASEÑA"
+                      v-decorator="[
                     'confirm',
                     {
                       rules: [{
@@ -185,288 +571,65 @@
                       }],
                     }
                   ]"
-                type="password"
-                @blur="handleConfirmBlur"
-              />
-            </a-form-item>
-          </a-col>
+                      type="password"
+                      @blur="handleConfirmBlur"
+                    />
+                  </a-form-item>
+                </a-col>
 
-          <a-col :span="24">
-            <a-form-item>
-              <a-button
-                type="primary"
-                style="background-color:#001529; border: 1px solid #001529; width: 100%"
-                @click="onSubmitFileForm"
-                html-type="submit"
-              >Registrar</a-button>
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
-
-    <div v-if="Pharmacy" style="background:#f0f2f5; padding:80px 0">
-      <a-card title="Registro de Farmacias" style="width: 50%; margin: 0 auto">
-        <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
-        <a-form :form="form" @submit="handleSubmit">
-          <a-row>
-            <a-col>
-              <a-col :span="9" :offset="2">
-                <a-form-item>
-                  <a-input
-                    placeholder="NOMBRE"
-                    v-decorator="[
-              'name',
-              {
-                rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
-              }
-            ]"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="10" :offset="1">
-                <a-form-item>
-                  <a-input
-                    placeholder="APELLIDOS"
-                    v-decorator="[
-              'lastname',
-              {
-                rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
-              }
-            ]"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-col>
-
-            <a-col :span="20" :offset="2">
-              <a-form-item>
-                <a-input
-                  placeholder="NICKNAME"
-                  v-decorator="[
-                'nickname',
-                {
-                  rules: [{ required: true, message: 'Ingrese su nickname', whitespace: true }]
-                }
-              ]"
-                />
-              </a-form-item>
-            </a-col>
-
-            <a-col>
-              <!-- <a-col :span="10" :offset="2"></a-col> -->
-              <a-col :span="9" :offset="2">
-                <a-form-item>
-                  <span>Fecha de cumpleaños &nbsp;</span>
-                  <a-date-picker
-                    v-decorator="[
-                  'date',
-                  { rules: [{ required: true, message: 'Seleccione su fecha' }] },
-                ]"
-                    :defaultValue="moment('2000/01/01', dateFormat)"
-                    :format="dateFormat"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-col>
-            <!-- Genero -->
-            <a-col :span="22" :offset="2">
-              <a-form-item>
-                <a-radio-group
-                  v-decorator="[
-                  'genero',
-                  { rules: [{ required: true, message: 'Seleccione su genero' }] },
-                ]"
-                  name="radioGroup"
-                >
-                  <span>GENERO&nbsp;</span>
-                  <a-radio :value="1">Hombre</a-radio>
-                  <a-radio :value="2">Mujer</a-radio>
-                </a-radio-group>
-              </a-form-item>
-            </a-col>
-            <!-- Ciudad -->
-            <a-col>
-              <a-col :span="6" :offset="2">
-                <a-form-item style="margin-bottom: 15px">
-                  <a-select
-                    v-decorator="[
-                  'city',
-                  { rules: [{ required: true, message: 'Seleccione su ciudad' }] },
-                ]"
-                    placeholder="Ciudad"
-                    @change="handleSelectChange"
-                  >
-                    <a-select-option value="Mexico">Mexico</a-select-option>
-                    <a-select-option value="Morelos">Morelos</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <!-- Farmacia -->
-              <a-col :span="6" :offset="1">
-                <a-form-item style="margin-bottom: 15px">
-                  <a-select
-                    v-decorator="[
-                  'pharmacy',
-                  { rules: [{ required: true, message: 'Seleccione su farmacia' }] },
-                ]"
-                    placeholder="Farmacia"
-                    @change="handleSelectChange"
-                  >
-                    <a-select-option value="Del ahorro">Del ahorro</a-select-option>
-                    <a-select-option value="Similares">Similares</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <!-- Cadena -->
-              <a-col :span="6" :offset="1">
-                <a-form-item style="margin-bottom: 15px">
-                  <a-select
-                    v-decorator="[
-                  'network',
-                  { rules: [{ required: true, message: 'Seleccione su cadena' }] },
-                ]"
-                    placeholder="Cadena"
-                    @change="handleSelectChange"
-                  >
-                    <a-select-option value="cadena1">Cadena 1</a-select-option>
-                    <a-select-option value="cadena2">Cadena 2</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <!-- Sucursal -->
-              <a-col :span="6" :offset="2">
-                <a-form-item style="margin-bottom: 15px">
-                  <a-select
-                    v-decorator="[
-                  'branch',
-                  { rules: [{ required: true, message: 'Seleccione su sucursal' }] },
-                ]"
-                    placeholder="Sucursal"
-                    @change="handleSelectChange"
-                  >
-                    <a-select-option value="sucursalNorte">Sucursal Norte</a-select-option>
-                    <a-select-option value="sucursalSur">Sucursal Sur</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <!-- Cargo -->
-              <a-col :span="6" :offset="1">
-                <a-form-item style="margin-bottom: 15px">
-                  <a-select
-                    v-decorator="[
-                  'position',
-                  { rules: [{ required: true, message: 'Seleccione su cargo' }] },
-                ]"
-                    placeholder="Cargo"
-                    @change="handleSelectChange"
-                  >
-                    <a-select-option value="SEO">SEO</a-select-option>
-                    <a-select-option value="CPO">CPO</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </a-col>
-
-            <a-col :span="20" :offset="2">
-              <a-form-item>
-                <a-input
-                  placeholder="NUMERO TELEFONICO"
-                  v-decorator="[
-                  'phonenumber',
-                  {
-                    rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
-                  }
-                ]"
-                />
-              </a-form-item>
-            </a-col>
-
-            <!-- Email -->
-            <a-col :span="20" :offset="2">
-              <a-form-item>
-                <a-input
-                  placeholder="EMAIL"
-                  v-decorator="[
-                  'email',
-                  {
-                    rules: [{
-                      type: 'email', message: 'Correo electronico no valido',
-                    }, {
-                      required: true, message: 'Ingrese su correo electronico',
-                    }]
-                  }
-                ]"
-                />
-              </a-form-item>
-            </a-col>
-
-            <a-col :span="20" :offset="2">
-              <a-form-item>
-                <a-input
-                  placeholder="CONTRASEÑA DE ACCESO"
-                  v-decorator="[
-                  'password',
-                  {
-                    rules: [{
-                      required: true, message: 'Ingrese su contraseña',
-                    }, {
-                      validator: validateToNextPassword,
-                    }],
-                  }
-                ]"
-                  type="password"
-                />
-              </a-form-item>
-            </a-col>
-
-            <a-col :span="20" :offset="2" style="margin-bottom:10px">
-              <a-form-item>
-                <a-input
-                  placeholder="CONFIRMAR CONTRASEÑA"
-                  v-decorator="[
-                  'confirm',
-                  {
-                    rules: [{
-                      required: true, message: 'Confirme su contraseña',
-                    }, {
-                      validator: compareToFirstPassword,
-                    }],
-                  }
-                ]"
-                  type="password"
-                  @blur="handleConfirmBlur"
-                />
-              </a-form-item>
-            </a-col>
-
-            <a-col :span="24">
-              <a-form-item>
-                <a-button
-                  class="btn-submit"
-                  type="primary"
-                  style="background-color:#001529; height: 60px; border: 1px solid #001529; width: 100%"
-                  @click="onSubmitFileForm"
-                  html-type="submit"
-                >Registrar</a-button>
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </a-card>
+                <a-col :span="24">
+                  <a-form-item>
+                    <a-button
+                      class="btn-submit"
+                      type="primary"
+                      style="background-color:#001529; height: 60px; border: 1px solid #001529; width: 100%"
+                      @click="onSubmitFileForm"
+                      html-type="submit"
+                    >Registrar</a-button>
+                  </a-form-item>
+                </a-col>
+              </a-row>
+            </a-form>
+          </a-card>
+        </a-col>
+      </a-Row>
     </div>
   </div>
 </template>
 <script>
 import moment from "moment";
 import "moment/locale/es";
+import { async } from "q";
 moment.locale("es");
 export default {
   data() {
     return {
+      name: "",
+      photo: "URL",
+      lastName: "",
+      nickName: "",
+      birthDate: "1996-06-11",
+      gender: false,
+      phone: "",
+      email: "",
+      password: "",
+      postalCode: "",
+      state: 1,
+      city: 1,
+      naosPosition: 1,
+      chain: 1,
+      drugStore: "",
+      town: "",
+      mayoralty: "",
+      charge: "",
       visible: false,
-      value: 1,
+      value: 2,
       dateFormat: "YYYY-MM-DD",
+      states: [],
+      selectedState: 1,
+      workPositions: [],
+      cities: [],
+      chains: [],
       confirmDirty: false,
       autoCompleteResult: []
     };
@@ -474,7 +637,31 @@ export default {
   beforeCreate() {
     this.form = this.$form.createForm(this);
   },
+  mounted() {
+    this.getStates();
+    this.getPosition();
+    this.getChains();
+  },
   methods: {
+    handleChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        this.$message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    async onStateChange(stateid) {
+      console.log("stateid: ", stateid);
+      this.getCities(stateid);
+      /*const direction = "city/" + stateid;
+      const responseCity = await this.$axios(direction);
+      console.log("ResponseCity: ", responseCity.data);
+      this.cities = responseCity.data.name;*/
+    },
+    onSubmitFileForm() {},
     success() {
       this.$success({
         // JSX support
@@ -486,15 +673,144 @@ export default {
         )
       });
     },
-
+    failEmail() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            ERROR AL COMPLETAR TU REGISTRO, INTRODUCE UN CORREO DIFERENTE
+          </p>
+        )
+      });
+    },
+    failIncorrect() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            ERROR AL COMPLETAR TU REGISTRO, UN CAMPO NO TIENE EL FORMATO
+            CORRECTO
+          </p>
+        )
+      });
+    },
+    fail() {
+      this.$error({
+        content: (
+          <p style="text-align:center">
+            HA OCURRIDO UN ERROR DURANTE EL REGISTRO, FAVOR DE INTENTARLO MÁS
+            TARDE
+          </p>
+        )
+      });
+    },
+    async getStates() {
+      const responseStates = await this.$axios("state");
+      this.states = responseStates.data.states;
+      // axios.get('state.json').then( response => {
+      //   this.state = response.data
+      // })
+    },
+    async getPosition() {
+      const responsePosition = await this.$axios("position");
+      this.workPositions = responsePosition.data.workPositions;
+    },
+    async getChains() {
+      const responseChains = await this.$axios("chain");
+      this.chains = responseChains.data.chains;
+    },
+    async getCities(num) {
+      const direction = "city/" + num;
+      const responseCity = await this.$axios(direction);
+      this.cities = responseCity.data.cities;
+    },
     moment,
-
-    handleSubmit(e) {
+    handleSelectChange() {},
+    handleSubmit1(e) {
       e.preventDefault();
-      this.form.validateFieldsAndScroll((err, values) => {
+      this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
-          this.success();
+          try {
+            const response = await this.$axios.post(
+              "https://bioderma-api-inmersys.herokuapp.com/user/naos",
+              {
+                name: values.name,
+                lastName: values.lastName,
+                nickName: values.nickName,
+                photo: "URL",
+                birthDate: values.birthDate,
+                gender: values.gender,
+                phone: values.phone,
+                email: values.email,
+                password: values.password,
+                state: values.state,
+                city: values.city,
+                naosPosition: values.naosPosition
+              }
+            );
+            console.log(response.data.status);
+            if (response.data.status == 0) {
+              this.success();
+            } else if (response.data.status == 5) {
+              this.failEmail();
+            } else if (response.data.status == 3) {
+              this.failIncorrect();
+            }
+          } catch (error) {
+            this.fail();
+          }
+        } else {
+          console.log(err);
+        }
+      });
+    },
+    handleSubmit2(e) {
+      e.preventDefault();
+      this.form.validateFieldsAndScroll(async (err, values) => {
+        if (!err) {
+          console.log("Datos recibidos: ", values);
+          try {
+            const response = await this.$axios.post(
+              "https://bioderma-api-inmersys.herokuapp.com/user/drugstore",
+              {
+                name: values.name,
+                lastName: values.lastName,
+                nickName: values.nickName,
+                photo: "URL",
+                birthDate: values.birthDate,
+                gender: values.gender,
+                phone: values.phone,
+                email: values.email,
+                password: values.password,
+                postalCode: values.postalCode,
+                state: values.state,
+                city: values.city,
+                chain: values.chain,
+                drugStore: values.drugStore,
+                town: values.town,
+                mayoralty: values.mayoralty,
+                charge: values.charge
+              }
+            );
+            if (response.data.status == 0) {
+              this.success();
+            } else if (response.data.status == 5) {
+              this.failEmail();
+            } else if (response.data.status == 3) {
+              this.failIncorrect();
+            }
+          } catch (error) {
+            THIS.fail();
+          }
+        } else {
+          console.log(err);
+        }
+      });
+    },
+    onSubmitPictureForm() {
+      //alert("Subir");
+      this.fileForm.validateFields(err => {
+        if (!err) {
+          alert("Exito");
         }
       });
     },
