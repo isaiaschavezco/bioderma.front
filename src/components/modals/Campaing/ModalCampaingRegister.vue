@@ -1,5 +1,5 @@
 <template>
-	<div>
+  <div>
     <a-form :form="fileForm">
       <a-form-item>
         <a-input
@@ -28,7 +28,7 @@
 									}
 								]"
             name="upload"
-            action="http://localhost:3000/upload/1"
+            action="https://bioderma-api-inmersys.herokuapp.com/upload/3"
             accept=".png, .jpg, jpeg"
             @change="handleChangeFileUpload"
             :beforeUpload="beforeUpload"
@@ -48,15 +48,15 @@
     <CampaingFilter @filterAdded="addFilter" />
 
     <a-row>
-			<a-col span="24" class="text-center">
-				<a-button
-					type="primary"
-					style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-					@click="onSubmitFileForm"
-				>SUBIR</a-button>
-			</a-col>
+      <a-col span="24" class="text-center">
+        <a-button
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          @click="onSubmitFileForm"
+        >SUBIR</a-button>
+      </a-col>
     </a-row>
-	</div>
+  </div>
 </template>
 
 <script>
@@ -68,21 +68,21 @@ export default {
     CampaingFilter
   },
   props: {
-		biodermaGames: Boolean
+    biodermaGames: Boolean
   },
   data() {
     return {
       filters: [],
-			fileList: [],
-			loadingFileForm: false,
+      fileList: [],
+      loadingFileForm: false,
       isBiodermaGame: this.biodermaGames,
       fileForm: this.$form.createForm(this)
     };
   },
   methods: {
-		closeModal() {
-			this.$emit('closeModal');
-		},
+    closeModal() {
+      this.$emit("closeModal");
+    },
     showNotification(type, title, message) {
       this.$notification[type]({
         message: title,
@@ -120,8 +120,7 @@ export default {
 
               const campaingData = {
                 name: values.name,
-                portrait:
-                  "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
+                portrait: values.upload.fileList[0].response,
                 isBiodermaGame: this.biodermaGames,
                 targets: [...this.filters]
               };
@@ -133,7 +132,7 @@ export default {
                 urlRegisterCampaing,
                 campaingData
               );
-              
+
               // Clear array of filter ids.
               this.filters.splice(0, this.filters.length);
               this.loadFileModal = false;
@@ -156,7 +155,6 @@ export default {
                   "La sección ya cuenta con un archivo, si desea registrar uno nuevo elimine el archivo actual."
                 );
               }
-
             } catch (err) {
               this.showNotification(
                 "error",
@@ -164,8 +162,7 @@ export default {
                 "Ha ocurrido un error al registrar esta sección."
               );
             }
-          }
-          else {
+          } else {
             this.showNotification(
               "warning",
               "Filtros insuficientes",
@@ -175,12 +172,12 @@ export default {
         }
       });
     }
-	}
+  }
 };
 </script>
 
 <style scoped>
 .text-center {
-	text-align: center;
+  text-align: center;
 }
 </style>

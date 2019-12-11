@@ -296,7 +296,8 @@ export default {
         city: "Mi ciudad",
         pharmacy: "Nombre farmacia",
         chain: "Mi cadena",
-        address: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
+        address:
+          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
         position: "Mi cargo",
         phone: "555-5555-555",
         email: "user@user.com",
@@ -422,13 +423,9 @@ export default {
       }
     },
     async getChains() {
-      // const responseChains = await this.$axios("chain");
-      // this.chains = responseChains.data;
-      // console.log(responseChains.data);
-      this.chains = [
-        { id: 5, name: "GUADALAJARA", isDeleted: false },
-        { id: 18, name: "SAN PABLO", isDeleted: false }
-      ];
+      const responseChains = await this.$axios("chain");
+      this.chains = responseChains.data.chains;
+      console.log(responseChains.data);
       this.tableChains = this.chains;
     },
     onSubmitChainForm() {
@@ -440,6 +437,7 @@ export default {
               isDeleted: false
             });
             this.chainModal = false;
+            this.chainForm.resetFields();
             if (response.data == 1) {
               this.getChains();
               this.showNotification(
@@ -539,15 +537,18 @@ export default {
             this.inviteUserLoading = false;
             this.showNotification(
               "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
+              "Error al invitar usuario",
+              "Ha ocurrido un error realizar la invitación."
             );
           }
         }
       });
     },
     onShowUserInfo() {
-      console.log("%cObteniendo informacion usuario.", "color:green;font-size:0.7rem;")
+      console.log(
+        "%cObteniendo informacion usuario.",
+        "color:green;font-size:0.7rem;"
+      );
 
       this.showUserInfoModal = true;
     },
