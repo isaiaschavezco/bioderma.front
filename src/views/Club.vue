@@ -16,8 +16,7 @@
               >
                 <a-card :title="item.title">
                   <p class="center">{{item.points}}</p>
-                  <img />
-                  {{item.image}}
+                  <img alt="example" :src="item.image" slot="cover" />
                   <span style="font-weight: 700;">{{item.description}}</span>
                   <br />
                   <span>{{item.description}}</span>
