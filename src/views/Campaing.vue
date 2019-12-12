@@ -39,7 +39,7 @@
 
                       <a-divider />
                       
-                      <img alt="example" :src="item.portrait" class="campaing__img"/>
+                      <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
                       
                       <span style="font-weight: 700;">FILTROS</span>
                       <div class="campaing__filters">
@@ -189,8 +189,7 @@ export default {
       return groupsCampaings;
     },
     editCampaing(campaingId) {
-      const campaingName = `campaingDetail/${campaingId}`;
-      this.$router.push({ path: campaingName });
+      this.$router.push({ name: 'campaingDetail', query: { id: campaingId } });
     }
   }
 };

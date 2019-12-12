@@ -49,14 +49,6 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Campaing.vue")
         },
         {
-          path: "EditCampaing",
-          name: "editcampaing",
-          component: () =>
-            import(
-              /* webpackChunkName: "Plataforma" */ "./views/EditCampaing.vue"
-            )
-        },
-        {
           path: "ViewCampaing",
           name: "viewcampaing",
           component: () =>
@@ -91,12 +83,20 @@ export default new Router({
             import(/* webpackChunkName: "Plataforma" */ "./views/Themes.vue")
         },
         {
-          path: "CampaingDetail/:id",
+          path: "CampaingDetail",
           name: "campaingDetail",
           props: true,
           component: () =>
             import(
               /* webpackChunkName: "Plataforma" */ "./views/CampaingDetail.vue"
+            ),
+        },
+        {
+          path: "EditCampaing",
+          name: "editCampaing",
+          component: () =>
+          import(
+            /* webpackChunkName: "Plataforma" */ "./views/EditCampaing.vue"
             )
         },
         {

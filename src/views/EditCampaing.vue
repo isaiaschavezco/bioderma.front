@@ -85,122 +85,8 @@
 
     <!-- MODALES -->
     <!-- OPCION MULTIPLE -->
-    <a-modal title="NUEVA PREGUNTA OPCION MULTIPLE" centered v-model="multipleOptionModal ">
-      <a-form :form="optionMultiForm">
-        <span>ESCRIBE TU PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            placeholder="PREGUNTA"
-            v-decorator="[
-          'name-question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-        </a-form-item>
-        <a-divider />
-        <span>
-          ESCRIBE TU RESPUESTAS Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES ESCRIBIR 2 A 5
-          POSIBLES REPUESTAS
-        </span>
-        <a-checkbox-group @change="onChange">
-          <a-checkbox value="A-OM"></a-checkbox>
-          <a-form-item>
-            <a-input
-              placeholder="Respuesta A"
-              v-decorator="[
-          'questionA',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
+    <ModalMultipleOption :isVisible="multipleOptionModal" @close="() => multipleOptionModal = false"/>
 
-          <a-checkbox value="B-OM"></a-checkbox>
-          <a-form-item>
-            <a-input
-              placeholder="Respuesta B"
-              v-decorator="[
-          'questionB',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-
-          <a-checkbox value="C-OM"></a-checkbox>
-          <a-form-item>
-            <a-input
-              placeholder="Respuesta C"
-              v-decorator="[
-          'questionC',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-
-          <a-checkbox value="D-OM"></a-checkbox>
-          <a-form-item>
-            <a-input
-              placeholder="Respuesta D"
-              v-decorator="[
-          'questionD',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-
-          <a-checkbox value="E-OM"></a-checkbox>
-          <a-form-item>
-            <a-input
-              placeholder="Respuesta E"
-              v-decorator="[
-          'questionE',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-checkbox-group>
-        <a-divider />
-        <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
-        <a-form-item>
-          <span>TIEMPO</span>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'time',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>SEG</span>
-        </a-form-item>
-        <a-divider />
-        <span>ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'pts',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>PTS</span>
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <a-divider />
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-        >CANCELAR</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitOptionMultiple"
-        >CREAR</a-button>
-      </template>
-    </a-modal>
     <!-- RELACION DE COLUMNAS -->
     <a-modal title="NUEVA PREGUNTA RELACIÓN DE COLUMNAS" centered v-model="columnRelationModal">
       <a-form :form="columnRelationForm">
@@ -461,13 +347,11 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitPhraseCompleteForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitPhraseCompleteForm"
         >CREAR</a-button>
       </template>
     </a-modal>
@@ -537,7 +421,7 @@
       centered
       v-model="multipleOptionImageModal "
     >
-      <a-form :form="inviteUserForm">
+      <a-form :form="imageQuestionForm">
         <span>ESCRIBE TU PREGUNTA</span>
         <a-form-item>
           <a-input
@@ -664,19 +548,19 @@
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitOptionMultipleForm"
         >CANCELAR</a-button>
         <a-button
           key="submit"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitOptionMultipleForm"
         >CREAR</a-button>
       </template>
     </a-modal>
   </div>
 </template>
 <script>
+import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMultipleOption.vue"
+
 const testIconSVG = {
   template: `  <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.422 155.255"><defs><style>.cls-1{fill:#1d1d1b;}</style></defs><title>Agregar_CompletaLaFrase</title><g id="Grupo_587" data-name="Grupo 587"><g id="Grupo_579" data-name="Grupo 579"><g id="Grupo_549" data-name="Grupo 549"><rect id="Rectángulo_260" data-name="Rectángulo 260" class="cls-1" y="3.794" width="156.63" height="65.626"/></g><g id="Grupo_550" data-name="Grupo 550"><path id="Trazado_2103" data-name="Trazado 2103" class="cls-1" d="M337.9,261.227H173.675V188.014H337.9ZM181.25,253.64H330.294V195.612H181.273Z" transform="translate(0.422 -188.014)"/></g><g id="Grupo_551" data-name="Grupo 551"><rect id="Rectángulo_261" data-name="Rectángulo 261" class="cls-1" x="355.792" y="3.794" width="156.63" height="65.626"/></g><g id="Grupo_552" data-name="Grupo 552"><rect id="Rectángulo_262" data-name="Rectángulo 262" class="cls-1" y="89.628" width="156.63" height="65.626"/></g><g id="Grupo_553" data-name="Grupo 553"><rect id="Rectángulo_263" data-name="Rectángulo 263" class="cls-1" x="177.901" y="89.628" width="156.63" height="65.626"/></g></g></g></svg>`
 };
@@ -742,24 +626,33 @@ const data = [
   }
 ];
 export default {
+  components: {
+    ModalMultipleOption
+  },
   data() {
     return {
+      quizzId: -1,
+      multipleOptionModal: true,
+
       testIconSVG,
       collapsed: false,
       data,
       columns,
       chainModal: false,
+      imageQuestionForm: this.$form.createForm(this),
       chainForm: this.$form.createForm(this),
       optionMultiForm: this.$form.createForm(this),
       columnRelationForm: this.$form.createForm(this),
       phraseCompleteForm: this.$form.createForm(this),
       phraseOrderForm: this.$form.createForm(this),
-      multipleOptionModal: false,
       columnRelationModal: false,
       phraseCompleteModal: false,
       phraseOrderModal: false,
-      multipleOptionImageModal: false
+      multipleOptionImageModal: false,
     };
+  },
+  mounted() {
+    this.quizzId = this.$route.query.quizzId;
   },
   methods: {
     onChange(checkedValues) {
@@ -800,6 +693,9 @@ export default {
           alert("Exito");
         }
       });
+    },
+    handleChange() {
+
     }
   }
 };
@@ -823,10 +719,6 @@ export default {
   margin: 0 auto;
   width: 70%;
 }
-
-.container-multi-option {
-}
-
 .container-row-img-option {
   display: flex;
   justify-content: center;
