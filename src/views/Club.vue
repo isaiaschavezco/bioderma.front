@@ -75,7 +75,7 @@
           <div class="dropbox">
             <a-upload-dragger
               v-decorator="[
-                'image',
+                'upload',
                 {
                   rules: [
                     {
@@ -86,9 +86,11 @@
                 }
               ]"
               name="upload"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
               accept=".png, .jpg, jpge"
-              @change="handleChange"
+              @change="handleChangeFileUpload"
+              :beforeUpload="beforeUpload"
+              :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
@@ -153,7 +155,7 @@
           <div class="dropbox">
             <a-upload-dragger
               v-decorator="[
-                'image',
+                'upload',
                 {
                   rules: [
                     {
@@ -164,9 +166,11 @@
                 }
               ]"
               name="upload"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
               accept=".png, .jpg, jpge"
-              @change="handleChange"
+              @change="handleChangeFileUpload"
+              :beforeUpload="beforeUpload"
+              :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
@@ -229,7 +233,8 @@ export default {
       ],
       fileForm: this.$form.createForm(this),
       addProductModal: false,
-      editProductModal: false
+      editProductModal: false,
+      fileList: []
     };
   },
   mounted() {
@@ -263,7 +268,7 @@ export default {
               {
                 productId: this.newId,
                 title: values.title,
-                image: this.image,
+                image: values.upload.fileList[0].response,
                 description: values.description,
                 points: values.points
               }
@@ -356,7 +361,7 @@ export default {
               "https://bioderma-api-inmersys.herokuapp.com/product",
               {
                 title: values.title,
-                image: this.image,
+                image: values.upload.fileList[0].response,
                 description: values.description,
                 points: values.points
               }
@@ -372,6 +377,22 @@ export default {
           }
         }
       });
+    },
+    handleChangeFileUpload(info) {
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      this.fileList = fileList;
+    },
+    beforeUpload(file) {
+      let status = true;
+      this.fileForm.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
+      });
+      return status;
     }
   }
 };
