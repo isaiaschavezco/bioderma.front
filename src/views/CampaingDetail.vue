@@ -3,29 +3,34 @@
     <a-row>
       <a-col :xs="{ span: 15 }">
         <a-card title="CAMPAÑA PHOTODERM">
-          <a-table :columns="columns" :dataSource="data" style="margin-top: 0rem;">
-            <span slot="action" slot-scope="text, record">
-              <router-link to="EditCampaing">
-                <a-button shape="circle" icon="edit" size="large" />
-              </router-link>
-              <a-divider type="vertical" />
-              <a-button shape="circle" icon="delete" size="large" />
-              <a-divider type="vertical" />
-              <a-button shape="circle" icon="caret-right" size="large" />
-            </span>
-          </a-table>
+          <a-skeleton :loading="loadingQuizz" active>
+            <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
+              <span slot="action" slot-scope="text, record">
+                <router-link to="EditCampaing">
+                  <a-button shape="circle" icon="edit" size="large" />
+                </router-link>
+              
+                <a-divider type="vertical" />
+                <a-button shape="circle" icon="delete" size="large" />
+                
+                <a-divider type="vertical" />
+                <a-button shape="circle" icon="caret-right" size="large" @click="() => {validityModalForm = true; currentModalId = record.quizzId;}" />
+              </span>
+            </a-table>
+          </a-skeleton>
         </a-card>
       </a-col>
+
       <a-col :xs="{ span: 6 }" style="margin-left: 30px;">
         <div class="container-notification">
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
-            <a-list :dataSource="data">
+            <!-- <a-list :dataSource="quizz">
               <div slot="renderItem" slot-scope="item, index" style="padding: 0px">
                 <span style="font-weight: bold;">{{ item.date }}</span>
                 <p style="margin-bottom:30px">{{ item.description }}</p>
                 <a-divider class="divider" />
               </div>
-            </a-list>
+            </a-list>-->
           </a-card>
         </div>
       </a-col>
@@ -37,7 +42,7 @@
                 shape="circle"
                 icon="plus"
                 size="large"
-                @click="() => inviteUserModal = true"
+                @click="() => quizzModalRegister = true"
               />
             </a-col>
             <a-col>Añadi trivia</a-col>
@@ -46,58 +51,88 @@
       </a-col>
     </a-row>
 
-    <a-modal title="NUEVA ENTRADA" centered v-model="inviteUserModal">
-      <a-form :form="inviteUserForm">
+    <a-modal title="NUEVA ENTRADA" centered v-model="quizzModalRegister">
+      <a-form :form="quizzForm">
         <a-form-item>
           <a-input
-            placeholder="Titulo de la entrada"
+            placeholder="Titulo de la trivia"
             v-decorator="[
-          'input',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
+          'quizzTitle',
+          {rules: [{ required: true, message: 'Favor de asignar un titulo a la trivia' }]}
         ]"
           />
-        </a-form-item>
-        <a-form-item>
-          <a-form-item>
-            <a-upload-dragger
-              name="file"
-              :multiple="true"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Click or drag file to this area to upload</p>
-              <p class="ant-upload-hint">Seleccione una imagen THUMBNAIL</p>
-            </a-upload-dragger>
-          </a-form-item>
         </a-form-item>
       </a-form>
       <template slot="footer">
         <a-button
           key="submit"
           type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin: 0 auto 20px auto; display:block"
           :loading="inviteUserLoading"
-          @click="onSubmitInvitationForm"
+          @click="onSubmitQuizz"
         >SIGUIENTE</a-button>
+      </template>
+    </a-modal>
+
+    <a-modal
+      class="modal-validity"
+      v-model="validityModalForm"
+      :closable="false" width="40%" centered
+      :bodyStyle="{
+        height: '300px'
+      }"
+    >
+      <h4>ANTES DE ENVIAR LA TRIVIA DEBES ASIGNAR UNA VIGENCIA</h4>
+
+      <div class="modal-validity__form">
+        <span>VIGENCIAL DEL: </span>
+        <a-date-picker
+          :disabledDate="disabledStartValidityDate"
+          showTime
+          format="DD-MM-YYYY"
+          v-model="startValidityDate"
+          placeholder="Inicio de trivia"
+          @openChange="handleStartOpenChange"
+        />
+        <span> AL </span>
+        <a-date-picker
+          :disabledDate="disabledEndValidityDate"
+          showTime
+          format="DD-MM-YYYY"
+          placeholder="Fin trivia"
+          v-model="endValidityDate"
+          :open="endOpenDate"
+          @openChange="handleEndOpenChange"
+        />
+      </div> 
+
+      <template slot="footer">
+        <div class="validity-form__buttons">
+          <a-button class="validity-form__button" type="primary" size="large" @click="() => validityModalForm = false">
+            Cancelar
+          </a-button>
+          <a-button class="validity-form__button" type="primary" size="large" v-if="continueBtnValidity" @click="onSubmitValidityForm">
+            Enviar
+          </a-button>
+        </div>
       </template>
     </a-modal>
   </div>
 </template>
 <script>
+import moment from "moment";
+
 const columns = [
   {
-    dataIndex: "title",
-    key: "title",
+    dataIndex: "name",
+    key: "name",
     title: "NOMBRE DE LA TRIVIA",
     align: "center"
   },
   {
     title: "VIGENCIA",
-    dataIndex: "valid",
-    key: "valid",
+    dataIndex: "validity",
+    key: "validity",
     align: "center",
     scopedSlots: { customRender: "tags" }
   },
@@ -120,49 +155,102 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-    key: "1",
-    title: "HYDRABIO GEL-CREMA PREMIO COSMÉTICA GQ 2018",
-    valid: "01/01/2000",
-    status: "Enviada",
-    points: 500
-  },
-  {
-    key: "2",
-    title: "HYDRABIO GEL-CREMA PREMIO COSMÉTICA GQ 2018",
-    valid: "01/01/2000",
-    status: "Enviada",
-    points: 500
-  },
-  {
-    key: "3",
-    title: "HYDRABIO GEL-CREMA PREMIO COSMÉTICA GQ 2018",
-    label: "prueba@inmersys.com",
-    valid: "01/01/2000",
-    status: "Enviada",
-    points: 500
-  }
-];
 export default {
   data() {
     return {
+      currentModalId: -1,
+      continueBtnValidity: false,
+      startValidityDate: null,
+      endValidityDate: null,
+      endOpenDate: false,
+      loadingQuizz: true,
+      validityModalForm: false,
       collapsed: false,
-      data,
       columns,
       inviteUserModal: false,
       value: 1,
       activeTab: 1,
-      chainModal: false,
-      chainForm: this.$form.createForm(this),
-      inviteUserForm: this.$form.createForm(this),
+      quizzModalRegister: false,
+      quizzForm: this.$form.createForm(this),
       chains: [],
       tableChains: [],
       inviteUserModal: false,
-      inviteUserLoading: false
+      inviteUserLoading: false,
+      campaingId: null,
+      quizz: []
     };
   },
+  mounted() {
+    this.campaingId = this.$route.params.id;
+    this.getCampaingDetails();
+  },
+  watch: {
+    startValidityDate: function() {
+      this.continueBtnValidity = this.startValidityDate !== null && this.endValidityDate !== null;
+    },
+    endValidityDate: function() {
+      this.continueBtnValidity = this.startValidityDate !== null && this.endValidityDate !== null;
+    }
+  },
   methods: {
+    moment,
+    disabledAllDates(current) {
+      return true;
+    },
+    disabledValidityDate(current) {
+      // Can not select days before today and today
+      return current && current < moment().endOf('day');
+    },
+    disabledStartValidityDate(startValidityDate) {
+      const endValidityDate = this.endValidityDate;
+      if (!startValidityDate || !endValidityDate) {
+        return false;
+      }
+      return startValidityDate.valueOf() > endValidityDate.valueOf() && disabledValidityDate(startValidityDate);
+    },
+    disabledEndValidityDate(endValidityDate) {
+      const startValidityDate = this.startValidityDate;
+      if (!endValidityDate || !startValidityDate) {
+        return false;
+      }
+      return startValidityDate.valueOf() >= endValidityDate.valueOf();
+    },
+    handleStartOpenChange(open) {
+      if (!open) {
+        this.endOpenDate = true;
+      }
+    },
+    handleEndOpenChange(open) {
+      this.endOpenDate = open;
+    },
+    async getCampaingDetails() {
+      this.loadingQuizz = true;
+      const urlCampaingDetails = `https://bioderma-api-inmersys.herokuapp.com/quizz/${this.campaingId}`;
+
+      try {
+        const response = await this.$axios(urlCampaingDetails);
+
+        this.quizz = response.data;
+
+        this.quizz.map((trivia, index) => {
+          const newTrivia = trivia;
+          newTrivia.key = index;
+
+          if (newTrivia.isDeleted) newTrivia.status = "Eliminada";
+          else if (newTrivia.isActive) newTrivia.status = "Activa";
+          else if (newTrivia.isSend) newTrivia.status = "Enviada";
+          else newTrivia.status = "No enviada";
+
+          if (newTrivia.startedAt === "Invalid date")
+            newTrivia.validity = "No asigninada";
+          else
+            newTrivia.validity = `${newTrivia.startedAt} - ${newTrivia.finishedAt}`;
+
+          return newTrivia;
+        });
+      } catch (err) {}
+      this.loadingQuizz = false;
+    },
     handleChange(info) {
       const status = info.file.status;
       if (status !== "uploading") {
@@ -174,42 +262,43 @@ export default {
         this.$message.error(`${info.file.name} file upload failed.`);
       }
     },
-    callback(key) {
-      console.log(key);
-    },
-    async getChains() {
-      const responseChains = await this.$axios("chain");
-      this.chains = responseChains.data;
-      this.tableChains = this.chains;
-    },
-    onSubmitChainForm() {
-      this.chainForm.validateFields(async (err, values) => {
+    async onSubmitQuizz() {
+      this.quizzForm.validateFields(async (err, values) => {
         if (!err) {
+          const urlQuizzRegister =
+            "https://bioderma-api-inmersys.herokuapp.com/quizz";
+
           try {
-            const response = await this.$axios.post("chain", {
-              name: values.chain.toUpperCase().trim(),
-              isDeleted: false
-            });
-            this.chainModal = false;
-            if (response.data == 1) {
-              this.getChains();
+            const quizzInfo = {
+              campaingId: this.campaingId,
+              name: values.quizzTitle
+            };
+
+            console.log(quizzInfo);
+
+            const response = await this.$axios.post(
+              urlQuizzRegister,
+              quizzInfo
+            );
+
+            this.quizzModalRegister = false;
+            this.quizzForm.resetFields();
+            this.getCampaingDetails();
+
+            console.log(response.data);
+
+            if (response.data == 0) {
               this.showNotification(
                 "success",
-                "Cadena registrada",
-                "La cadena ha sido registrada correctamente."
-              );
-            } else if (response.data == 2) {
-              this.showNotification(
-                "info",
-                "Esta cadena ya existe",
-                "La cadena que ha intentando registrar, ya existe."
+                "Trivia registrada",
+                "La trivia ha sido registrada correctamente."
               );
             }
           } catch (err) {
             this.showNotification(
               "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
+              "Error al agregar trivia",
+              "Ha ocurrido un error al registrar la trivia."
             );
           }
         }
@@ -267,35 +356,30 @@ export default {
         this.tableChains = newChain;
       }
     },
-    onSubmitInvitationForm() {
-      this.inviteUserForm.validateFields(async (err, values) => {
-        if (!err) {
-          this.inviteUserLoading = true;
-          try {
-            const response = await this.$axios.post("user/invite", {
-              email: values.email.trim(),
-              type: values.type
-            });
-            this.inviteUserLoading = false;
-            this.inviteUserForm.resetFields();
-            this.inviteUserModal = false;
-            if (response.data == 0) {
-              this.showNotification(
-                "success",
-                "Invitación enviada",
-                "La invitación ha sido enviada correctamente."
-              );
-            }
-          } catch (err) {
-            this.inviteUserLoading = false;
-            this.showNotification(
-              "error",
-              "Error al agregar cadena",
-              "Ha ocurrido un error al registrar la cadena."
-            );
-          }
-        }
-      });
+    async onSubmitValidityForm() {
+      const quizzId = this.currentModalId;
+      const urlValidityDate = "https://bioderma-api-inmersys.herokuapp.com/quizz/send";
+
+      console.log("Submited Dates: ")
+      console.log(quizzId, this.startValidityDate.format('YYYY-MM-DD'), this.endValidityDate.format('YYYY-MM-DD'))
+
+      try {
+        const validityDate = {
+          quizzId,
+          startDate: this.startValidityDate.format('YYYY-MM-DD'),
+          finishDate: this.endValidityDate.format('YYYY-MM-DD')
+        };
+        const response = await this.$axios.post(urlValidityDate, validityDate);
+
+        this.getCampaingDetails();
+        this.validityModalForm = false;
+        this.startValidityDate = null;
+        this.endValidityDate = null;
+        console.log("Response validity:", response.data);
+      }
+      catch (err) {
+        console.log("Submit dates: ", err);
+      }
     }
   }
 };
@@ -309,5 +393,27 @@ export default {
   margin-right: 30px;
   color: #526987;
   font-weight: 500;
+}
+.form-questions__button {
+  text-align: center;
+}
+.modal-validity h4 {
+  font-size: 1.1rem;
+  font-weight: 650;
+  text-align: center;
+  margin: 3rem 0 4rem 0;
+}
+.modal-validity__form {
+  text-align: center;
+  font-size: 1rem;
+}
+.modal-validity__form span {
+  margin: 0 0.2rem;
+}
+.validity-form__buttons {
+  text-align: center;
+}
+.validity-form__button {
+  width: 20%;
 }
 </style>

@@ -5,7 +5,7 @@
 					<a-row class="container-option">
 						<a-row class="container-item">
 							<a-row class="select-item">
-								<a-checkbox @change="onChangeMainFilter" :checked="disabledFilters">Todos los nombres</a-checkbox>
+								<a-checkbox @change="onChangeMainFilter" :checked="disabledFilters">Todos los usuarios</a-checkbox>
 							</a-row>
 
 							<a-row class="select-item">
@@ -149,6 +149,17 @@
 <script>
 export default {
 	name: "CampaingFilter",
+	props: {
+		resetFilters: {
+			type: Boolean,
+			default: false
+		}
+	},
+	watch: {
+		'resetFilters': function () {
+			this.filters.splice(0, this.filters.length);
+		}
+	},
 	data() {
 		return {
 			filterToSend: {
@@ -417,7 +428,7 @@ p{
 }
 .filter-list {
 	height: 30vh;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 .filter__data {
 	font-size: 0.87rem;

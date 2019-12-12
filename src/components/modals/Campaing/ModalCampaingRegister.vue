@@ -45,16 +45,16 @@
     </a-form>
     <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
 
-    <CampaingFilter @filterAdded="addFilter" />
+    <CampaingFilter @filterAdded="addFilter" :resetFilters="deleteFilters" />
 
     <a-row>
-      <a-col span="24" class="text-center">
-        <a-button
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-          @click="onSubmitFileForm"
-        >SUBIR</a-button>
-      </a-col>
+			<a-col span="24" class="text-center">
+				<a-button
+					type="primary"
+					style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+					@click="onSubmitCampaingForm"
+				>SUBIR</a-button>
+			</a-col>
     </a-row>
   </div>
 </template>
@@ -72,6 +72,7 @@ export default {
   },
   data() {
     return {
+      deleteFilters: false,
       filters: [],
       fileList: [],
       loadingFileForm: false,
@@ -108,8 +109,9 @@ export default {
       });
       return status;
     },
-    onSubmitFileForm() {
+    onSubmitCampaingForm() {
       this.fileForm.validateFields(async (err, values) => {
+        this.deleteFilters = false;
         if (!err) {
           if (this.filters.length > 0) {
             const urlRegisterCampaing =
@@ -138,6 +140,7 @@ export default {
               this.loadFileModal = false;
               this.fileForm.resetFields();
               this.fileList = [];
+              this.deleteFilters = true;
 
               this.closeModal();
 
