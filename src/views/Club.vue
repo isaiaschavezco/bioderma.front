@@ -21,10 +21,7 @@
                   <br />
                   <span></span>
                   <template class="ant-card-actions" slot="actions">
-                    <a-icon
-                      type="edit"
-                      @click="(editProductModal = true), gettingId(item.id)"
-                    />
+                    <a-icon type="edit" @click="(editProductModal = true), gettingId(item.id)" />
                     <a-icon type="delete" @click="deleteProduct(item.id)" />
                   </template>
                 </a-card>
@@ -40,12 +37,7 @@
       >
         <a-row>
           <a-col>
-            <a-button
-              shape="circle"
-              icon="plus"
-              size="large"
-              @click="addProductModal = true"
-            />
+            <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />
           </a-col>
           <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
@@ -109,12 +101,8 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">
-                Selecciona o suelta una imagen para tu producto
-              </p>
-              <p class="ant-upload-hint">
-                Unicamente archivos .png, .jpg o .jpge
-              </p>
+              <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+              <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
           </div>
         </a-form-item>
@@ -139,8 +127,7 @@
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitEditProduct"
-          >Aceptar</a-button
-        >
+        >Aceptar</a-button>
       </template>
     </a-modal>
     <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" centered>
@@ -192,12 +179,8 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">
-                Selecciona o suelta una imagen para tu producto
-              </p>
-              <p class="ant-upload-hint">
-                Unicamente archivos .png, .jpg o .jpge
-              </p>
+              <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+              <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
           </div>
         </a-form-item>
@@ -222,8 +205,7 @@
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitPictureForm"
-          >Publicar</a-button
-        >
+        >Publicar</a-button>
       </template>
     </a-modal>
   </div>
@@ -241,7 +223,7 @@ export default {
         "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
       description: "",
       points: "",
-      id: "",
+      productId: "",
       newId: "",
       proudcts: [
         {
@@ -287,7 +269,7 @@ export default {
             const response = await this.$axios.put(
               "https://bioderma-api-inmersys.herokuapp.com/product",
               {
-                id: this.newId,
+                productId: this.newId,
                 title: values.title,
                 image: this.image,
                 description: values.description,
@@ -300,7 +282,7 @@ export default {
             } else {
               this.failEditingProduct();
             }
-            this.addProductModal = false;
+            this.editProductModal = false;
           } catch (error) {
             alert(error);
           }
@@ -340,6 +322,7 @@ export default {
           </p>
         )
       });
+      this.getListProducts();
     },
     failEditingProduct() {
       this.$error({
