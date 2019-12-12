@@ -164,7 +164,7 @@ export default {
       endValidityDate: null,
       endOpenDate: false,
       loadingQuizz: true,
-      validityModalForm: true,
+      validityModalForm: false,
       collapsed: false,
       columns,
       inviteUserModal: false,
@@ -367,11 +367,15 @@ export default {
         const validityDate = {
           quizzId,
           startDate: this.startValidityDate.format('YYYY-MM-DD'),
-          endDate: this.startValidityDate.format('YYYY-MM-DD')
+          finishDate: this.endValidityDate.format('YYYY-MM-DD')
         };
-        const response = this.$axios.post(urlValidityDate, validityDate);
+        const response = await this.$axios.post(urlValidityDate, validityDate);
 
-        console.log("Response:", response.data);
+        this.getCampaingDetails();
+        this.validityModalForm = false;
+        this.startValidityDate = null;
+        this.endValidityDate = null;
+        console.log("Response validity:", response.data);
       }
       catch (err) {
         console.log("Submit dates: ", err);

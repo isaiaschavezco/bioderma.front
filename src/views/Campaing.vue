@@ -17,12 +17,31 @@
               <a-row :gutter="16" :style="{ 'margin-top': '16px' }" v-for="(row, i) in groupedCampaings" :key="i">
                 <a-col span="6" v-for="(item, j) in row" :key="j">
                   <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
-                    <a-card
-                      :title="item.name"
-                    >
-                      <img alt="example" :src="item.portrait" slot="cover" class="campaing__img"/>
-                      <span style="font-weight: 700;">FILTROS</span>
+                    <a-card>
+                      <div class="campaing__head">
+                        <a-row>
+                          <a-col span="15">
+                            <h2>{{ item.name }}</h2>
+                          </a-col>
+                          <a-col span="9">
+                            <a-row class="camapaing__actions" type="flex" justify="space-between">
+                              <a-col span="8">
+                                <a-icon class="campaing__action" type="edit" @click="() => editCampaing(item.id)"/>
+                              </a-col>
 
+                              <a-col span="8">
+                                <a-icon class="campaing__action" type="delete" />
+                              </a-col>
+                            </a-row>
+                          </a-col>
+                        </a-row>
+                      </div>
+
+                      <a-divider />
+                      
+                      <img alt="example" :src="item.portrait" class="campaing__img"/>
+                      
+                      <span style="font-weight: 700;">FILTROS</span>
                       <div class="campaing__filters">
                           <div class="campaing__filter" v-if="item.target.length > 0">
                             <p v-for="filter in item.target" :key="filter.id">
@@ -32,20 +51,11 @@
                       </div>
                       
                       
-                      <a-divider
-                        :style="{
-                          margin: '10px 0px',
-                          border: '1px solid rgba(0,0,0,0.1)'
-                        }"
-                      />
+                      <a-divider/>
                       <span style="font-weight: 700;">ESTATUS</span>
                       <br />
                       <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
-                      <template class="ant-card-actions" slot="actions">
-                        <a-icon type="close-circle" />
-                        <a-icon type="edit" @click="() => editCampaing(item.id)"/>
-                        <a-icon type="delete" />
-                      </template>
+                      <a-divider />
                     </a-card>
                   </a-tooltip>
                 </a-col>
@@ -193,12 +203,28 @@ export default {
   > .ant-tabs-no-animation {
   border-bottom: 1px solid;
 }
+.campaing__header h4 {
+  margin: 0;
+}
+.campaing__action {
+  font-size: 1.2rem;
+  padding: 7px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px 1px rgba(119, 119, 119, 0.5);
+  transition-delay: 0;
+  transition-duration: 10ms;
+  transition-timing-function: ease-in-out;
+}
+.campaing__action:active {
+  transform: scale(0.9);
+}
 .campaing__img {
   height: 200px;
+  width: 100%;
   object-fit: cover;
 }
 .campaing__filters {
-  height: 3.5rem;
+  height: 4.5rem;
   overflow-y: auto;
   margin: 1rem 0 2rem 0;
 }
