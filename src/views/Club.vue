@@ -42,16 +42,8 @@
           <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
         <br />
-        <a-row>
-          <a-switch defaultChecked @click="showConfirm">
-            <a-icon type="check" slot="checkedChildren" />
-            <a-icon type="close" slot="unCheckedChildren" />
-          </a-switch>
-          <a-row class="title-span-tag">Activar/Desactivar Tienda</a-row>
-        </a-row>
       </a-col>
     </a-row>
-    <a-modal v-modal="confirmClose"></a-modal>
     <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" centered>
       <a-form :form="fileForm">
         <a-form-item>
@@ -379,19 +371,6 @@ export default {
             alert(error);
           }
         }
-      });
-    },
-    showConfirm() {
-      this.$confirm({
-        title: "¿ESTAS SEGURO QUE DESEAS DESACTIVAR LA TIENDA?",
-        content: "",
-        onOk() {
-          return new Promise((resolve, reject) => {
-            alert("Tienda desactivada");
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 0.5);
-          }).catch(() => console.log("Oops errors!"));
-        },
-        onCancel() {}
       });
     }
   }
