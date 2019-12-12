@@ -1,82 +1,109 @@
 <template>
   <div>
-    <a-row>
-      <h1 class="title-theme">SELECCIONA UN TEMA PARA LA APLICACIÓN</h1>
-    </a-row>
-    <a-row class="main-phones">
-      <div>
-        <!-- Spring -->
-        <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
-          <a-row class="container-palette">
-            <div class="color-palette" style="background: #95DB95"></div>
-            <div class="color-palette" style="background: #449C44"></div>
-            <div class="color-palette" style="background: #1C541C"></div>
-          </a-row>
-          <a-button
-            key="submit"
-            type="primary"
-            style="background: #449C44; border: none;"
-            class="btn-cel"
-            @click="changeSessionColor"
-          >APLICAR</a-button>
+    <a-Row :gutter="2">
+      <a-col :span="21">
+        <a-row>
+          <h1 class="title-theme">BIODERMA GAMES</h1>
+          <a-card style="width:100%; min-height:300px;"></a-card>
         </a-row>
-      </div>
-      <div>
-        <!-- Summer -->
-        <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
-          <a-row class="container-palette">
-            <div class="color-palette" style="background: #EEC795"></div>
-            <div class="color-palette" style="background: #F99F28"></div>
-            <div class="color-palette" style="background: #AF6B11"></div>
-          </a-row>
-          <a-button
-            key="submit"
-            type="primary"
-            style="background: #F99F28; border: none;"
-            class="btn-cel"
-            @click="changeSessionColor"
-          >APLICAR</a-button>
+      </a-col>
+      <a-col :span="3">
+        <a-button
+          shape="circle"
+          icon="plus"
+          size="large"
+          style="margin-left:70px; margin-top:50px;"
+        />
+      </a-col>
+      <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
+    </a-Row>
+    <a-Row :gutter="3">
+      <a-col :span="14" style="margin-top: 50px;">
+        <a-row>
+          <h1 class="title-theme">SELECCIONA UN TEMA PARA LA APLICACIÓN</h1>
         </a-row>
-      </div>
-      <div>
-        <!-- Autumn -->
-        <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
-          <a-row class="container-palette">
-            <div class="color-palette" style="background: #A31A29"></div>
-            <div class="color-palette" style="background: #AB6870"></div>
-            <div class="color-palette" style="background: #E89DA6"></div>
-          </a-row>
-          <a-button
-            key="submit"
-            type="primary"
-            style="background: #AB6870; border: none;"
-            class="btn-cel"
-            @click="changeSessionColor"
-          >APLICAR</a-button>
+        <a-row class="main-phones">
+          <div>
+            <!-- Spring -->
+            <a-row class="container-phone">
+              <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
+              <a-row class="container-palette">
+                <div class="color-palette" style="background: #95DB95"></div>
+                <div class="color-palette" style="background: #449C44"></div>
+                <div class="color-palette" style="background: #1C541C"></div>
+              </a-row>
+              <a-button
+                key="submit"
+                type="primary"
+                style="background: #449C44; border: none;"
+                class="btn-cel"
+                @click="changeSessionColor"
+              >APLICAR</a-button>
+            </a-row>
+          </div>
+          <div>
+            <!-- Summer -->
+            <a-row class="container-phone">
+              <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
+              <a-row class="container-palette">
+                <div class="color-palette" style="background: #EEC795"></div>
+                <div class="color-palette" style="background: #F99F28"></div>
+                <div class="color-palette" style="background: #AF6B11"></div>
+              </a-row>
+              <a-button
+                key="submit"
+                type="primary"
+                style="background: #F99F28; border: none;"
+                class="btn-cel"
+                @click="changeSessionColor"
+              >APLICAR</a-button>
+            </a-row>
+          </div>
+          <div>
+            <!-- Autumn -->
+            <a-row class="container-phone">
+              <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
+              <a-row class="container-palette">
+                <div class="color-palette" style="background: #A31A29"></div>
+                <div class="color-palette" style="background: #AB6870"></div>
+                <div class="color-palette" style="background: #E89DA6"></div>
+              </a-row>
+              <a-button
+                key="submit"
+                type="primary"
+                style="background: #AB6870; border: none;"
+                class="btn-cel"
+                @click="changeSessionColor"
+              >APLICAR</a-button>
+            </a-row>
+          </div>
+          <div>
+            <!-- Winter -->
+            <a-row class="container-phone">
+              <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
+              <a-row class="container-palette">
+                <div class="color-palette" style="background: #80C7E5"></div>
+                <div class="color-palette" style="background: #009DE0"></div>
+                <div class="color-palette" style="background: #0077AA"></div>
+              </a-row>
+              <a-button
+                key="submit"
+                type="primary"
+                style="background: #0077AA; border: none;"
+                class="btn-cel"
+                @click="changeSessionColor"
+              >APLICAR</a-button>
+            </a-row>
+          </div>
         </a-row>
-      </div>
-      <div>
-        <!-- Winter -->
-        <a-row class="container-phone">
-          <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
-          <a-row class="container-palette">
-            <div class="color-palette" style="background: #80C7E5"></div>
-            <div class="color-palette" style="background: #009DE0"></div>
-            <div class="color-palette" style="background: #0077AA"></div>
-          </a-row>
-          <a-button
-            key="submit"
-            type="primary"
-            style="background: #0077AA; border: none;"
-            class="btn-cel"
-            @click="changeSessionColor"
-          >APLICAR</a-button>
+      </a-col>
+      <a-col :span="6" style="margin-top: 50px;">
+        <a-row>
+          <h1 class="title-theme">TIENDA</h1>
+          <a-card style="width:100%; min-height:400px; margin-left:80px;"></a-card>
         </a-row>
-      </div>
-    </a-row>
+      </a-col>
+    </a-Row>
   </div>
 </template>
 <script>
