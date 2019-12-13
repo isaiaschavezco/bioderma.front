@@ -30,11 +30,18 @@
 				</a-col>
 			</a-row>
 
-      <a-radio-group class="form-question__options" default="A">
+      <a-radio-group class="form-question__options"
+				v-model="answer"
+				v-decorator="[
+					`answer`,
+					{rules: [{ required: true }]}
+				]"
+				@change="(e) => onChangeAnswer(e.target.value)"
+			>
 				<a-row style="margin-left: 4rem; margin-right: 4rem;" v-for="(option, index) in textOptions" :key="index">
 					<a-col class="form-question__option" span="24">
 						<a-col span="2">
-							<a-radio :value="option.indicator" class="option__radioOption" :disabled="!isAvailable(index)"></a-radio>
+							<a-radio class="option__radioOption" :value="index" :disabled="!isAvailableOption[index]"></a-radio>
 						</a-col>
 						<a-col span="1" class="option__labelOption">
 							{{ `${option.indicator})` }}
@@ -44,11 +51,12 @@
 								<a-input
 									class="form-question__inputText"
 									:placeholder="`Respuesta ${option.indicator}`"
-									:disabled="!isAvailable(index)"
+									:disabled="!isAvailableOption[index]"
 									v-decorator="[
 										`question${option.indicator}`,
 										{rules: [{ required: index < 2, message: 'Favor de llenar el campo' }]}
 									]"
+									@change="(e) => onChangeOptionValue(index, e.target.value)"
 								/>
 							</a-form-item>
 						</a-col>
@@ -113,17 +121,18 @@ export default {
 		isVisible: {
 			type: Boolean,
 			default: false
-		}
-	},
-	watch: {
-		isVisible: function() {
-			this.isVisibleModal = this.isVisible;
+		},
+		quizz: {
+			default: ""
 		}
 	},
 	data() {
 		return {
 			time: "1",
 			points: "1",
+			answer: 0,
+			quizzId: this.quizz,
+			isAvailableOption: [true, true, false, false, false],
 			textOptions: [
 				{
 					name: 'optionA',
@@ -147,24 +156,85 @@ export default {
 				}
 			],
 			isVisibleModal: this.isVisible,
-			questionForm: this.$form.createForm(this)
+			questionForm: this.$form.createForm(this),
+			optionsValues: ["", "", "", "", ""]
 		};
 	},
+	watch: {
+		isVisible: function() {
+			this.isVisibleModal = this.isVisible;
+		}
+	},
 	methods: {
-		isAvailable(index) {
-			let available = true;
+		onChangeOptionValue(index, value) {
+			this.optionsValues[index] = value;
+			this.setAvailableOptions();
+			this.onChangeAnswer();
+		},
+		onChangeAnswer() {
+			if (!this.isAvailableOption[this.answer]) {
+				for (let j = 4; j >= 0; --j) {
+					if (this.isAvailableOption[j]) {
+						this.answer = j;
+						break;
+					}
+				}
+			}
+		},
+		setAvailableOptions() {
+			let newAvailableValues = new Array(5);
+			newAvailableValues.fill(true);
 
+			for (let i = 0; i < 5; ++i) {
+				if (i < 2)
+					newAvailableValues[i] = true;
+				else {
+					let available = true;
 
+					for (let j = 0; j < i && available; ++j)
+						available &= (this.optionsValues[j].length > 0);
+					
 
-			return available;
+					newAvailableValues[i] = available;
+				}
+			}
+
+			this.isAvailableOption = newAvailableValues;
 		},
 		onSubmitQuestion(e) {
 			e.preventDefault();
-			console.log(this.questionForm);
-
 			this.questionForm.validateFields(async (err, values) => {
 				if (!err) {
 					console.log('No err', values);
+
+					let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
+
+					options = options.map((option, index) => {
+						return {
+							index: index,
+							response: option
+						};
+					})
+
+					const contentJSON = JSON.stringify({
+						question: values.question,
+						possiblesResponses: options
+					});
+
+					const answerJSON = JSON.stringify({
+						responser: this.answer
+					});
+					
+					const questionInformation = {
+						content: contentJSON,
+						answer: answerJSON,
+						point: values.points,
+						time: values.time,
+						questionType: 1,
+						quizzId: this.quizzId
+					};
+
+					console.log(questionInformation);
 				}
 			})
 		}

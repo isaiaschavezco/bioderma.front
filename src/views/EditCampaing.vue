@@ -85,7 +85,7 @@
 
     <!-- MODALES -->
     <!-- OPCION MULTIPLE -->
-    <ModalMultipleOption :isVisible="multipleOptionModal" @close="() => multipleOptionModal = false"/>
+    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" @close="() => multipleOptionModal = false"/>
 
     <!-- RELACION DE COLUMNAS -->
     <a-modal title="NUEVA PREGUNTA RELACIÓN DE COLUMNAS" centered v-model="columnRelationModal">
@@ -631,7 +631,7 @@ export default {
   },
   data() {
     return {
-      quizzId: -1,
+      quizzId: this.$route.query.quizzId,
       multipleOptionModal: true,
 
       testIconSVG,
@@ -652,7 +652,6 @@ export default {
     };
   },
   mounted() {
-    this.quizzId = this.$route.query.quizzId;
   },
   methods: {
     onChange(checkedValues) {

@@ -221,6 +221,7 @@ export default {
   height: 200px;
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 .campaing__filters {
   height: 4.5rem;
