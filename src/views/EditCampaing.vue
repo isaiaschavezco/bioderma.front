@@ -529,9 +529,14 @@ export default {
       const questions = questionsResponse.questions.map(question => {
         const content = JSON.parse(question.content);
 
+        let title = content.question;
+
+        if (question.question_type.id === 3)
+          title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
+
         let newQuestion = {
           key: question.id,
-          title: content.question,
+          title: title,
           time: question.time,
           points: question.points,
           type: question.question_type.name

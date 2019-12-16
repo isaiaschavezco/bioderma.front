@@ -209,8 +209,6 @@ export default {
 		onSubmitQuestion(e) {
 			e.preventDefault();
 			this.questionForm.validateFields(async (err, values) => {
-				const urlQuestionRegister = "https://bioderma-api-inmersys.herokuapp.com/question";
-
 				if (!err) {
 					console.log('No err', values);
 					
@@ -250,15 +248,19 @@ export default {
 						quizzId: this.quizzId
 					};
 					
-					const responseData = await this.$emit('register', questionInformation);
-					
-					this.onCloseModal();
-					this.questionForm.resetFields();
-					this.optionsValues.fill("");
-					this.setAvailableOptions();
-					this.answer = 0;
+					try {
+						const responseData = await this.$emit('register', questionInformation);
+						
+						this.onCloseModal();
+						this.questionForm.resetFields();
+						this.optionsValues.fill("");
+						this.setAvailableOptions();
+						this.answer = 0;
 
-					console.log(JSON.stringify(questionInformation));
+						console.log(JSON.stringify(questionInformation));
+					} catch (error) {
+						console.log('Hubo un erro: ', error);
+					}
 				}
 			})
 		}
@@ -266,7 +268,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 :root {
 	--main-color: rgb(200, 200, 200);
 }

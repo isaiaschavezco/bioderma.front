@@ -56,7 +56,7 @@
 									:disabled="!isAvailableOption[index]"
 									v-decorator="[
 										`question${option.indicator}`,
-										{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
+										{rules: [{ required: isRequiredOption[index], validator: checkWords }]}
 									]"
 									@change="(e) => {onChangeOptionValue(index, e.target.value); }"
 								/>
@@ -133,6 +133,7 @@ export default {
 			time: "1",
 			points: "1",
 			answer: 0,
+			wordsToComplete: 0,
 			quizzId: this.quizz,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
@@ -170,13 +171,30 @@ export default {
 	},
 	methods: {
 		checkQuestion(rule, value, callback) {
-			console.log("Check:", value);
-			if (value.search("_") === -1)
-				callback("La pregunta al menos debe contener una palabra para completar");
-			else if (value.length === 0)
-				callback("Favor de llenar el campo");
+			let currWords = 0;
 			
-			callback();
+			for (let i = 0; i < value.length; ++i) {
+				if (value[i] === '_')
+					++currWords;
+			}
+
+			this.wordsToComplete = currWords;
+
+			if (currWords === 0)
+				callback("La pregunta al menos debe contener una palabra para completar.");
+			else {
+				callback();
+			}
+		},
+		checkWords(rule, value, callback) {
+			const options = value.split(',').filter(value => value.trim().length > 0);
+
+			if (options.length < this.wordsToComplete) {
+				callback(`Hay ${this.wordsToComplete} por completar y tu solo proporcionas ${options.length}.`)
+			}
+			else {
+				callback();
+			}
 		},
 		onChangeOptionValue(index, value) {
 			this.optionsValues[index] = value;
@@ -219,9 +237,10 @@ export default {
 		},
 		onSubmitQuestion(e) {
 			e.preventDefault();
-			this.questionForm.validateFields(async (err, values) => {
-				const urlQuestionRegister = "https://bioderma-api-inmersys.herokuapp.com/question";
 
+			this.questionForm.validateFields(['time', 'points'], async (err, values) => {
+				values = this.questionForm.getFieldsValue();
+				
 				if (!err) {
 					console.log('No err', values);
 					
@@ -234,50 +253,57 @@ export default {
 						}
 					}
 
-					let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
-
-					options = options.map((option, index) => {
+					let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]).map((option, index) => {
 						return {
 							index: index,
-							response: option
+							response: option,
+							responses: option.split(',').map(val => val.trim())
 						};
 					})
 
-					const contentJSON = JSON.stringify({
-						question: values.question,
+					let question = values.question.split('_').filter(val => val.length > 0).map(part => { return {data: part} } );
+					const content = JSON.stringify({
+						question,
 						possiblesResponses: options
 					});
 
-					const answerJSON = JSON.stringify({
+					const answer = JSON.stringify({
 						response: this.answer
 					});
-					
+
 					const questionInformation = {
-						content: contentJSON,
-						answer: answerJSON,
+						quizzId: this.quizzId,
+						questionType: 3,
+						content: content,
 						points: Number.parseInt(values.points),
+						answer: answer,
 						time: Number.parseInt(values.time),
-						questionType: 1,
-						quizzId: this.quizzId
 					};
 					
-					// const responseData = await this.$emit('register', questionInformation);
-					
-					// this.onCloseModal();
-					// this.questionForm.resetFields();
-					// this.optionsValues.fill("");
-					// this.setAvailableOptions();
-					// this.answer = 0;
+					try {
+						const responseData = await this.$emit('register', questionInformation);
+						
+						this.onCloseModal();
+						this.questionForm.resetFields();
+						this.optionsValues.fill("");
+						this.setAvailableOptions();
+						this.answer = 0;
 
-					console.log(JSON.stringify(questionInformation));
+						console.log(JSON.stringify(questionInformation));
+					} catch (error) {
+						console.log("Hubo un error: ", error);
+					}
 				}
-			})
+				else {
+					console.log("Errores:", err)
+				}
+			});
 		}
 	}
 };
 </script>
 
-<style>
+<style scoped>
 :root {
 	--main-color: rgb(200, 200, 200);
 }
