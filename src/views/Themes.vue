@@ -26,7 +26,7 @@
         ></a-switch>
       </a-col>Activar Bioderma Games
     </a-Row>
-    <a-Row :gutter="2">
+    <a-Row :gutter="4">
       <a-col :span="14" style="margin-top: 50px;">
         <a-row>
           <h1 class="title-theme">SELECCIONA UN TEMA PARA LA APLICACIÓN</h1>
