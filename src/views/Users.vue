@@ -425,7 +425,7 @@ export default {
     async getChains() {
       const responseChains = await this.$axios("chain");
       this.chains = responseChains.data.chains;
-      console.log(responseChains.data);
+      // console.log(responseChains.data);
       this.tableChains = this.chains;
     },
     onSubmitChainForm() {

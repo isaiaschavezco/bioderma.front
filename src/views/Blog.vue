@@ -4,29 +4,47 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
-            <a-tab-pane tab="USUARIOS" key="1">
+            <a-tab-pane tab="BLOG" key="1">
               <a-input-search placeholder="Buscar blog" enterButton />
-              <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
+              <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
                 <span slot="tags" slot-scope="tags">
-                  <a-tag
-                    v-for="tag in tags"
-                    :color="tag==='loser' ? 'volcano' : (tag.length > 5 ? 'geekblue' : 'green')"
-                    :key="tag"
-                  >{{tag.toUpperCase()}}</a-tag>
+                  <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="text, record">
                   <a-button shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
-                  <a-button shape="circle" icon="delete" size="large" />
+                  <a-button
+                    shape="circle"
+                    icon="delete"
+                    size="large"
+                    @click="showDeleteConfirm(record.id, onDeleteBlog)"
+                  />
                 </span>
               </a-table>
             </a-tab-pane>
-            <a-tab-pane tab="BIODERMA GAMES" key="2"></a-tab-pane>
+            <a-tab-pane tab="BIODERMA GAMES" key="2">
+              <a-input-search placeholder="Buscar blog" enterButton />
+              <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
+                <span slot="tags" slot-scope="tags">
+                  <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                  <a-button shape="circle" icon="info" size="large" />
+                  <a-divider type="vertical" />
+                  <a-button
+                    shape="circle"
+                    icon="delete"
+                    size="large"
+                    @click="showDeleteConfirm(record.id, onDeleteBlog)"
+                  />
+                </span>
+              </a-table>
+            </a-tab-pane>
           </a-tabs>
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
-        <div v-if="activeTab == 1">
+        <div>
           <a-row style>
             <a-col>
               <a-button shape="circle" icon="plus" size="large" @click="() => blogNewModal = true" />
@@ -41,9 +59,9 @@
       <a-form :form="fileBlogForm">
         <a-form-item>
           <a-input
-            placeholder="Ingresa un nombre para la campaña"
+            placeholder="Ingresa el título de la entrada"
             v-decorator="[
-              'name',
+              'title',
               {
                 rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
@@ -66,7 +84,7 @@
                 }
               ]"
               name="upload"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
               accept=".png, .jpg, jpge"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
@@ -75,7 +93,9 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
+              <p
+                class="ant-upload-text"
+              >Selecciona o suelta una imagen para el thumbnail de la entrada</p>
               <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
             </a-upload-dragger>
           </div>
@@ -84,13 +104,11 @@
       <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
       <FormFilter />
       <template slot="footer">
-        <router-link to="NewBlog">
-          <a-button
-            type="primary"
-            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="onSubmitInvitationForm"
-          >SIGUIENTE</a-button>
-        </router-link>
+        <a-button
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          @click="onSubmitBlog"
+        >SIGUIENTE</a-button>
       </template>
     </a-modal>
   </div>
@@ -112,8 +130,8 @@ const columns = [
   },
   {
     title: "Fecha",
-    dataIndex: "date",
-    key: "date",
+    dataIndex: "createdAt",
+    key: "createdAt",
     align: "center",
     sorter: (a, b) => {
       if (a.profile < b.profile) {
@@ -162,25 +180,102 @@ export default {
       columns,
       value: 1,
       activeTab: 1,
-      chainModal: false,
-      chainForm: this.$form.createForm(this),
       fileBlogForm: this.$form.createForm(this),
-      chains: [],
-      tableChains: [],
-
+      fileList: [],
       blogNewModal: false,
-      inviteUserLoading: false
+      inviteUserLoading: false,
+      isBiodermaGame: false,
+      blogList: []
     };
   },
   methods: {
-    onSubmitInvitationForm() {
+    onSubmitBlog() {
       this.fileBlogForm.validateFields(async (err, values) => {
         if (!err) {
-          alert("Exito");
-          console.log(values);
+          this.$router.push({
+            name: "newblog",
+            params: {
+              title: values.title,
+              image: values.upload.fileList[0].response,
+              isBiodermaGame: this.isBiodermaGame
+            }
+          });
         }
       });
+    },
+    handleChangeFileUpload(info) {
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      this.fileList = fileList;
+    },
+    beforeUpload(file) {
+      let status = true;
+      this.fileBlogForm.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
+      });
+      return status;
+    },
+    onChangeTab(activeTabKey) {
+      this.activeTab = activeTabKey;
+      switch (activeTabKey) {
+        case "1":
+          this.isBiodermaGame = false;
+          this.getBlogList();
+          break;
+        case "2":
+          this.isBiodermaGame = true;
+          this.getBlogList();
+          break;
+        default:
+          break;
+      }
+    },
+    showDeleteConfirm(blogId, onDelete) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas eliminar esta entrada?",
+        okText: "ELIMINAR",
+        okType: "danger",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onDelete(blogId);
+        },
+        onCancel() {}
+      });
+    },
+    async onDeleteBlog(chaindId) {
+      try {
+        const response = await this.$axios.delete(`chain/${chaindId}`);
+        if (response.data == 1) {
+          this.getChains();
+          this.showNotification(
+            "success",
+            "Cadena eliminada",
+            "La cadena ha sido eliminada exitosamente."
+          );
+        }
+      } catch (err) {
+        this.showNotification(
+          "error",
+          "Error al eliminar cadena",
+          "Ha ocurrido un error al intentar eliminar la cadena."
+        );
+      }
+    },
+    async getBlogList() {
+      const blogList = await this.$axios.get(
+        `article/list/${this.isBiodermaGame}`
+      );
+      this.blogList = blogList.data.blogs;
+      console.log("blogList: ", blogList.data.blogs);
     }
+  },
+  async mounted() {
+    this.getBlogList();
   }
 };
 </script>
