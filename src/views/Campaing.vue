@@ -26,7 +26,7 @@
                           <a-col span="9">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="edit" @click="() => editCampaing(item.id)"/>
+                                <a-icon class="campaing__action" type="edit"/>
                               </a-col>
 
                               <a-col span="8">

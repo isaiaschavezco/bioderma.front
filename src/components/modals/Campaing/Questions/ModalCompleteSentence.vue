@@ -1,18 +1,20 @@
 <template>
   <a-modal class="form-question" width="35%" centered v-model="isVisibleModal" @cancel="onCloseModal" :footer="null">
-		<h3 class="form-question__title">NUEVA PREGUNTA OPCION MULTIPLE</h3>
+		<h3 class="form-question__title">NUEVA PREGUNTA COMPLETA LA FRASE</h3>
     
 		<a-divider/>
 
 		<a-form class="form-question__form" :form="questionForm" @submit="onSubmitQuestion">
-    	<label class="form-question__headerLabel form-question__labelQuestion margin-horizontal">ESCRIBE TU PREGUNTA</label>
+    	<label class="form-question__headerLabel form-question__labelQuestion margin-horizontal">
+				ESCRIBE TU PREGUNTA Y COLOCA UN GUION BAJO DÓNDE QUIERAS DEJAR UN ESPACIO A COMPLETAR
+			</label>
       <a-form-item class="margin-horizontal" style="margin-bottom: 0">
         <a-input
 					class="form-question__inputQuestion"
-          placeholder="PREGUNTA"
+          placeholder="PREGUNTA _ X"
           v-decorator="[
           'question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
+          {rules: [{ required: true, validator: checkQuestion }]}
         ]"
         />
       </a-form-item>
@@ -167,6 +169,15 @@ export default {
 		}
 	},
 	methods: {
+		checkQuestion(rule, value, callback) {
+			console.log("Check:", value);
+			if (value.search("_") === -1)
+				callback("La pregunta al menos debe contener una palabra para completar");
+			else if (value.length === 0)
+				callback("Favor de llenar el campo");
+			
+			callback();
+		},
 		onChangeOptionValue(index, value) {
 			this.optionsValues[index] = value;
 			this.setAvailableOptions();
@@ -250,13 +261,13 @@ export default {
 						quizzId: this.quizzId
 					};
 					
-					const responseData = await this.$emit('register', questionInformation);
+					// const responseData = await this.$emit('register', questionInformation);
 					
-					this.onCloseModal();
-					this.questionForm.resetFields();
-					this.optionsValues.fill("");
-					this.setAvailableOptions();
-					this.answer = 0;
+					// this.onCloseModal();
+					// this.questionForm.resetFields();
+					// this.optionsValues.fill("");
+					// this.setAvailableOptions();
+					// this.answer = 0;
 
 					console.log(JSON.stringify(questionInformation));
 				}
@@ -282,6 +293,10 @@ export default {
 .form-question__inputQuestion {
 	font-size: 1.5rem;
 	height: 2.7rem;
+}
+.form-question__labelQuestion {
+	display: block;
+	margin-bottom: 0.5rem;
 }
 .form-question__headerLabel {
 	font-weight: 600;
