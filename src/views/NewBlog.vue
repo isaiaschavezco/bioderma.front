@@ -170,7 +170,7 @@
           type="primary"
           size="large"
           style="margin-left:3rem; background-color:#009FD1; border-radius: 24px;"
-          @click="onSubmitArticle"
+          @click="showSubmitConfirm(onSubmitArticle)"
         >PUBLICAR</a-button>
       </a-col>
     </a-row>
@@ -256,7 +256,10 @@ export default {
         if (!err) {
           console.log("assetsForm: ", values);
           for (let index = 0; index < values.upload.fileList.length; index++) {
-            imagesArray.push({ data: values.upload.fileList[index].response });
+            imagesArray.push({
+              id: index,
+              data: values.upload.fileList[index].response
+            });
           }
         } else {
           isAllValidate = false;
@@ -264,15 +267,6 @@ export default {
       });
 
       if (isAllValidate) {
-        console.log("request", {
-          title: this.articleTitle,
-          image: this.articleImage,
-          galery: JSON.stringify(imagesArray),
-          subtitle: this.articleSubtitle,
-          content: this.editorData,
-          isBiodermaGame: this.isBiodermaGame,
-          tags: this.tagIds
-        });
         try {
           const response = await this.$axios.post("article", {
             title: this.articleTitle,
@@ -284,10 +278,26 @@ export default {
             tags: this.tagIds
           });
           console.log("response", response);
+          this.$router.push({
+            name: "blog"
+          });
         } catch (error) {
           console.log(error);
         }
       }
+    },
+    showSubmitConfirm(onSubmit) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas publicar esta entrada?",
+        okText: "PUBLICAR",
+        okType: "warning",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onSubmit();
+        },
+        onCancel() {}
+      });
     },
     onSubmitTag() {
       this.tagForm.validateFields(async (err, values) => {

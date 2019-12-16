@@ -44,7 +44,7 @@
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
-        <div v-if="activeTab == 1">
+        <div>
           <a-row style>
             <a-col>
               <a-button shape="circle" icon="plus" size="large" @click="() => blogNewModal = true" />
