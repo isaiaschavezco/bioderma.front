@@ -36,7 +36,10 @@
                     </span>
                   </div>
                   <template class="ant-card-actions" slot="actions">
-                    <a-icon type="edit" @click="(editProductModal = true), gettingId(item.id)" />
+                    <a-icon
+                      type="edit"
+                      @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points)"
+                    />
                     <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
                   </template>
                 </a-card>
@@ -73,7 +76,7 @@
         <a-form-item>
           <a-input
             setFieldsValue="title"
-            placeholder="Ingresa el nombre del producto"
+            :placeholder="this.newTitle"
             v-decorator="[
               'title',
               {
@@ -85,7 +88,7 @@
         <a-form-item>
           <a-textarea
             setFieldsValue="description"
-            placeholder="Ingresa la descripcion del producto"
+            :placeholder="this.newDescription"
             :rows="4"
             v-decorator="[
               'description',
@@ -129,6 +132,7 @@
           <a-input
             type="number"
             setFieldsValue="points"
+            :placeholder="this.newPoints"
             class="input-cost"
             size="small"
             v-decorator="[
@@ -236,6 +240,7 @@ export default {
   components: {
     //  FormFilter
   },
+
   data() {
     return {
       title: "",
@@ -245,6 +250,9 @@ export default {
       points: "",
       productId: "",
       newId: "",
+      newTitle: "",
+      newDescription: "",
+      newPoints: "",
       proudcts: [
         {
           id: 0,
@@ -275,6 +283,11 @@ export default {
     deletingModal() {
       this.deleteProduct(this.newId);
       this.deleteProductModal = false;
+    },
+    gettingData(title, description, points) {
+      this.newTitle = title;
+      this.newDescription = description;
+      this.newPoints = points;
     },
     gettingId(id) {
       this.newId = id;
