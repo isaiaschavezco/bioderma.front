@@ -75,7 +75,7 @@
               shape="circle"
               icon="picture"
               size="large"
-              @click="() => multipleOptionImageModal = true"
+              @click="() => multipleImageOptionModal = true"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Opcion Multiple Imagen</a-col>
@@ -90,6 +90,9 @@
 
     <!-- COMPLETA LA FRASE -->
     <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
+
+    <!-- OPCION MULTIPLE IMAGEN -->
+    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
     <!-- RELACION DE COLUMNAS -->
     <a-modal title="NUEVA PREGUNTA RELACIÓN DE COLUMNAS" centered v-model="columnRelationModal">
@@ -304,163 +307,23 @@
         >CREAR</a-button>
       </template>
     </a-modal>
-    <!-- OPCION MULTIPLE IMAGEN -->
-    <a-modal
-      title="NUEVA PREGUNTA OPCION MULTIPLE IMAGEN"
-      centered
-      v-model="multipleOptionImageModal "
-    >
-      <a-form :form="imageQuestionForm">
-        <span>ESCRIBE TU PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            placeholder="PREGUNTA"
-            v-decorator="[
-          'name-question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-        </a-form-item>
-        <span>
-          CARGA TUS IMAGENES Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES CARGAR HASTA
-          5 POSIBLES RESPUESTAS
-        </span>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-upload-dragger
-              name="file"
-              :multiple="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Seleccione una imagen</p>
-              <p class="ant-upload-hint"></p>
-            </a-upload-dragger>
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-upload-dragger
-              name="file"
-              :multiple="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Seleccione una imagen</p>
-              <p class="ant-upload-hint"></p>
-            </a-upload-dragger>
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-upload-dragger
-              name="file"
-              :multiple="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Seleccione una imagen</p>
-              <p class="ant-upload-hint"></p>
-            </a-upload-dragger>
-          </a-form-item>
-
-          <a-form-item class="img-upload">
-            <a-upload-dragger
-              name="file"
-              :multiple="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Seleccione una imagen</p>
-              <p class="ant-upload-hint"></p>
-            </a-upload-dragger>
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-upload-dragger
-              name="file"
-              :multiple="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              @change="handleChange"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="inbox" />
-              </p>
-              <p class="ant-upload-text">Seleccione una imagen</p>
-              <p class="ant-upload-hint"></p>
-            </a-upload-dragger>
-          </a-form-item>
-        </a-row>
-
-        <a-divider />
-        <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
-        <a-form-item>
-          <span>TIEMPO</span>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'time',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>SEG</span>
-        </a-form-item>
-        <a-divider />
-        <span>ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'pts',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>PTS</span>
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <a-divider />
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-        >CANCELAR</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-        >CREAR</a-button>
-      </template>
-    </a-modal>
   </div>
 </template>
 <script>
 import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMultipleOption.vue";
 import ModalCompleteSentence from "../components/modals/Campaing/Questions/ModalCompleteSentence.vue";
+import ModalMultipleImageOption from "../components/modals/Campaing/Questions/ModalMultipleImageOption.vue";
 
 export default {
   components: {
     ModalMultipleOption,
     ModalCompleteSentence,
+    ModalMultipleImageOption
   },
   data() {
     return {
       quizzId: this.$route.query.quizzId,
       multipleOptionModal: false,
-
       collapsed: false,
       questionsData: [],
       columnsQuestionsTable: [
@@ -501,9 +364,9 @@ export default {
       columnRelationForm: this.$form.createForm(this),
       phraseOrderForm: this.$form.createForm(this),
       columnRelationModal: false,
-      completeSentenceModal: true,
+      completeSentenceModal: false,
       sortSentenceModal: false,
-      multipleOptionImageModal: false,
+      multipleImageOptionModal: true
     };
   },
   async mounted() {
