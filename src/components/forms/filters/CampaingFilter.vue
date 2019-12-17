@@ -192,20 +192,17 @@ export default {
 	},
 	methods: {
 		async getStates() {
-			const urlStates = "https://bioderma-api-inmersys.herokuapp.com/state";
-			const response = await this.$axios(urlStates);
+			const response = await this.$axios("state");
 			
 			return response.data.states;
 		},
 		async getWorkPositions() {
-			const urlWorkPositions = "https://bioderma-api-inmersys.herokuapp.com/position";
-			const response = await this.$axios(urlWorkPositions);
+			const response = await this.$axios("position");
 			
 			return response.data.workPositions;
 		},
 		async getChains() {
-			const urlChains = "https://bioderma-api-inmersys.herokuapp.com/chain";
-			const response = await this.$axios(urlChains);
+			const response = await this.$axios("chain");
 
 			return response.data.chains;
 		},
@@ -239,7 +236,6 @@ export default {
     },
 
     onSubmitNotificationForm() {
-      //alert("Subir");
       this.fileForm.validateFields((err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
@@ -353,10 +349,8 @@ export default {
 			this.registerFilter(filterData);
 		},
 		async registerFilter(filter) {
-			const urlRegisterFilter = "https://bioderma-api-inmersys.herokuapp.com/target";
-
 			try {
-				const response = await this.$axios.post(urlRegisterFilter, filter);
+				const response = await this.$axios.post("target", filter);
 				this.filters.push(response.data.target);
 				this.$emit('filterAdded', this.filters.slice(-1)[0]);
 				// this.$notification["success"]({
@@ -375,10 +369,9 @@ export default {
 		},
 		async onRemoveFilter(idFilter) {
 			console.log("Remove filter:", idFilter);
-			const urlRegisterFilter = "https://bioderma-api-inmersys.herokuapp.com/target";
 
 			try {
-				const response = await this.$axios.delete(urlRegisterFilter, {
+				const response = await this.$axios.delete("target", {
 					"targetId": idFilter
 				});
 				

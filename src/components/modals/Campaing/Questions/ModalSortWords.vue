@@ -145,11 +145,21 @@ export default {
 					
 
 					const contentJSON = JSON.stringify({
-						unorder: shuffledSentence
+						unorder: shuffledSentence.map((val, index) => {
+							return {
+								index,
+								data: val
+							};
+						})
 					});
 
 					const answerJSON = JSON.stringify({
-						order: sentence
+						order: sentence.map((val, index) => {
+							return {
+								index,
+								data: val
+							};
+						})
 					});
 					
 					const questionInformation = {

@@ -123,7 +123,7 @@ export default {
   methods: {
     async getCamapings() {
       this.loadingCampaings = true;
-      const urlCamapaings = `https://bioderma-api-inmersys.herokuapp.com/campaing/${this.bioGamesTab}`;
+      const urlCamapaings = `campaing/${this.bioGamesTab}`;
 
       try {
         const response = await this.$axios(urlCamapaings);

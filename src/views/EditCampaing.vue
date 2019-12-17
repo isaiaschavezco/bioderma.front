@@ -19,9 +19,7 @@
       <a-col class="column" :xs="{ span: 4 }" style="text-align:center;">
         <a-row class="btn-description">
           <a-col>
-            <router-link to="ViewCampaing">
-              <a-button shape="circle" icon="arrow-left" size="large" />
-            </router-link>
+            <a-button shape="circle" icon="arrow-left" size="large" @click="returnToCampaing"/>
           </a-col>
           <a-col class="description-icon title-span-tag">Regresar a Campaña</a-col>
         </a-row>
@@ -166,12 +164,10 @@ export default {
   },
   methods: {
     async getQuestions() {
-      const urlQuestions = `https://bioderma-api-inmersys.herokuapp.com/question/${this.quizzId}`;
       let questions = [];
 
       try {
-        console.log("Obteniendo preguntas...");
-        const response = await this.$axios(urlQuestions);
+        const response = await this.$axios(`question/${this.quizzId}`);
         
         questions = this.getFormatedQuestions(response.data);
       } catch (error) {
@@ -223,6 +219,9 @@ export default {
 
       return questions;
     },
+    returnToCampaing() {
+      this.$router.go(-1);
+    },
     onCloseModal() {
       this.sortWordsModal = false;
       this.multipleOptionModal = false;
@@ -233,17 +232,20 @@ export default {
       this.getQuestions();
     },
     async registerQuestion(questionData) {
-      const urlQuestionRegister = "https://bioderma-api-inmersys.herokuapp.com/question";
       let responseData = {};
 
       try {
-        const response = await this.$axios.post(urlQuestionRegister, questionData);
-        responseData = response.data;
-        this.getQuestions();
+        responseData = await this.$axios.post("question", questionData);
       } catch (error) {
-        throw error;
+        this.$notification["error"]({
+          message: "Error al registrar la pregunta.",
+          description:
+          'Al parecer hubo un error al registrar la pregunta, intenta de nuevo.',
+        });
       }
 
+      this.getQuestions();
+      
       return responseData;
     },
     editQuestion(id) {
