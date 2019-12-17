@@ -413,6 +413,8 @@ export default {
     onCloseModal() {
       this.multipleOptionModal = false;
       this.completeSentenceModal = false;
+      this.multipleImageOptionModal = false;
+      
       this.getQuestions();
     },
     async registerQuestion(questionData) {
