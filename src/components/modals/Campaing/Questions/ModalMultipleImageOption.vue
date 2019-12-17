@@ -131,7 +131,7 @@
 
       <a-row class="form-question__actions" type="flex" justify="center" :gutter="24">
         <a-col span="7">
-          <a-button type="primary">CANCELAR</a-button>
+          <a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
         </a-col>
         <a-col span="7">
           <a-button type="primary" html-type="submit">CREAR</a-button>
@@ -139,135 +139,6 @@
       </a-row>
     </a-form>
   </a-modal>
-  <!-- <a-modal title="NUEVA PREGUNTA OPCION MULTIPLE IMAGEN" wdith="35%" centered v-model="isVisibleModal" :footer="null">
-    <a-form :form="questionForm">
-      <span>ESCRIBE TU PREGUNTA</span>
-      <a-form-item>
-        <a-input
-          placeholder="PREGUNTA"
-          v-decorator="[
-          'name-question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-        />
-      </a-form-item>
-      <span>
-        CARGA TUS IMAGENES Y SELECCIONA LA RESPUESTA CORRECTA, PUEDES CARGAR HASTA
-        5 POSIBLES RESPUESTAS
-      </span>
-      <a-row class="container-row-img-option">
-        <a-form-item class="img-upload">
-          <a-upload-dragger
-            name="file"
-            :multiple="false"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Seleccione una imagen</p>
-            <p class="ant-upload-hint"></p>
-          </a-upload-dragger>
-        </a-form-item>
-        <a-form-item class="img-upload">
-          <a-upload-dragger
-            name="file"
-            :multiple="false"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Seleccione una imagen</p>
-            <p class="ant-upload-hint"></p>
-          </a-upload-dragger>
-        </a-form-item>
-      </a-row>
-      <a-row class="container-row-img-option">
-        <a-form-item class="img-upload">
-          <a-upload-dragger
-            name="file"
-            :multiple="false"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Seleccione una imagen</p>
-            <p class="ant-upload-hint"></p>
-          </a-upload-dragger>
-        </a-form-item>
-
-        <a-form-item class="img-upload">
-          <a-upload-dragger
-            name="file"
-            :multiple="false"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Seleccione una imagen</p>
-            <p class="ant-upload-hint"></p>
-          </a-upload-dragger>
-        </a-form-item>
-      </a-row>
-      <a-row class="container-row-img-option">
-        <a-form-item class="img-upload">
-          <a-upload-dragger
-            name="file"
-            :multiple="false"
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          >
-            <p class="ant-upload-drag-icon">
-              <a-icon type="inbox" />
-            </p>
-            <p class="ant-upload-text">Seleccione una imagen</p>
-            <p class="ant-upload-hint"></p>
-          </a-upload-dragger>
-        </a-form-item>
-      </a-row>
-
-      <a-divider />
-      <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
-      <a-form-item>
-        <span>TIEMPO</span>
-        <a-input
-          style="width: 100px"
-          placeholder
-          v-decorator="[
-          'time',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-        />
-        <span>SEG</span>
-      </a-form-item>
-      <a-divider />
-      <span>ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</span>
-      <a-form-item>
-        <a-input
-          style="width: 100px"
-          placeholder
-          v-decorator="[
-          'pts',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-        />
-        <span>PTS</span>
-      </a-form-item>
-    </a-form>
-
-		<a-divider />
-		
-		<a-row class="form-question__actions" type="flex" justify="center" :gutter="24">
-			<a-col span="7">
-				<a-button type="primary">CANCELAR</a-button>
-			</a-col>
-			<a-col span="7">
-				<a-button type="primary" html-type="submit">CREAR</a-button>
-			</a-col>
-		</a-row>
-  </a-modal>-->
 </template>
 
 <script>

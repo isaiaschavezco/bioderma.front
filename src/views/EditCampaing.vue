@@ -120,7 +120,6 @@ export default {
   data() {
     return {
       quizzId: this.$route.query.quizzId,
-      multipleOptionModal: false,
       collapsed: false,
       questionsData: [],
       columnsQuestionsTable: [
@@ -155,9 +154,10 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      columnRelationModal: true,
-      completeSentenceModal: false,
       sortWordsModal: false,
+      multipleOptionModal: false,
+      columnRelationModal: false,
+      completeSentenceModal: false,
       multipleImageOptionModal: false
     };
   },
@@ -201,6 +201,9 @@ export default {
           }
           else if (question.question_type.id === 4) {
             title = content.unorder.join(' ');
+          }
+          else if (question.question_type.id === 5) {
+            title = content.questions[0].data;
           }
         } catch (error) {
           title = 'Sin titulo';

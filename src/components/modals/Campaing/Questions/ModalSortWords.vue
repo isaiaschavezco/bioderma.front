@@ -57,7 +57,7 @@
 			
 			<a-row class="form-question__actions" type="flex" justify="center" :gutter="24">
 				<a-col span="7">
-					<a-button type="primary">CANCELAR</a-button>
+					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>
 				<a-col span="7">
 					<a-button type="primary" html-type="submit">CREAR</a-button>

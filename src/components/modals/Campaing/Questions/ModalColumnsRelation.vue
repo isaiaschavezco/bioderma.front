@@ -36,7 +36,7 @@
 									`reactive${option.indicator}`,
 									{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
 								]"
-								@change="(e) => {onChangeOptionValue(index, e.target.value); }"
+								@change="(e) => {onChangeReactiveValue(index, e.target.value); }"
 							/>
 						</a-form-item>
 					</a-col>
@@ -53,7 +53,7 @@
 									`response${option.indicator}`,
 									{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
 								]"
-								@change="(e) => {onChangeOptionValue(index, e.target.value); }"
+								@change="(e) => {onChangeResponseValue(index, e.target.value); }"
 							/>
 						</a-form-item>
 					</a-col>
@@ -100,7 +100,7 @@
 			
 			<a-row class="form-question__actions" type="flex" justify="center" :gutter="24">
 				<a-col span="7">
-					<a-button type="primary">CANCELAR</a-button>
+					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>
 				<a-col span="7">
 					<a-button type="primary" html-type="submit">CREAR</a-button>
@@ -126,7 +126,6 @@ export default {
 		return {
 			time: "1",
 			points: "1",
-			answer: 0,
 			quizzId: this.quizz,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
@@ -154,7 +153,8 @@ export default {
 			],
 			isVisibleModal: this.isVisible,
 			questionForm: this.$form.createForm(this),
-			optionsValues: ["", "", "", "", ""],
+			reactivesValues: ["", "", "", "", ""],
+			responsesValues: ["", "", "", "", ""]
 		};
 	},
 	watch: {
@@ -163,21 +163,13 @@ export default {
 		}
 	},
 	methods: {
-		onChangeOptionValue(index, value) {
-			this.optionsValues[index] = value;
+		onChangeReactiveValue(index, value) {
+			this.reactivesValues[index] = value;
 			this.setAvailableOptions();
-			this.onChangeAnswer();
 		},
-		onChangeAnswer() {
-			const option = this.optionsValues[this.answer];
-			if (!this.isAvailableOption[this.answer] || option.length == 0) {
-				for (let i = 4; i >= 0; --i) {
-					if (i < 2 || (this.isAvailableOption[i] && this.optionsValues[i].length > 0)) {
-						this.answer = i;
-						break;
-					}
-				}
-			}
+		onChangeResponseValue(index, value) {
+			this.responsesValues[index] = value;
+			this.setAvailableOptions();
 		},
 		onCloseModal() {
 			this.$emit('close');
@@ -193,7 +185,7 @@ export default {
 					let available = true;
 
 					for (let j = 0; j < i && available; ++j)
-						available &= (this.optionsValues[j].length > 0);
+						available &= (this.reactivesValues[j].length > 0 && this.responsesValues[j].length > 0);
 					
 
 					newAvailableValues[i] = available;
@@ -206,33 +198,40 @@ export default {
 			e.preventDefault();
 			this.questionForm.validateFields(async (err, values) => {
 				if (!err) {
-					console.log('No err', values);
-					
 					for (let i = 0; i < 5; ++i) {
-						if (this.optionsValues[i].length == 0) {
-							for (let j  = i; j < 5; ++j)
-								this.optionsValues[j] = "";
+						if (this.reactivesValues[i].length === 0 || this.responsesValues[i].length === 0) {
+							for (let j  = i; j < 5; ++j) {
+								this.reactivesValues[j] = "";
+								this.responsesValues[j] = "";
+							}
 
 							break;
 						}
 					}
 
-					let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
+					let questions = this.reactivesValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
+					let responses = this.responsesValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
 
-					options = options.map((option, index) => {
+					questions = questions.map((val, index) => {
 						return {
 							index: index,
-							response: option
+							data: val
 						};
-					})
+					});
+
+					responses = responses.map((val, index) => {
+						return {
+							index: index,
+							data: val
+						};
+					});
 
 					const contentJSON = JSON.stringify({
-						question: values.question,
-						possiblesResponses: options
+						questions,
 					});
 
 					const answerJSON = JSON.stringify({
-						response: this.answer
+						responses
 					});
 					
 					const questionInformation = {
@@ -240,7 +239,7 @@ export default {
 						answer: answerJSON,
 						points: Number.parseInt(values.points),
 						time: Number.parseInt(values.time),
-						questionType: 1,
+						questionType: 5,
 						quizzId: this.quizzId
 					};
 					
@@ -249,9 +248,9 @@ export default {
 						
 						this.onCloseModal();
 						this.questionForm.resetFields();
-						this.optionsValues.fill("");
+						this.reactivesValues.fill("");
+						this.responsesValues.fill("");
 						this.setAvailableOptions();
-						this.answer = 0;
 
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {
