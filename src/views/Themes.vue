@@ -8,7 +8,7 @@
             <a-divider />
             <div style="height:90px; text-align:center">
               <img
-                style="max-width:35rem; margin-left:50px;"
+                style="max-width:35rem; margin-left:50px; max-height: 10rem"
                 :src="general.biodermaGameImage"
                 centered
               />
@@ -67,8 +67,14 @@
             >Aceptar</a-button>
           </template>
         </a-modal>
-        <a-switch style="margin-left:60px; margin-top:30px;" defaultChecked @click="BiodermaGames"></a-switch>
-      </a-col>Activar Bioderma Games
+        <a-switch
+          style="margin-left:60px; margin-top:30px;"
+          defaultChecked
+          @click="BiodermaGames"
+          :checked="this.switchBGame"
+        ></a-switch>
+      </a-col>
+      {{word}} Bioderma Games
     </a-Row>
     <a-Row :gutter="4">
       <a-col :span="14" style="margin-top: 50px;">
@@ -159,8 +165,14 @@
         </a-row>
       </a-col>
       <a-col :span="3">
-        <a-switch style="margin-left:80px; margin-top:80px;" defaultChecked @click="StoreCheck"></a-switch>
-      </a-col>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activar Tienda
+        <a-switch
+          style="margin-left:60px; margin-top:80px;"
+          defaultChecked
+          @click="StoreCheck"
+          :checked="this.switchClubB"
+        ></a-switch>
+      </a-col>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{wordStore}} Tienda
     </a-Row>
   </div>
 </template>
@@ -169,6 +181,8 @@ const data = [];
 export default {
   data() {
     return {
+      word: "Desactivar",
+      wordStore: "Desactivar",
       addImageModal: false,
       image: "",
       imageForm: this.$form.createForm(this),
@@ -176,6 +190,8 @@ export default {
       isBiodermaGameActive: true,
       biodermaGameImage: "",
       fileList: [],
+      switchBGame: true,
+      switchClubB: true,
       theme: 1,
       general: [
         {
@@ -197,7 +213,8 @@ export default {
       const responseGeneral = await this.$axios.get("configutarion/general");
       console.log(responseGeneral.data.general);
       this.general = responseGeneral.data.general;
-      //console.log(responseGeneral.data.general.biodermaGameImage);
+      this.switchClubB = responseGeneral.data.general.isClubBiodermaActive;
+      this.switchBGame = responseGeneral.data.general.isBiodermaGameActive;
     },
     StoreCheck(value) {
       //console.log(value);
@@ -208,8 +225,11 @@ export default {
           content: "¿Deseas activar Tienda?",
           onOk() {
             component.postStore(value);
+            component.wordStore = "Desactivar";
           },
-          onCancel() {}
+          onCancel() {
+            component.switchClubB = false;
+          }
         });
       } else {
         this.$confirm({
@@ -217,10 +237,23 @@ export default {
           content: "¿Deseas desactivar Tienda?",
           onOk() {
             component.postStore(value);
+            component.wordStore = "Activar";
           },
-          onCancel() {}
+          onCancel() {
+            component.switchClubB = true;
+          }
         });
       }
+    },
+    success() {
+      this.$notification["success"]({
+        message: "TEMA CAMBIADO",
+        description: (
+          <div>
+            <p>El tema ha sido cambiado correctamente</p>
+          </div>
+        )
+      });
     },
     BiodermaGames(value) {
       //console.log(value);
@@ -232,8 +265,11 @@ export default {
           content: "¿Deseas activar Bioderma Games?",
           onOk() {
             component.postBiodermaG(value);
+            component.word = "Desactivar";
           },
-          onCancel() {}
+          onCancel() {
+            component.switchBGame = false;
+          }
         });
       } else {
         this.$confirm({
@@ -241,13 +277,16 @@ export default {
           content: "¿Deseas desactivar Bioderma Games?",
           onOk() {
             component.postBiodermaG(value);
+            component.word = "Activar";
           },
-          onCancel() {}
+          onCancel() {
+            component.switchBGame = true;
+          }
         });
       }
     },
     async postStore(value) {
-      console.log(value);
+      //console.log(value);
       try {
         const responseBiodermaGames = await this.$axios.post(
           "configutarion/club",
@@ -283,6 +322,7 @@ export default {
         console.log(error);
       }
       this.getGeneral();
+      this.success();
     },
     changeSessionColor(num) {
       //console.log(num);
@@ -340,7 +380,8 @@ export default {
           this.failAddingImage();
         }
       });
-      this.addImageModal = false;
+      //this.addImageModal = false;
+      this.imageForm.resetFields();
     }
   }
 };

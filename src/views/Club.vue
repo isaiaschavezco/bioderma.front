@@ -75,9 +75,8 @@
       <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
-            initialValue="hello"
             setFieldsValue="title"
-            placeholder="Ingresa el nombre del producto"
+            :placeholder="this.newTitle"
             v-decorator="[
               'title',
               {
@@ -214,6 +213,7 @@
           <a-input
             type="number"
             setFieldsValue="points"
+            placeholder="Pts"
             class="input-cost"
             size="small"
             v-decorator="[
