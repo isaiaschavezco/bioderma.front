@@ -35,7 +35,7 @@
             </a-menu-item>
             <a-menu-item class="item" key="4">
               <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
-              <span>Trivia</span>
+              <span>Campañas</span>
             </a-menu-item>
             <a-menu-item class="item" key="5">
               <img src="../assets/icons/Club_Bioderma_Inactivo.png" class="icon" alt />

@@ -26,7 +26,7 @@
                           <a-col span="9">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="edit" @click="() => editCampaing(item.id)"/>
+                                <a-icon class="campaing__action" type="edit"/>
                               </a-col>
 
                               <a-col span="8">
@@ -39,7 +39,7 @@
 
                       <a-divider />
                       
-                      <img alt="example" :src="item.portrait" class="campaing__img"/>
+                      <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
                       
                       <span style="font-weight: 700;">FILTROS</span>
                       <div class="campaing__filters">
@@ -189,8 +189,7 @@ export default {
       return groupsCampaings;
     },
     editCampaing(campaingId) {
-      const campaingName = `campaingDetail/${campaingId}`;
-      this.$router.push({ path: campaingName });
+      this.$router.push({ name: 'campaingDetail', query: { id: campaingId } });
     }
   }
 };
@@ -222,6 +221,7 @@ export default {
   height: 200px;
   width: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 .campaing__filters {
   height: 4.5rem;

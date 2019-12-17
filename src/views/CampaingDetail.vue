@@ -6,10 +6,9 @@
           <a-skeleton :loading="loadingQuizz" active>
             <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
               <span slot="action" slot-scope="text, record">
-                <router-link to="EditCampaing">
-                  <a-button shape="circle" icon="edit" size="large" />
-                </router-link>
-              
+                <!-- <router-link :to="`/editCampaing/${record.quizzId}`"> -->
+                  <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId)" />
+                <!-- </router-link> -->
                 <a-divider type="vertical" />
                 <a-button shape="circle" icon="delete" size="large" />
                 
@@ -181,7 +180,7 @@ export default {
     };
   },
   mounted() {
-    this.campaingId = this.$route.params.id;
+    this.campaingId = this.$route.query.id;
     this.getCampaingDetails();
   },
   watch: {
@@ -380,6 +379,9 @@ export default {
       catch (err) {
         console.log("Submit dates: ", err);
       }
+    },
+    editQuizz(quizzId) {
+      this.$router.push({ name: 'editCampaing', query: { quizzId } });
     }
   }
 };
@@ -388,7 +390,6 @@ export default {
 .column-right {
   margin-top: 65px;
 }
-
 .item-modal {
   margin-right: 30px;
   color: #526987;
