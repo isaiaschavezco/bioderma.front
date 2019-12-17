@@ -242,8 +242,6 @@ export default {
 				values = this.questionForm.getFieldsValue();
 				
 				if (!err) {
-					console.log('No err', values);
-					
 					for (let i = 0; i < 5; ++i) {
 						if (this.optionsValues[i].length == 0) {
 							for (let j  = i; j < 5; ++j)

@@ -64,7 +64,7 @@
               shape="circle"
               icon="appstore"
               size="large"
-              @click="() => sortSentenceModal = true"
+              @click="() => sortWordsModal = true"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Ordena la Frase</a-col>
@@ -93,6 +93,9 @@
 
     <!-- OPCION MULTIPLE IMAGEN -->
     <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
+    
+    <!-- ORDENA LA FRASE -->
+    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
     <!-- RELACION DE COLUMNAS -->
     <a-modal title="NUEVA PREGUNTA RELACIÓN DE COLUMNAS" centered v-model="columnRelationModal">
@@ -247,78 +250,20 @@
         >CREAR</a-button>
       </template>
     </a-modal>
-    <!-- ORDENA LA FRASE -->
-    <a-modal title="NUEVA PREGUNTA ORDENA LA FRASE" centered v-model="sortSentenceModal">
-      <a-form :form="phraseOrderForm">
-        <span>
-          ESCRIBE TU FRASE, EL SISTEMA SE ENCARGARA DE SEPARAR PALABRA POR PALABRA
-          Y ALEATORIZARLA AL MOMENTO DE GENERARLA
-        </span>
-        <a-form-item>
-          <a-input
-            placeholder="PREGUNTA"
-            v-decorator="[
-          'name-questionOrder',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-        </a-form-item>
-        <a-divider />
-        <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
-        <a-form-item>
-          <span>TIEMPO</span>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'timeOrder',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>SEG</span>
-        </a-form-item>
-        <a-divider />
-        <span>ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'ptsOrder',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>PTS</span>
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <a-divider />
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitPhraseOrderForm"
-        >CANCELAR</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitPhraseOrderForm"
-        >CREAR</a-button>
-      </template>
-    </a-modal>
   </div>
 </template>
 <script>
 import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMultipleOption.vue";
 import ModalCompleteSentence from "../components/modals/Campaing/Questions/ModalCompleteSentence.vue";
 import ModalMultipleImageOption from "../components/modals/Campaing/Questions/ModalMultipleImageOption.vue";
+import ModalSortWords from "../components/modals/Campaing/Questions/ModalSortWords.vue";
 
 export default {
   components: {
     ModalMultipleOption,
     ModalCompleteSentence,
-    ModalMultipleImageOption
+    ModalMultipleImageOption,
+    ModalSortWords
   },
   data() {
     return {
@@ -358,14 +303,13 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      chainModal: false,
       imageQuestionForm: this.$form.createForm(this),
       chainForm: this.$form.createForm(this),
       columnRelationForm: this.$form.createForm(this),
       phraseOrderForm: this.$form.createForm(this),
       columnRelationModal: false,
       completeSentenceModal: false,
-      sortSentenceModal: false,
+      sortWordsModal: false,
       multipleImageOptionModal: false
     };
   },
@@ -394,17 +338,25 @@ export default {
 
         let title = content.question;
 
-        if (question.question_type.id === 3) {
-          if (title.length === 1) {
-            title = title[0].data;
-            
-            if (title[0] === ' ')
-              title = "_" + title;
+        try {
+          if (question.question_type.id === 3) {
+            if (title.length === 1) {
+              title = title[0].data;
+              
+              if (title[0] === ' ')
+                title = "_" + title;
+              else
+                title += "_"; 
+            }
             else
-              title += "_"; 
+              title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
           }
-          else
-            title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
+          else if (question.question_type.id === 4) {
+            title = content.unorder.join(' ');
+          }
+        } catch (error) {
+          title = 'Sin titulo';
+          console.log("Hubo un error.")
         }
 
         let newQuestion = {
@@ -421,6 +373,7 @@ export default {
       return questions;
     },
     onCloseModal() {
+      this.sortWordsModal = false;
       this.multipleOptionModal = false;
       this.completeSentenceModal = false;
       this.multipleImageOptionModal = false;
@@ -444,9 +397,6 @@ export default {
     editQuestion(id) {
       console.log(id);
     },
-    onChange(checkedValues) {
-      console.log("checked = ", checkedValues);
-    },
     onSubmitColumnRelationForm() {
       this.columnRelationForm.validateFields(async (err, values) => {
         if (!err) {
@@ -455,27 +405,6 @@ export default {
           alert("Exito");
         }
       });
-    },
-    onSubmitPhraseCompleteForm() {
-      this.phraseCompleteForm.validateFields(async (err, values) => {
-        if (!err) {
-          //this.inviteUserLoading = true;
-          console.log(values);
-          alert("Exito");
-        }
-      });
-    },
-    onSubmitPhraseOrderForm() {
-      this.phraseOrderForm.validateFields(async (err, values) => {
-        if (!err) {
-          //this.inviteUserLoading = true;
-          console.log(values);
-          alert("Exito");
-        }
-      });
-    },
-    handleChange() {
-
     }
   }
 };

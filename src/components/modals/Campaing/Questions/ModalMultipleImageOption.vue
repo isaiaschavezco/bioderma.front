@@ -288,7 +288,6 @@ export default {
       points: "1",
 			answer: 0,
 			fileList: [[], [], [], [], []],
-      wordsToComplete: 0,
       quizzId: this.quizz,
       isAvailableOption: [true, true, false, false, false],
       isRequiredOption: [true, true, false, false, false],
