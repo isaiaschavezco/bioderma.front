@@ -366,7 +366,7 @@ export default {
       columnRelationModal: false,
       completeSentenceModal: false,
       sortSentenceModal: false,
-      multipleImageOptionModal: true
+      multipleImageOptionModal: false
     };
   },
   async mounted() {
@@ -394,8 +394,18 @@ export default {
 
         let title = content.question;
 
-        if (question.question_type.id === 3)
-          title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
+        if (question.question_type.id === 3) {
+          if (title.length === 1) {
+            title = title[0].data;
+            
+            if (title[0] === ' ')
+              title = "_" + title;
+            else
+              title += "_"; 
+          }
+          else
+            title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
+        }
 
         let newQuestion = {
           key: question.id,
@@ -414,7 +424,7 @@ export default {
       this.multipleOptionModal = false;
       this.completeSentenceModal = false;
       this.multipleImageOptionModal = false;
-      
+
       this.getQuestions();
     },
     async registerQuestion(questionData) {
