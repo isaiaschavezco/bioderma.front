@@ -75,8 +75,9 @@
       <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
+            initialValue="hello"
             setFieldsValue="title"
-            :placeholder="this.newTitle"
+            placeholder="Ingresa el nombre del producto"
             v-decorator="[
               'title',
               {

@@ -6,6 +6,13 @@
           <a-card style="width:100%; min-height:300px;">
             <h1 class="title-theme">BIODERMA GAMES</h1>
             <a-divider />
+            <div style="height:90px; text-align:center">
+              <img
+                style="max-width:35rem; margin-left:50px;"
+                :src="general.biodermaGameImage"
+                centered
+              />
+            </div>
           </a-card>
         </a-row>
       </a-col>
@@ -20,42 +27,6 @@
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AÑADIR IMAGEN
         <br />
         <br />
-        <a-modal
-          title="ACTIVAR BIODERMA GAMES"
-          v-model="activateBioGames"
-          okText="Si"
-          cancelText="No"
-          @ok="actBioGames"
-        >
-          <p>¿Estás seguro de activar Bioderma Games?</p>
-        </a-modal>
-        <a-modal
-          title="DESACTIVAR BIODERMA GAMES"
-          v-model="desactivateBioGames"
-          okText="Si"
-          cancelText="No"
-          @ok="desBioGames"
-        >
-          <p>¿Estás seguro de desactivar Bioderma Games?</p>
-        </a-modal>
-        <a-modal
-          title="ACTIVAR TIENDA"
-          v-model="activateStore"
-          okText="Si"
-          cancelText="No"
-          @ok="actStore"
-        >
-          <p>¿Estás seguro de activar la Tienda?</p>
-        </a-modal>
-        <a-modal
-          title="DESACTIVAR BIODERMA GAMES"
-          v-model="desactivateStore"
-          okText="Si"
-          cancelText="No"
-          @ok="desStore"
-        >
-          <p>¿Estás seguro de desactivar la Tienda?</p>
-        </a-modal>
         <a-modal title="Añadir una imagen" v-model="addImageModal" centered>
           <a-form :form="imageForm">
             <a-form-item>
@@ -96,11 +67,7 @@
             >Aceptar</a-button>
           </template>
         </a-modal>
-        <a-switch
-          style="margin-left:60px; margin-top:30px;"
-          defaultChecked
-          @change="checkedBioderma"
-        ></a-switch>
+        <a-switch style="margin-left:60px; margin-top:30px;" defaultChecked @click="BiodermaGames"></a-switch>
       </a-col>Activar Bioderma Games
     </a-Row>
     <a-Row :gutter="4">
@@ -192,7 +159,7 @@
         </a-row>
       </a-col>
       <a-col :span="3">
-        <a-switch style="margin-left:80px; margin-top:80px;" defaultChecked @change="Storechecked"></a-switch>
+        <a-switch style="margin-left:80px; margin-top:80px;" defaultChecked @click="StoreCheck"></a-switch>
       </a-col>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activar Tienda
     </a-Row>
   </div>
@@ -202,22 +169,19 @@ const data = [];
 export default {
   data() {
     return {
-      activateBioGames: false,
-      desactivateBioGames: false,
-      activateStore: false,
-      desactivateStore: false,
       addImageModal: false,
       image: "",
       imageForm: this.$form.createForm(this),
       isClubBiodermaActive: true,
       isBiodermaGameActive: true,
+      biodermaGameImage: "",
       fileList: [],
-      themes: 1,
+      theme: 1,
       general: [
         {
           id: 0,
           isClubBiodermaActive: true,
-          themes: 1,
+          theme: 1,
           isBiodermaGameActive: true,
           biodermaGameImage: ""
         }
@@ -233,62 +197,115 @@ export default {
       const responseGeneral = await this.$axios.get("configutarion/general");
       console.log(responseGeneral.data.general);
       this.general = responseGeneral.data.general;
+      //console.log(responseGeneral.data.general.biodermaGameImage);
     },
-    Storechecked(value) {
+    StoreCheck(value) {
       //console.log(value);
+      const component = this;
       if (value) {
-        this.activateStore = true;
+        this.$confirm({
+          title: "TIENDA",
+          content: "¿Deseas activar Tienda?",
+          onOk() {
+            component.postStore(value);
+          },
+          onCancel() {}
+        });
       } else {
-        this.desactivateStore = true;
+        this.$confirm({
+          title: "TIENDA",
+          content: "¿Deseas desactivar Tienda?",
+          onOk() {
+            component.postStore(value);
+          },
+          onCancel() {}
+        });
       }
     },
-    failActStore() {
-      this.$notification["error"]({
-        message: "ERROR EN TIENDA",
-        description:
-          "Se ha proudcido un error intentando activar la tienda, favor de intentarlo más tarde"
+    BiodermaGames(value) {
+      //console.log(value);
+      //this.postBiodermaG(value);
+      const component = this;
+      if (value) {
+        this.$confirm({
+          title: "BIODERMA GAMES",
+          content: "¿Deseas activar Bioderma Games?",
+          onOk() {
+            component.postBiodermaG(value);
+          },
+          onCancel() {}
+        });
+      } else {
+        this.$confirm({
+          title: "BIODERMA GAMES",
+          content: "¿Deseas desactivar Bioderma Games?",
+          onOk() {
+            component.postBiodermaG(value);
+          },
+          onCancel() {}
+        });
+      }
+    },
+    async postStore(value) {
+      console.log(value);
+      try {
+        const responseBiodermaGames = await this.$axios.post(
+          "configutarion/club",
+          {
+            isClubBiodermaActive: value
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async postBiodermaG(value) {
+      //console.log(value);
+      try {
+        const responseBiodermaGames = await this.$axios.post(
+          "configutarion/bioderma",
+          {
+            isBiodermaGameActive: value
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async getThemes(num) {
+      try {
+        const responseThemes = await this.$axios.post("configutarion/theme", {
+          theme: num
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    changeSessionColor(num) {
+      //console.log(num);
+      const component = this;
+      this.$confirm({
+        title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
+        content: "",
+        onOk() {
+          component.getThemes(num);
+        },
+        onCancel() {}
       });
     },
-    failDesStore() {
-      this.$notification["error"]({
-        message: "ERROR EN TIENDA",
-        description:
-          "Se ha proudcido un error intentando desactivar la tienda, favor de intentarlo más tarde"
-      });
-    },
-    failActGames() {
-      this.$notification["error"]({
-        message: "ERROR EN BIODERMA GAMES",
-        description:
-          "Se ha proudcido un error intentando activar Bioderma Games, favor de intentarlo más tarde"
-      });
-    },
-    failDesGames() {
-      this.$notification["error"]({
-        message: "ERROR EN TIENDA",
-        description:
-          "Se ha proudcido un error intentando desactivar Bioderma Games, favor de intentarlo más tarde"
-      });
-    },
-    onSubmitPictureForm() {
-      this.imageForm.validateFields((err, values) => {
-        if (!err) {
-          image: values.upload.fileList[0].response;
-          //console.log(this.fileList[0].response);
-        } else {
-          console.log("Huevos");
-        }
-      });
-    },
-    successAddingImage() {
-      //Agregando una imagen
-    },
-    failAddingImage() {
-      this.$notification["error"]({
-        message: "ERROR AL AÑADIR UNA IMAGEN",
-        description:
-          "Se ha proudcido un error añdiendo una imagen, favor de intentarlo más tarde."
-      });
+    async postImage() {
+      //console.log(this.fileList[0].response);
+      try {
+        const responseImage = await this.$axios.post("configutarion/image", {
+          biodermaGameImage: this.fileList[0].response
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
     },
     handleChangeFileUpload(info) {
       let fileList = [...info.fileList];
@@ -306,118 +323,24 @@ export default {
       });
       return status;
     },
-    async actStore() {
-      try {
-        const responseStore = await this.$axios.post("configutarion/club", {
-          isClubBiodermaActive: true
-        });
-        if (responseStore.data.status == 0) {
-          this.getGeneral();
-        } else {
-          if (value) {
-            this.failActStore;
-          } else {
-            this.failDesStore;
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      this.activateStore = false;
-    },
-    async desStore() {
-      try {
-        const responseStore = await this.$axios.post("configutarion/club", {
-          isClubBiodermaActive: false
-        });
-        if (responseStore.data.status == 0) {
-          this.getGeneral();
-        } else {
-          if (value) {
-            this.failActStore;
-          } else {
-            this.failDesStore;
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      this.desactivateStore = false;
-    },
-    async actBioGames() {
-      //console.log("activar");
-      try {
-        const responseBGames = await this.$axios.post(
-          "configutarion/bioderma",
-          {
-            isClubBiodermaActive: true
-          }
-        );
-        if (responseBGames.data.status == 0) {
-          this.getGeneral();
-        } else {
-          if (value) {
-            this.failActGames;
-          } else {
-            this.failDesGames;
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      this.activateBioGames = false;
-    },
-    async desBioGames() {
-      //console.log("desactivar");
-      try {
-        const responseBGames = await this.$axios.post(
-          "configutarion/bioderma",
-          {
-            isClubBiodermaActive: false
-          }
-        );
-        if (responseBGames.data.status == 0) {
-          this.getGeneral();
-        } else {
-          if (value) {
-            this.failActGames;
-          } else {
-            this.failDesGames;
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      this.desactivateBioGames = false;
-    },
-    checkedBioderma(value) {
-      if (value) {
-        this.activateBioGames = true;
-      } else {
-        this.desactivateBioGames = true;
-      }
-    },
-    async getThemes(num) {
-      try {
-        const responseThemes = await this.$axios.post("configutarion/theme", {
-          themes: this.num
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      this.getGeneral();
-    },
-    changeSessionColor(num) {
-      console.log(num);
-      const component = this;
-      this.$confirm({
-        title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
-        content: "",
-        onOk() {
-          component.getThemes(num);
-        },
-        onCancel() {}
+    failAddingImage() {
+      this.$notification["error"]({
+        message: "ERROR AL AÑADIR UNA IMAGEN",
+        description:
+          "Se ha proudcido un error añdiendo una imagen, favor de intentarlo más tarde."
       });
+    },
+    onSubmitPictureForm() {
+      this.imageForm.validateFields((err, values) => {
+        if (!err) {
+          image: values.upload.fileList[0].response;
+          //console.log(this.fileList[0].response);
+          this.postImage();
+        } else {
+          this.failAddingImage();
+        }
+      });
+      this.addImageModal = false;
     }
   }
 };
