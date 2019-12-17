@@ -98,158 +98,8 @@
     <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
     <!-- RELACION DE COLUMNAS -->
-    <a-modal title="NUEVA PREGUNTA RELACIÓN DE COLUMNAS" centered v-model="columnRelationModal">
-      <a-form :form="columnRelationForm">
-        <span>
-          ESCRIBE EN LA COLUMNA 1 EL REACTIVO Y EN LA COLUMNA 2 LA RESPUESTA CORRECTA DE FORMA LINEAL,
-          EL SISTEMA POR SI MISMO SE ENCARGARÁ DE ALEATORIZARLA AMBAS COLUMNAS
-        </span>
+    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Reactivo A"
-              v-decorator="[
-          'questionA',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Respuesta A"
-              v-decorator="[
-          'answerA',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Reactivo B"
-              v-decorator="[
-          'questionB',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Respuesta B"
-              v-decorator="[
-          'answerB',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Reactivo C"
-              v-decorator="[
-          'questionC',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Respuesta C"
-              v-decorator="[
-          'answerC',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Reactivo D"
-              v-decorator="[
-          'questionD',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Respuesta D"
-              v-decorator="[
-          'answerD',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-row>
-        <a-row class="container-row-img-option">
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Reactivo E"
-              v-decorator="[
-          'questionE',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-          <a-form-item class="img-upload">
-            <a-input
-              placeholder="Respuesta E"
-              v-decorator="[
-          'answerE',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-            />
-          </a-form-item>
-        </a-row>
-
-        <a-divider />
-        <span>ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</span>
-        <a-form-item>
-          <span>TIEMPO</span>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'timeColum',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>SEG</span>
-        </a-form-item>
-        <a-divider />
-        <span>ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</span>
-        <a-form-item>
-          <a-input
-            style="width: 100px"
-            placeholder
-            v-decorator="[
-          'ptsColum',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
-        ]"
-          />
-          <span>PTS</span>
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <a-divider />
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitColumnRelationForm"
-        >CANCELAR</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 150px; margin-bottom: 20px;"
-          @click="onSubmitColumnRelationForm"
-        >CREAR</a-button>
-      </template>
-    </a-modal>
   </div>
 </template>
 <script>
@@ -257,13 +107,15 @@ import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMu
 import ModalCompleteSentence from "../components/modals/Campaing/Questions/ModalCompleteSentence.vue";
 import ModalMultipleImageOption from "../components/modals/Campaing/Questions/ModalMultipleImageOption.vue";
 import ModalSortWords from "../components/modals/Campaing/Questions/ModalSortWords.vue";
+import ModalColumnsRelation from "../components/modals/Campaing/Questions/ModalColumnsRelation.vue";
 
 export default {
   components: {
     ModalMultipleOption,
     ModalCompleteSentence,
     ModalMultipleImageOption,
-    ModalSortWords
+    ModalSortWords,
+    ModalColumnsRelation,
   },
   data() {
     return {
@@ -303,11 +155,7 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      imageQuestionForm: this.$form.createForm(this),
-      chainForm: this.$form.createForm(this),
-      columnRelationForm: this.$form.createForm(this),
-      phraseOrderForm: this.$form.createForm(this),
-      columnRelationModal: false,
+      columnRelationModal: true,
       completeSentenceModal: false,
       sortWordsModal: false,
       multipleImageOptionModal: false
@@ -377,6 +225,7 @@ export default {
       this.multipleOptionModal = false;
       this.completeSentenceModal = false;
       this.multipleImageOptionModal = false;
+      this.columnRelationModal = false;
 
       this.getQuestions();
     },
@@ -396,15 +245,6 @@ export default {
     },
     editQuestion(id) {
       console.log(id);
-    },
-    onSubmitColumnRelationForm() {
-      this.columnRelationForm.validateFields(async (err, values) => {
-        if (!err) {
-          //this.inviteUserLoading = true;
-          console.log(values);
-          alert("Exito");
-        }
-      });
     }
   }
 };
