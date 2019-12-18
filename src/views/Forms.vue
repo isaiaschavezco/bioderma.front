@@ -1,20 +1,33 @@
 <template>
-  <div>
+  <div :style="{ height: 'calc(100vh - 64px)' }" breakpoint="md" collapsed-width="0">
     <div v-if="User" style="background:#f0f2f5; padding:80px 0">
       <a-Row :gutter="1">
         <a-col :span="8">
-          <a-card style="width:50%; height:260px; margin-left: 300px;">
+          <a-card style="width:50%; height:30%; margin-left: 45%">
             <a-upload-dragger
               setFieldsValue="photo"
               v-decorator="[
-              'photo',
-              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+                'photo',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
               name="upload"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+              <img
+                alt="editProfile"
+                src="../assets/user.png"
+                width="170px"
+                height="180px"
+              />
             </a-upload-dragger>
           </a-card>
         </a-col>
@@ -27,15 +40,17 @@
                     <a-input
                       setFieldsValue="nickName"
                       v-decorator="[
-                      'nickName',
-                      {
-                        rules: [{ required: true,
-                        message: 'Ingrese su nickname',
-                        whitespace: true
-                          }
-                        ]
-                      }
-                    ]"
+                        'nickName',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su nickname',
+                              whitespace: true
+                            }
+                          ]
+                        }
+                      ]"
                       placeholder="NICKNAME"
                     />
                   </a-form-item>
@@ -46,11 +61,17 @@
                       setFieldsValue="name"
                       placeholder="NOMBRE"
                       v-decorator="[
-                    'name',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
-                    }
-                  ]"
+                        'name',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su nombre',
+                              whitespace: true
+                            }
+                          ]
+                        }
+                      ]"
                     />
                   </a-form-item>
                 </a-col>
@@ -60,11 +81,17 @@
                       setFieldsValue="lastName"
                       placeholder="APELLIDOS"
                       v-decorator="[
-                    'lastName',
-                    {
-                      rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
-                    }
-                  ]"
+                        'lastName',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese sus apellidos',
+                              whitespace: true
+                            }
+                          ]
+                        }
+                      ]"
                     />
                   </a-form-item>
                 </a-col>
@@ -77,13 +104,16 @@
                   <a-date-picker
                     setFieldsValue="birthDate"
                     v-decorator="[
-                  'birthDate',
-                  {
-                  rules: [{required: true,
-                  message: 'Seleccione su fecha de nacimiento'
-                  }]
-                  }]
-                  "
+                      'birthDate',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Seleccione su fecha de nacimiento'
+                          }
+                        ]
+                      }
+                    ]"
                     option.initialValue="moment('01-01-2000', dateFormat)"
                     :format="dateFormat"
                   />
@@ -96,7 +126,11 @@
                     setFieldsValue="gender"
                     v-decorator="[
                       'gender',
-                      { rules: [{ required: true, message: 'Seleccione su genero' }] },
+                      {
+                        rules: [
+                          { required: true, message: 'Seleccione su genero' }
+                        ]
+                      }
                     ]"
                     name="radioGroup"
                   >
@@ -112,9 +146,13 @@
                     setFieldsValue="state"
                     optionFilterProp="children"
                     v-decorator="[
-                    'state',
-                    { rules: [{ required: true, message: 'Seleccione su Estado' }] },
-                  ]"
+                      'state',
+                      {
+                        rules: [
+                          { required: true, message: 'Seleccione su Estado' }
+                        ]
+                      }
+                    ]"
                     placeholder="Estado"
                     @change="onStateChange"
                   >
@@ -122,7 +160,8 @@
                       :value="state.id"
                       v-for="state in states"
                       :key="state.id"
-                    >{{state.name}}</a-select-option>
+                      >{{ state.name }}</a-select-option
+                    >
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -133,7 +172,11 @@
                     setFieldsValue="city"
                     v-decorator="[
                       'city',
-                      { rules: [{ required: true, message: 'Seleccione su municipio' }] },
+                      {
+                        rules: [
+                          { required: true, message: 'Seleccione su municipio' }
+                        ]
+                      }
                     ]"
                     placeholder="Municipio"
                     @change="handleSelectChange"
@@ -142,7 +185,8 @@
                       :value="city.id"
                       v-for="city in cities"
                       :key="city.id"
-                    >{{city.name}}</a-select-option>
+                      >{{ city.name }}</a-select-option
+                    >
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -153,7 +197,14 @@
                     setFieldsValue="naosPosition"
                     v-decorator="[
                       'naosPosition',
-                      { rules: [{ required: true, message: 'Seleccione su posicición NAOS' }] },
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Seleccione su posicición NAOS'
+                          }
+                        ]
+                      }
                     ]"
                     placeholder="Posición NAOS"
                     @change="handleSelectChange"
@@ -162,7 +213,8 @@
                       :value="position.id"
                       v-for="position in workPositions"
                       :key="position.id"
-                    >{{position.name}}</a-select-option>
+                      >{{ position.name }}</a-select-option
+                    >
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -170,15 +222,28 @@
               <a-col :span="20" :offset="2">
                 <a-form-item>
                   <a-input
-                    type="tel"
-                    pattern="[0-9]{10}"
+                    :value="tel"
                     setFieldsValue="phone"
                     v-decorator="[
                       'phone',
-                        {
-                          rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
-                        }
-                      ]"
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Ingrese su numero telefonico',
+                            whitespace: true
+                          },
+                          {
+                            pattern: '[0-9,+,(,)]',
+                            message: 'Únicamente números'
+                          },
+                          {
+                            min: 10,
+                            message: 'Mínimo 10 dígitos'
+                          }
+                        ]
+                      }
+                    ]"
                     placeholder="NUMERO TELEFONICO"
                   />
                 </a-form-item>
@@ -191,15 +256,20 @@
                     setFieldsValue="email"
                     placeholder="EMAIL"
                     v-decorator="[
-                        'email',
-                        {
-                          rules: [{
-                            type: 'email', message: 'Correo electronico no valido',
-                          }, {
-                            required: true, message: 'Ingrese su correo electronico',
-                          }]
-                        }
-                      ]"
+                      'email',
+                      {
+                        rules: [
+                          {
+                            type: 'email',
+                            message: 'Correo electronico no valido'
+                          },
+                          {
+                            required: true,
+                            message: 'Ingrese su correo electronico'
+                          }
+                        ]
+                      }
+                    ]"
                   />
                 </a-form-item>
               </a-col>
@@ -207,19 +277,24 @@
               <a-col :span="9" :offset="2">
                 <a-form-item help="Contraseña al menos 8 caracteres">
                   <a-input
+                    class="password"
                     pattern=".{8,}"
                     placeholder="CONTRASEÑA"
                     setFieldsValue="password"
                     v-decorator="[
-                        'password',
-                        {
-                          rules: [{
-                            required: true, message: 'Ingrese su contraseña',
-                          }, {
-                            validator: validateToNextPassword,
-                          }],
-                        }
-                      ]"
+                      'password',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Ingrese su contraseña'
+                          },
+                          {
+                            validator: validateToNextPassword
+                          }
+                        ]
+                      }
+                    ]"
                     type="password"
                   />
                 </a-form-item>
@@ -230,15 +305,19 @@
                   <a-input
                     placeholder="CONFIRMAR CONTRASEÑA"
                     v-decorator="[
-                        'confirm',
-                        {
-                          rules: [{
-                            required: true, message: 'Confirme su contraseña',
-                          }, {
-                            validator: compareToFirstPassword,
-                          }],
-                        }
-                      ]"
+                      'confirm',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Confirme su contraseña'
+                          },
+                          {
+                            validator: compareToFirstPassword
+                          }
+                        ]
+                      }
+                    ]"
                     type="password"
                     @blur="handleConfirmBlur"
                   />
@@ -252,7 +331,8 @@
                     style="background-color:#001529; border: 1px solid #001529; width: 100%"
                     @click="onSubmitFileForm"
                     html-type="submit"
-                  >Registrar</a-button>
+                    >Registrar</a-button
+                  >
                 </a-form-item>
               </a-col>
             </a-form>
@@ -266,19 +346,35 @@
           <a-card style="width:50%; height:260px; margin-left: 300px;">
             <a-upload-dragger
               v-decorator="[
-              'upload',
-              {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
               name="photo"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+              <img
+                alt="editProfile"
+                src="../assets/user.png"
+                width="170px"
+                height="180px"
+              />
             </a-upload-dragger>
           </a-card>
         </a-col>
         <a-col :span="16">
-          <a-card title="Registro de Farmacias" style="width: 70%; margin-left: 0px;">
+          <a-card
+            title="Registro de Farmacias"
+            style="width: 70%; margin-left: 0px;"
+          >
             <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
             <a-form :form="form" @submit="handleSubmit2">
               <a-row>
@@ -288,11 +384,17 @@
                       setFieldsValue="nickName"
                       placeholder="NICKNAME"
                       v-decorator="[
-                  'nickName',
-                  {
-                    rules: [{ required: true, message: 'Ingrese su nickname', whitespace: true }]
-                  }
-                ]"
+                        'nickName',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su nickname',
+                              whitespace: true
+                            }
+                          ]
+                        }
+                      ]"
                     />
                   </a-form-item>
                 </a-col>
@@ -305,7 +407,13 @@
                         v-decorator="[
                           'name',
                           {
-                            rules: [{ required: true, message: 'Ingrese su nombre', whitespace: true }]
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su nombre',
+                                whitespace: true
+                              }
+                            ]
                           }
                         ]"
                       />
@@ -319,7 +427,13 @@
                         v-decorator="[
                           'lastName',
                           {
-                            rules: [{ required: true, message: 'Ingrese sus apellidos', whitespace: true }]
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese sus apellidos',
+                                whitespace: true
+                              }
+                            ]
                           }
                         ]"
                       />
@@ -335,7 +449,14 @@
                         setFieldsValue="gender"
                         v-decorator="[
                           'gender',
-                          { rules: [{ required: true, message: 'Seleccione su genero' }] },
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Seleccione su genero'
+                              }
+                            ]
+                          }
                         ]"
                         name="radioGroup"
                       >
@@ -352,9 +473,13 @@
                       <a-date-picker
                         setFieldsValue="birthDate"
                         v-decorator="[
-                    'birthDate',
-                    { rules: [{ required: true, message: 'Seleccione su fecha' }] },
-                  ]"
+                          'birthDate',
+                          {
+                            rules: [
+                              { required: true, message: 'Seleccione su fecha' }
+                            ]
+                          }
+                        ]"
                         option.initialValue="moment('01-01-2000', dateFormat)"
                         :format="dateFormat"
                       />
@@ -367,9 +492,13 @@
                     <a-select
                       setFieldsValue="chain"
                       v-decorator="[
-                    'chain',
-                    { rules: [{ required: true, message: 'Seleccione su cadena' }] },
-                  ]"
+                        'chain',
+                        {
+                          rules: [
+                            { required: true, message: 'Seleccione su cadena' }
+                          ]
+                        }
+                      ]"
                       placeholder="Cadena"
                       @change="handleSelectChange"
                     >
@@ -377,7 +506,8 @@
                         :value="chains.id"
                         v-for="chains in chains"
                         :key="chains.id"
-                      >{{chains.name}}</a-select-option>
+                        >{{ chains.name }}</a-select-option
+                      >
                     </a-select>
                   </a-form-item>
                 </a-col>
@@ -388,11 +518,17 @@
                       placeholder="Sucursal"
                       setFieldsValue="drugStore"
                       v-decorator="[
-                    'drugStore',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su Sucursal', whitespace: true }]
-                    }
-                  ]"
+                        'drugStore',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su Sucursal',
+                              whitespace: true
+                            }
+                          ]
+                        }
+                      ]"
                     />
                   </a-form-item>
                 </a-col>
@@ -403,9 +539,13 @@
                       optionFilterProp="children"
                       setFieldsValue="state"
                       v-decorator="[
-                    'state',
-                    { rules: [{ required: true, message: 'Seleccione su Estado' }] },
-                  ]"
+                        'state',
+                        {
+                          rules: [
+                            { required: true, message: 'Seleccione su Estado' }
+                          ]
+                        }
+                      ]"
                       placeholder="Estado"
                       @change="onStateChange"
                     >
@@ -413,7 +553,8 @@
                         :value="state.id"
                         v-for="state in states"
                         :key="state.id"
-                      >{{state.name}}</a-select-option>
+                        >{{ state.name }}</a-select-option
+                      >
                     </a-select>
                   </a-form-item>
                 </a-col>
@@ -425,9 +566,16 @@
                         optionFilterProp="children"
                         setFieldsValue="city"
                         v-decorator="[
-                    'city',
-                    { rules: [{ required: true, message: 'Seleccione su municipio' }] },
-                  ]"
+                          'city',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Seleccione su municipio'
+                              }
+                            ]
+                          }
+                        ]"
                         placeholder="Municipio"
                         @change="handleSelectChange"
                       >
@@ -435,7 +583,8 @@
                           :value="city.id"
                           v-for="city in cities"
                           :key="city.id"
-                        >{{city.name}}</a-select-option>
+                          >{{ city.name }}</a-select-option
+                        >
                       </a-select>
                     </a-form-item>
                   </a-col>
@@ -446,11 +595,17 @@
                         placeholder="Ciudad"
                         setFieldsValue="town"
                         v-decorator="[
-                    'town',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su Ciudad', whitespace: true }]
-                    }
-                  ]"
+                          'town',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su Ciudad',
+                                whitespace: true
+                              }
+                            ]
+                          }
+                        ]"
                       />
                     </a-form-item>
                   </a-col>
@@ -461,11 +616,17 @@
                         placeholder="Colonia"
                         setFieldsValue="mayoralty"
                         v-decorator="[
-                    'mayoralty',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su Colonia', whitespace: true }]
-                    }
-                  ]"
+                          'mayoralty',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su Colonia',
+                                whitespace: true
+                              }
+                            ]
+                          }
+                        ]"
                       />
                     </a-form-item>
                   </a-col>
@@ -477,11 +638,17 @@
                         setFieldsValue="postalCode"
                         placeholder="Código Postal"
                         v-decorator="[
-                    'postalCode',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su Còdigo Postal', whitespace: true }]
-                    }
-                  ]"
+                          'postalCode',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su Còdigo Postal',
+                                whitespace: true
+                              }
+                            ]
+                          }
+                        ]"
                       />
                     </a-form-item>
                   </a-col>
@@ -492,11 +659,17 @@
                         placeholder="Cargo"
                         setFieldsValue="charge"
                         v-decorator="[
-                    'charge',
-                    {
-                      rules: [{ required: true, message: 'Ingrese su Cargo', whitespace: true }]
-                    }
-                  ]"
+                          'charge',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su Cargo',
+                                whitespace: true
+                              }
+                            ]
+                          }
+                        ]"
                       />
                     </a-form-item>
                   </a-col>
@@ -507,9 +680,23 @@
                       pattern="[0-9]{10}"
                       setFieldsValue="phone"
                       v-decorator="[
-                      'phone',
+                        'phone',
                         {
-                          rules: [{ required: true, message: 'Ingrese su numero telefonico', whitespace: true }]
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su numero telefonico',
+                              whitespace: true
+                            },
+                            {
+                              pattern: '[0-9,+,(,)]',
+                              message: 'Únicamente números'
+                            },
+                            {
+                              min: 10,
+                              message: 'Mínimo 10 dígitos'
+                            }
+                          ]
                         }
                       ]"
                       placeholder="NUMERO TELEFONICO"
@@ -524,15 +711,20 @@
                       placeholder="EMAIL"
                       setFieldsValue="email"
                       v-decorator="[
-                    'email',
-                    {
-                      rules: [{
-                        type: 'email', message: 'Correo electronico no valido',
-                        }, {
-                          required: true, message: 'Ingrese su correo electronico',
-                        }]
-                      }
-                    ]"
+                        'email',
+                        {
+                          rules: [
+                            {
+                              type: 'email',
+                              message: 'Correo electronico no valido'
+                            },
+                            {
+                              required: true,
+                              message: 'Ingrese su correo electronico'
+                            }
+                          ]
+                        }
+                      ]"
                     />
                   </a-form-item>
                 </a-col>
@@ -543,15 +735,19 @@
                       placeholder="CONTRASEÑA"
                       setFieldsValue="password"
                       v-decorator="[
-                    'password',
-                    {
-                      rules: [{
-                        required: true, message: 'Ingrese su contraseña',
-                      }, {
-                        validator: validateToNextPassword,
-                      }],
-                    }
-                  ]"
+                        'password',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Ingrese su contraseña'
+                            },
+                            {
+                              validator: validateToNextPassword
+                            }
+                          ]
+                        }
+                      ]"
                       type="password"
                     />
                   </a-form-item>
@@ -562,15 +758,19 @@
                     <a-input
                       placeholder="CONFIRMAR CONTRASEÑA"
                       v-decorator="[
-                    'confirm',
-                    {
-                      rules: [{
-                        required: true, message: 'Confirme su contraseña',
-                      }, {
-                        validator: compareToFirstPassword,
-                      }],
-                    }
-                  ]"
+                        'confirm',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Confirme su contraseña'
+                            },
+                            {
+                              validator: compareToFirstPassword
+                            }
+                          ]
+                        }
+                      ]"
                       type="password"
                       @blur="handleConfirmBlur"
                     />
@@ -585,7 +785,8 @@
                       style="background-color:#001529; height: 60px; border: 1px solid #001529; width: 100%"
                       @click="onSubmitFileForm"
                       html-type="submit"
-                    >Registrar</a-button>
+                      >Registrar</a-button
+                    >
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -624,7 +825,7 @@ export default {
       charge: "",
       visible: false,
       value: 2,
-      dateFormat: "YYYY-MM-DD",
+      dateFormat: "DD-MM-YYYY",
       states: [],
       selectedState: 1,
       workPositions: [],
@@ -845,4 +1046,7 @@ export default {
 };
 </script>
 <style>
+.password {
+  -webkit-text-security: disc;
+}
 </style>
