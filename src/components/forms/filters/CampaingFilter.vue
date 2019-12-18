@@ -156,8 +156,11 @@ export default {
 		}
 	},
 	watch: {
-		'resetFilters': function () {
-			this.filters.splice(0, this.filters.length);
+		resetFilters: function () {
+			if (this.resetFilters) {
+				this.filters = [];
+				this.$emit('updateFilters', this.filters.slice(), false);
+			}
 		}
 	},
 	data() {
@@ -189,11 +192,6 @@ export default {
 		this.states = await this.getStates();
 		this.positions = await this.getWorkPositions();
 		this.chains = await this.getChains();
-	},
-	watch: {
-		filters: function () {
-			
-		}
 	},
 	methods: {
 		async getStates() {
@@ -238,31 +236,6 @@ export default {
     },
     toggleGender() {
       this.disabledGender = !this.disabledGender;
-    },
-
-    onSubmitNotificationForm() {
-      this.fileForm.validateFields((err, values) => {
-        if (!err) {
-          console.log("Datos recibidos: ", values);
-          this.showConfirm();
-          // this.notifications = values;
-          // console.log("Datos guardados: ", this.notifications);
-          //alert("Exito");
-        }
-      });
-    },
-    showConfirm() {
-      this.$confirm({
-        title: "¿Estás seguro que deseas enviar esta notificación?",
-        content: h => <div style="color:#000;"></div>,
-        onOk() {
-          console.log("ENVIAR");
-        },
-        onCancel() {
-          console.log("ATRAS");
-        },
-        class: "test"
-      });
     },
     filterOption(input, option) {
       return (

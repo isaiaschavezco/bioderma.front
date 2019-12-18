@@ -40,7 +40,7 @@
                       <a-divider />
                       
                       <div class="campaing__container-img">
-                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
+                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id, item.name)"/>
                       </div>
                       
                       <span style="font-weight: 700; margin-top: 1rem; display:block;">FILTROS</span>
@@ -73,12 +73,12 @@
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="openModal" />
           </a-col>
-          <a-col class="title-span-tag">AÑADIR CAMPAÑA</a-col>
+          <a-col class="title-span-tag">Añadir campaña</a-col>
         </a-row>
       </a-col>
     </a-row>
     <a-modal
-      title="NUEVA CAMPAÑA"
+      :title="`NUEVA CAMPAÑA ${bioGamesTab?'BIODERMA GAMES':''}`"
       v-model="loadFileModal"
       :confirmLoading="loadingFileForm"
       :afterClose="closeModal"
@@ -139,11 +139,9 @@ export default {
     },
     openModal() {
       this.loadFileModal = true;
-      console.log("Open", this.loadFileModal);
     },
     closeModal() {
       this.loadFileModal = false;
-      console.log(this.loadFileModal);
     },
     updateCampaings() {
       this.getCamapings();
@@ -190,8 +188,8 @@ export default {
 
       return groupsCampaings;
     },
-    editCampaing(campaingId) {
-      this.$router.push({ name: 'campaingDetail', query: { id: campaingId } });
+    editCampaing(campaingId, campaingName) {
+      this.$router.push({ name: 'campaingDetail', query: { id: campaingId }, params: {name: campaingName} });
     }
   }
 };
@@ -226,10 +224,14 @@ export default {
   width: 100%;
   text-align: center;
   object-fit: cover;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .campaing__img {
   text-align: center;
-  height: 200px;
+  max-height: 100%;
   width: 100%;
   object-fit: contain;
   cursor: pointer;
