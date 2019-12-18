@@ -139,27 +139,23 @@ export default {
 			this.questionForm.validateFields(['time', 'points'], async (err, values) => {
 				if (!err && this.isValidSentence) {
 					values = this.questionForm.getFieldsValue();
-					const sentence = values.question.trim().split(' ');
 
-					const shuffledSentence = sentence.sort(() => Math.random() - 0.5);
-					
+					const sentence = values.question.trim().split(' ').map((val, index) => {
+						return {
+							index,
+							data: val
+						};
+					});
+
+					const shuffledSentence = sentence.slice();
+					shuffledSentence.sort(function (a, b) { return 0.5 - Math.random() })
 
 					const contentJSON = JSON.stringify({
-						unorder: shuffledSentence.map((val, index) => {
-							return {
-								index,
-								data: val
-							};
-						})
+						unorder: shuffledSentence
 					});
 
 					const answerJSON = JSON.stringify({
-						order: sentence.map((val, index) => {
-							return {
-								index,
-								data: val
-							};
-						})
+						order: sentence
 					});
 					
 					const questionInformation = {
@@ -172,13 +168,14 @@ export default {
 					};
 					
 					try {
-						//const responseData = await this.$emit('register', questionInformation);
+						const responseData = await this.$emit('register', questionInformation);
 						
 						this.onCloseModal();
 						this.questionForm.resetFields();
 						this.answer = 0;
 					
 
+						console.log(questionInformation);
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {
 						console.log('Hubo un error: ', error);

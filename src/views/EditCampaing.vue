@@ -196,7 +196,7 @@ export default {
               title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
           }
           else if (question.question_type.id === 4) {
-            title = content.unorder.join(' ');
+            title = content.unorder.map(val => val.data).join(' ');
           }
           else if (question.question_type.id === 5) {
             title = content.questions[0].data;
