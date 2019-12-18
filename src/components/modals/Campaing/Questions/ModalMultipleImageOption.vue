@@ -363,7 +363,7 @@ export default {
   text-align: center;
 }
 .form-question__upload {
-	height: 210px;
+	height: 170px;
 }
 .form-question__actions button {
   border-radius: 25px;

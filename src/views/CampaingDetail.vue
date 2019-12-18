@@ -2,13 +2,11 @@
   <div class="container-blog">
     <a-row>
       <a-col :xs="{ span: 15 }">
-        <a-card title="CAMPAÑA PHOTODERM">
+        <a-card :title="campaingName">
           <a-skeleton :loading="loadingQuizz" active>
             <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
               <span slot="action" slot-scope="text, record">
-                <!-- <router-link :to="`/editCampaing/${record.quizzId}`"> -->
-                  <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId)" />
-                <!-- </router-link> -->
+                <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId, record.name)" />
                 <a-divider type="vertical" />
                 <a-button shape="circle" icon="delete" size="large" />
                 
@@ -175,12 +173,12 @@ export default {
       tableChains: [],
       inviteUserModal: false,
       inviteUserLoading: false,
-      campaingId: null,
+      campaingId: this.$route.query.id,
+      campaingName: this.$route.params.name,
       quizz: []
     };
   },
   mounted() {
-    this.campaingId = this.$route.query.id;
     this.getCampaingDetails();
   },
   watch: {
@@ -235,10 +233,14 @@ export default {
           const newTrivia = trivia;
           newTrivia.key = index;
 
-          if (newTrivia.isDeleted) newTrivia.status = "Eliminada";
-          else if (newTrivia.isActive) newTrivia.status = "Activa";
-          else if (newTrivia.isSend) newTrivia.status = "Enviada";
-          else newTrivia.status = "No enviada";
+          if (newTrivia.isDeleted)
+            newTrivia.status = "Eliminada";
+          else if (newTrivia.isActive)
+            newTrivia.status = "Activa";
+          else if (newTrivia.isSend)
+            newTrivia.status = "Enviada";
+          else
+            newTrivia.status = "No enviada";
 
           if (newTrivia.startedAt === "Invalid date")
             newTrivia.validity = "No asigninada";
@@ -379,8 +381,9 @@ export default {
         console.log("Submit dates: ", err);
       }
     },
-    editQuizz(quizzId) {
-      this.$router.push({ name: 'editCampaing', query: { quizzId } });
+    editQuizz(quizzId, quizzName) {
+      console.log(quizzName);
+      this.$router.push({ name: 'editCampaing', query: { quizzId }, params: {campaingName: this.campaingName, quizzName} });
     }
   }
 };

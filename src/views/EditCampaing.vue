@@ -3,7 +3,7 @@
     <a-row>
       <a-col :xs="{ span: 18 }" class="column">
         <div class="card-container">
-          <a-card title="CAMPAÑA PHOTODERM">
+          <a-card :title="quizzName">
             <a-table :columns="columnsQuestionsTable" :dataSource="questionsData" style="margin-top: 1rem;">
               <span slot="action" slot-scope="text, record">
                 <a-button shape="circle" icon="edit" size="large" @click="() => editQuestion(text.key)" />
@@ -21,7 +21,7 @@
           <a-col>
             <a-button shape="circle" icon="arrow-left" size="large" @click="returnToCampaing"/>
           </a-col>
-          <a-col class="description-icon title-span-tag">Regresar a Campaña</a-col>
+          <a-col class="description-icon title-span-tag">Regresar a trivia</a-col>
         </a-row>
         <a-row class="btn-description">
           <a-col>
@@ -118,6 +118,8 @@ export default {
   data() {
     return {
       quizzId: this.$route.query.quizzId,
+      quizzName: this.$route.params.quizzName,
+      campaingName: this.$route.params.campaingName,
       collapsed: false,
       questionsData: [],
       columnsQuestionsTable: [

@@ -40,7 +40,7 @@
                       <a-divider />
                       
                       <div class="campaing__container-img">
-                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
+                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id, item.name)"/>
                       </div>
                       
                       <span style="font-weight: 700; margin-top: 1rem; display:block;">FILTROS</span>
@@ -78,7 +78,7 @@
       </a-col>
     </a-row>
     <a-modal
-      title="NUEVA CAMPAÑA"
+      :title="`NUEVA CAMPAÑA ${bioGamesTab?'BIODERMA GAMES':''}`"
       v-model="loadFileModal"
       :confirmLoading="loadingFileForm"
       :afterClose="closeModal"
@@ -188,8 +188,8 @@ export default {
 
       return groupsCampaings;
     },
-    editCampaing(campaingId) {
-      this.$router.push({ name: 'campaingDetail', query: { id: campaingId } });
+    editCampaing(campaingId, campaingName) {
+      this.$router.push({ name: 'campaingDetail', query: { id: campaingId }, params: {name: campaingName} });
     }
   }
 };
