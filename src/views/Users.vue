@@ -6,9 +6,9 @@
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
             <a-tab-pane tab="USUARIOS" key="1">
               <a-input-search placeholder="Buscar usuario" enterButton />
-              <a-table :columns="columns" :dataSource="data" style="margin-top: 1rem;">
+              <a-table :columns="columns" :dataSource="usersListInfo" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
-                  <a-button @click="onShowUserInfo" shape="circle" icon="info" size="large" />
+                  <a-button @click="onShowUserInfo(record.key)" shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
                   <a-button shape="circle" icon="delete" size="large" />
                 </span>
@@ -242,7 +242,7 @@ const chainColumns = [
   }
 ];
 
-const data = [
+const usersListInfo = [
   {
     key: "1",
     name: "John Brown",
@@ -275,7 +275,7 @@ export default {
   data() {
     return {
       collapsed: false,
-      data,
+      usersListInfo: usersListInfo,
       columns,
       chainColumns,
       value: 1,
@@ -405,9 +405,34 @@ export default {
       }
     };
   },
+  mounted() {
+    this.getUsersListInfo();
+  },
   methods: {
     callback(key) {
       console.log(key);
+    },
+    async getUsersListInfo() {
+      try {
+        const response = await this.$axios('user');
+
+        const usersList = response.data.users.map((val, index) => {
+          return {
+            key: val.id,
+            name: val.name,
+            email: val.email,
+            profile: val.type.name,
+            position: (val.position === null?"":val.position.name),
+            points: val.points
+          };
+        });
+
+       this.usersListInfo = usersList;
+
+      } catch (error) {
+        console.log("%cError al obtener los usuarios", "color:red;");
+        console.log(error);
+      }
     },
     onChangeTab(activeTabKey) {
       this.activeTab = activeTabKey;
@@ -425,7 +450,6 @@ export default {
     async getChains() {
       const responseChains = await this.$axios("chain");
       this.chains = responseChains.data.chains;
-      // console.log(responseChains.data);
       this.tableChains = this.chains;
     },
     onSubmitChainForm() {
@@ -544,11 +568,13 @@ export default {
         }
       });
     },
-    onShowUserInfo() {
+    onShowUserInfo(userId) {
       console.log(
         "%cObteniendo informacion usuario.",
         "color:green;font-size:0.7rem;"
       );
+
+      console.log(userId)
 
       this.showUserInfoModal = true;
     },
