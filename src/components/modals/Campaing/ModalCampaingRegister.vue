@@ -45,7 +45,7 @@
     </a-form>
     <a-divider :style="{ margin: '10px 0px', border: '1px solid rgba(0,0,0,0.1)' }" />
 
-    <CampaingFilter @filterAdded="addFilter" :resetFilters="deleteFilters" />
+    <CampaingFilter @updateFilters="updateFilters" :resetFilters="deleteFilters" />
 
     <a-row>
 			<a-col span="24" class="text-center">
@@ -90,8 +90,8 @@ export default {
         description: message
       });
     },
-    addFilter(filter) {
-      this.filters.push(filter.id);
+    updateFilters(filters) {
+      this.filters = filters.slice();
     },
     handleChangeFileUpload(info) {
       let fileList = [...info.fileList];
