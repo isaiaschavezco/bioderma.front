@@ -4,7 +4,7 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container" style="height: 50rem; margin-top: 54px;">
           <a-list
-            :grid="{ gutter: 16, column: 3 }"
+            :grid="{ gutter: 16, column: 4 }"
             :dataSource="proudcts"
             :style="{ overflow: 'scroll' }"
             style="height: 100%;"
@@ -14,15 +14,33 @@
                 placement="topLeft"
                 title="Da click en la imágen para ver las los productos"
               >
-                <a-card :title="item.title">
-                  <p class="center">{{ item.points }}</p>
-                  <img alt="example" :src="item.image" slot="cover" />
-                  <span style="font-weight: 700;">{{ item.description }}</span>
-                  <br />
-                  <span></span>
+                <a-card
+                  hoverable
+                  style="height: 25rem; width: 22rem;"
+                  class="Cards"
+                  :title="item.title"
+                >
+                  <p class="center">
+                    <strong>{{ item.points }} puntos</strong>
+                  </p>
+                  <div style="height:90px;">
+                    <img style="max-width:13rem; margin-left:50px;" alt="example" :src="item.image" />
+                  </div>
+                  <div style="height:115px">
+                    <span style="font-weight: 700;">
+                      <br />
+                      <br />
+                      <br />
+                      <br />
+                      {{ item.description }}
+                    </span>
+                  </div>
                   <template class="ant-card-actions" slot="actions">
-                    <a-icon type="edit" @click="(editProductModal = true), gettingId(item.id)" />
-                    <a-icon type="delete" @click="deleteProduct(item.id)" />
+                    <a-icon
+                      type="edit"
+                      @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points)"
+                    />
+                    <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
                   </template>
                 </a-card>
               </a-tooltip>
@@ -44,12 +62,21 @@
         <br />
       </a-col>
     </a-row>
+    <a-modal
+      title="ELIMINAR PRODUCTO"
+      v-model="deleteProductModal"
+      @ok="deletingModal"
+      okText="si"
+      cancelText="No"
+    >
+      <p>¿Estás seguro de querer eliminar este producto?</p>
+    </a-modal>
     <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" centered>
-      <a-form :form="fileForm">
+      <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
             setFieldsValue="title"
-            placeholder="Ingresa el nombre del producto"
+            :placeholder="this.newTitle"
             v-decorator="[
               'title',
               {
@@ -61,7 +88,7 @@
         <a-form-item>
           <a-textarea
             setFieldsValue="description"
-            placeholder="Ingresa la descripcion del producto"
+            :placeholder="this.newDescription"
             :rows="4"
             v-decorator="[
               'description',
@@ -105,6 +132,7 @@
           <a-input
             type="number"
             setFieldsValue="points"
+            :placeholder="this.newPoints"
             class="input-cost"
             size="small"
             v-decorator="[
@@ -185,6 +213,7 @@
           <a-input
             type="number"
             setFieldsValue="points"
+            placeholder="Pts"
             class="input-cost"
             size="small"
             v-decorator="[
@@ -212,6 +241,7 @@ export default {
   components: {
     //  FormFilter
   },
+
   data() {
     return {
       title: "",
@@ -221,19 +251,24 @@ export default {
       points: "",
       productId: "",
       newId: "",
+      newTitle: "",
+      newDescription: "",
+      newPoints: "",
       proudcts: [
         {
           id: 0,
           title: "",
           image: "",
           description: "",
-          points: 100,
+          points: 0,
           isActive: true
         }
       ],
       fileForm: this.$form.createForm(this),
+      fileFormEdit: this.$form.createForm(this),
       addProductModal: false,
       editProductModal: false,
+      deleteProductModal: false,
       fileList: []
     };
   },
@@ -246,8 +281,17 @@ export default {
       //console.log(responseList.data.products);
       this.proudcts = responseList.data.products;
     },
+    deletingModal() {
+      this.deleteProduct(this.newId);
+      this.deleteProductModal = false;
+    },
+    gettingData(title, description, points) {
+      this.newTitle = title;
+      this.newDescription = description;
+      this.newPoints = points;
+    },
     gettingId(id) {
-      console.log((this.newId = id));
+      this.newId = id;
     },
     async deleteProduct(id) {
       const responseDelete = await this.$axios.delete(`product/${id}`);
@@ -258,8 +302,7 @@ export default {
       }
     },
     onSubmitEditProduct(id) {
-      console.log(this.newId);
-      this.fileForm.validateFields(async (err, values) => {
+      this.fileFormEdit.validateFields(async (err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
           try {
@@ -275,7 +318,7 @@ export default {
             );
             console.log(response.data);
             if (response.data.status == 0) {
-              this.successEditingProduct();
+              this.success();
             } else {
               this.failEditingProduct();
             }
@@ -285,70 +328,42 @@ export default {
           }
         }
       });
+      this.fileFormEdit.resetFields();
     },
     handleChange() {},
     confirmClose() {},
     cancelPictureForm() {
       alert("Cancelar");
     },
-    successAddingProduct() {
-      this.$success({
-        content: (
-          <p style="text-align:center">
-            SE HA AÑADIDO EL PRODUCTO CORRECTAMENTE
-          </p>
-        )
-      });
+    success() {
       this.getListProducts();
     },
     failAddingProduct() {
-      this.$error({
-        content: (
-          <p style="text-align:center">
-            SE HA PRODUCIDO UN ERROR AÑADIENDO EL PRODUCTO, FAVOR INTENTARLO MÁS
-            TARDE
-          </p>
-        )
+      this.$notification["error"]({
+        message: "ERROR AL AÑADIR UN PRODUCTO",
+        description:
+          "Se ha proudcido un error añdiendo un producto, favor de intentarlo más tarde."
       });
-    },
-    successEditingProduct() {
-      this.$success({
-        content: (
-          <p style="text-align:center">
-            SE HA EDITADO EL PRODUCTO CORRECTAMENTE
-          </p>
-        )
-      });
-      this.getListProducts();
     },
     failEditingProduct() {
-      this.$error({
-        content: (
-          <p style="text-align:center">
-            SE HA PRODUCIDO UN ERROR EDITANDO EL PRODUCTO, FAVOR INTENTARLO MÁS
-            TARDE
-          </p>
-        )
+      this.$notification["error"]({
+        message: "ERROR EDITANDO UN PRODUCTO",
+        description:
+          "Se ha proudcido un error editando un producto, favor de intentarlo más tarde."
       });
     },
     successDeletingProduct() {
-      this.$success({
-        content: (
-          <p style="text-align:center">
-            SE HA ELIMINADO EL PRODUCTO CORRECTAMENTE
-          </p>
-        )
+      this.$notification["success"]({
+        message: "ELIMINO UN PRODUCTO",
+        description: "El producto se elimino correctamente."
       });
       this.getListProducts();
     },
     failDeletingProduct() {
-      this.$error({
-        content: (
-          <p style="text-align:center">
-            SE HA PRODUCIDO UN ERROR ELIMINANDO EL PRODUCTO, FAVOR INTENTARLO
-            MÁS TARDE
-          </p>
-        )
+      this.$notification["error"]({
+        message: "ERROR ELIMINANDO UN PRODUCTO",
+        description:
+          "Se ha proudcido un error eliminando un producto, favor de intentarlo más tarde."
       });
     },
     onSubmitPictureForm() {
@@ -367,7 +382,7 @@ export default {
               }
             );
             if (response.data.status == 0) {
-              this.successAddingProduct();
+              this.success();
             } else {
               this.failAddingProduct();
             }
@@ -377,6 +392,7 @@ export default {
           }
         }
       });
+      this.fileForm.resetFields();
     },
     handleChangeFileUpload(info) {
       let fileList = [...info.fileList];
@@ -406,5 +422,10 @@ export default {
 }
 .column-right-club {
   margin-top: 25px;
+}
+.Cards {
+  position: relative;
+  width: 350px;
+  height: 350px;
 }
 </style>
