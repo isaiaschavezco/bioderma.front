@@ -260,6 +260,7 @@ export default {
 					})
 
 					let question = values.question.split('_').filter(val => val.length > 0).map(part => { return {data: part} } );
+					
 					const content = JSON.stringify({
 						question,
 						possiblesResponses: options

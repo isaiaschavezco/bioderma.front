@@ -36,6 +36,7 @@
 					`answer`,
 					{rules: [{ required: true }]}
 				]"
+				:disabled="true"
 				@change="(e) => onChangeAnswer()"
 			>
 				<a-row style="margin-left: 4rem; margin-right: 4rem;" v-for="(option, index) in textOptions" :key="index">
@@ -210,46 +211,45 @@ export default {
 			e.preventDefault();
 			this.questionForm.validateFields(async (err, values) => {
 				if (!err) {
-					console.log('No err', values);
-					
-					for (let i = 0; i < 5; ++i) {
-						if (this.optionsValues[i].length == 0) {
-							for (let j  = i; j < 5; ++j)
-								this.optionsValues[j] = "";
-
-							break;
-						}
-					}
-
-					let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
-
-					options = options.map((option, index) => {
-						return {
-							index: index,
-							response: option
-						};
-					})
-
-					const contentJSON = JSON.stringify({
-						question: values.question,
-						possiblesResponses: options
-					});
-
-					const answerJSON = JSON.stringify({
-						response: this.answer
-					});
-					
-					const questionInformation = {
-						content: contentJSON,
-						answer: answerJSON,
-						points: Number.parseInt(values.points),
-						time: Number.parseInt(values.time),
-						questionType: 1,
-						quizzId: this.quizzId
-					};
-					
 					try {
-						const responseData = await this.$emit('register', questionInformation);
+						for (let i = 0; i < 5; ++i) {
+							if (this.optionsValues[i].length == 0) {
+								for (let j  = i; j < 5; ++j)
+									this.optionsValues[j] = "";
+
+								break;
+							}
+						}
+
+						let options = this.optionsValues.filter((val, index) => val.length > 0 && this.isAvailableOption[index]);
+
+						options = options.map((option, index) => {
+							return {
+								index: index,
+								response: option
+							};
+						})
+
+						const contentJSON = JSON.stringify({
+							question: values.question,
+							possiblesResponses: options
+						});
+
+						const answerJSON = JSON.stringify({
+							response: this.answer
+						});
+						
+						const questionInformation = {
+							content: contentJSON,
+							answer: answerJSON,
+							points: Number.parseInt(values.points),
+							time: Number.parseInt(values.time),
+							questionType: 1,
+							quizzId: this.quizzId
+						};
+					
+						const response = await this.$emit('register', questionInformation);
+
 						
 						this.onCloseModal();
 						this.questionForm.resetFields();
@@ -259,7 +259,7 @@ export default {
 
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {
-						console.log('Hubo un erro: ', error);
+						console.log('Hubo un error al registrar: ', error);
 					}
 				}
 			})

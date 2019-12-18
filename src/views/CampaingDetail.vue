@@ -224,7 +224,7 @@ export default {
     },
     async getCampaingDetails() {
       this.loadingQuizz = true;
-      const urlCampaingDetails = `https://bioderma-api-inmersys.herokuapp.com/quizz/${this.campaingId}`;
+      const urlCampaingDetails = `quizz/${this.campaingId}`;
 
       try {
         const response = await this.$axios(urlCampaingDetails);
@@ -264,8 +264,7 @@ export default {
     async onSubmitQuizz() {
       this.quizzForm.validateFields(async (err, values) => {
         if (!err) {
-          const urlQuizzRegister =
-            "https://bioderma-api-inmersys.herokuapp.com/quizz";
+          const urlQuizzRegister = "quizz";
 
           try {
             const quizzInfo = {
@@ -357,7 +356,7 @@ export default {
     },
     async onSubmitValidityForm() {
       const quizzId = this.currentModalId;
-      const urlValidityDate = "https://bioderma-api-inmersys.herokuapp.com/quizz/send";
+      const urlValidityDate = "quizz/send";
 
       console.log("Submited Dates: ")
       console.log(quizzId, this.startValidityDate.format('YYYY-MM-DD'), this.endValidityDate.format('YYYY-MM-DD'))

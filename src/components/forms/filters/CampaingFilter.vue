@@ -10,9 +10,9 @@
 
 							<a-row class="select-item">
 								<a-checkbox :checked="!disabledFilters && !disabledUserType" :disabled="disabledFilters" @change="toggleUserType">
-									<a-radio-group :disabled="disabledUserType || disabledFilters" name="user-type" defaultValue="1" v-model="filterToSend.userType">
-										<a-radio value="1">NAOS</a-radio>
-										<a-radio value="2">Farmacia</a-radio>
+									<a-radio-group :disabled="disabledUserType || disabledFilters" name="user-type" :defaultValue="1" v-model="filterToSend.userType">
+										<a-radio :value="1">NAOS</a-radio>
+										<a-radio :value="2">Farmacia</a-radio>
 									</a-radio-group>
 								</a-checkbox>
 							</a-row>
@@ -22,7 +22,7 @@
 								<a-checkbox :checked="!disabledFilters && !disabledPosition" @click="togglePosition" :disabled="disabledFilters" style="margin-right:7px; "></a-checkbox>
 								<a-select
 									showSearch
-									placeholder="Posiciòn"
+									placeholder="Posición"
 									optionFilterProp="children"
 									style="width: 170px"
 									:filterOption="filterOption"
@@ -105,8 +105,8 @@
 							<a-row class="select-item">
 								<a-checkbox :checked="!disabledFilters && !disabledGender" :disabled="disabledFilters" @change="toggleGender">
 									<a-radio-group :disabled="disabledGender || disabledFilters" :defaultValue="filterToSend.gender" v-model="filterToSend.gender" name="gender">
-										<a-radio value="1">Mujer</a-radio>
-										<a-radio value="0">Hombre</a-radio>
+										<a-radio :value="1">Mujer</a-radio>
+										<a-radio :value="0">Hombre</a-radio>
 									</a-radio-group>
 								</a-checkbox>
 							</a-row>
@@ -170,7 +170,7 @@ export default {
 				naosPosition: 1,
 				initAge: 18,
 				finalAge: 100,
-				gender: -1
+				gender: 1
 			},
 			states: [],
 			positions: [],
@@ -190,22 +190,24 @@ export default {
 		this.positions = await this.getWorkPositions();
 		this.chains = await this.getChains();
 	},
+	watch: {
+		filters: function () {
+			
+		}
+	},
 	methods: {
 		async getStates() {
-			const urlStates = "https://bioderma-api-inmersys.herokuapp.com/state";
-			const response = await this.$axios(urlStates);
+			const response = await this.$axios("state");
 			
 			return response.data.states;
 		},
 		async getWorkPositions() {
-			const urlWorkPositions = "https://bioderma-api-inmersys.herokuapp.com/position";
-			const response = await this.$axios(urlWorkPositions);
+			const response = await this.$axios("position");
 			
 			return response.data.workPositions;
 		},
 		async getChains() {
-			const urlChains = "https://bioderma-api-inmersys.herokuapp.com/chain";
-			const response = await this.$axios(urlChains);
+			const response = await this.$axios("chain");
 
 			return response.data.chains;
 		},
@@ -239,7 +241,6 @@ export default {
     },
 
     onSubmitNotificationForm() {
-      //alert("Subir");
       this.fileForm.validateFields((err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
@@ -303,7 +304,7 @@ export default {
 			return formatedFilter;
 		},
 		getGender() {
-			if (this.filterToSend.gender === -1)
+			if (this.filterToSend.gender === -1 || this.disabledGender)
 				return -1;
 
 			console.log("Gender", this.filterToSend.gender);
@@ -353,12 +354,10 @@ export default {
 			this.registerFilter(filterData);
 		},
 		async registerFilter(filter) {
-			const urlRegisterFilter = "https://bioderma-api-inmersys.herokuapp.com/target";
-
 			try {
-				const response = await this.$axios.post(urlRegisterFilter, filter);
+				const response = await this.$axios.post("target", filter);
 				this.filters.push(response.data.target);
-				this.$emit('filterAdded', this.filters.slice(-1)[0]);
+				this.updateFilters();
 				// this.$notification["success"]({
 				// 	message: "Registro exitoso",
         //   description:
@@ -375,16 +374,15 @@ export default {
 		},
 		async onRemoveFilter(idFilter) {
 			console.log("Remove filter:", idFilter);
-			const urlRegisterFilter = "https://bioderma-api-inmersys.herokuapp.com/target";
 
 			try {
-				const response = await this.$axios.delete(urlRegisterFilter, {
+				const response = await this.$axios.delete("target", {
 					"targetId": idFilter
 				});
 				
 				this.filters = this.filters.filter(filter => filter.id !== idFilter);
 
-
+				this.updateFilters();
 				// this.$notification["success"]({
         //   message: "Filtro eliminado",
         //   description:
@@ -398,8 +396,11 @@ export default {
             "Hubo un error al eliminar el filtro.",
         });
 			}
+		},
+		updateFilters() {
+			this.$emit('updateFilters', this.filters.slice());
 		}
-  }
+	}
 }
 </script>
 

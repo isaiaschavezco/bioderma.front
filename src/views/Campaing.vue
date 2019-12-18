@@ -18,12 +18,12 @@
                 <a-col span="6" v-for="(item, j) in row" :key="j">
                   <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
                     <a-card>
-                      <div class="campaing__head">
-                        <a-row>
-                          <a-col span="15">
+                      <div class="campaing__header">
+                        <a-row :gutter="12">
+                          <a-col span="16">
                             <h2>{{ item.name }}</h2>
                           </a-col>
-                          <a-col span="9">
+                          <a-col span="8">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
                                 <a-icon class="campaing__action" type="edit"/>
@@ -39,9 +39,11 @@
 
                       <a-divider />
                       
-                      <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
+                      <div class="campaing__container-img">
+                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id)"/>
+                      </div>
                       
-                      <span style="font-weight: 700;">FILTROS</span>
+                      <span style="font-weight: 700; margin-top: 1rem; display:block;">FILTROS</span>
                       <div class="campaing__filters">
                           <div class="campaing__filter" v-if="item.target.length > 0">
                             <p v-for="filter in item.target" :key="filter.id">
@@ -123,7 +125,7 @@ export default {
   methods: {
     async getCamapings() {
       this.loadingCampaings = true;
-      const urlCamapaings = `https://bioderma-api-inmersys.herokuapp.com/campaing/${this.bioGamesTab}`;
+      const urlCamapaings = `campaing/${this.bioGamesTab}`;
 
       try {
         const response = await this.$axios(urlCamapaings);
@@ -202,7 +204,10 @@ export default {
   > .ant-tabs-no-animation {
   border-bottom: 1px solid;
 }
-.campaing__header h4 {
+.campaing__header {
+  height: 2.5rem;
+}
+.campaing__header h2 {
   margin: 0;
 }
 .campaing__action {
@@ -217,10 +222,16 @@ export default {
 .campaing__action:active {
   transform: scale(0.9);
 }
+.campaing__container-img {
+  width: 100%;
+  text-align: center;
+  object-fit: cover;
+}
 .campaing__img {
+  text-align: center;
   height: 200px;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
   cursor: pointer;
 }
 .campaing__filters {

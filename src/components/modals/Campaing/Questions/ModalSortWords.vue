@@ -81,118 +81,121 @@
 
 <script>
 export default {
-  name: "ModalSortWords",
-  props: {
-    isVisible: {
-      type: Boolean,
-      default: false
-    },
-    quizz: {
-      default: ""
-    }
-  },
-  data() {
-    return {
-      time: "1",
-      points: "1",
-      answer: 0,
-      quizzId: this.quizz,
-      isValidSentence: false,
-      isAvailableOption: [true, true, false, false, false],
-      isRequiredOption: [true, true, false, false, false],
-      textOptions: [
-        {
-          name: "optionA",
-          indicator: "A"
-        },
-        {
-          name: "optionB",
-          indicator: "B"
-        },
-        {
-          name: "optionC",
-          indicator: "C"
-        },
-        {
-          name: "optionD",
-          indicator: "D"
-        },
-        {
-          name: "optionE",
-          indicator: "E"
-        }
-      ],
-      isVisibleModal: this.isVisible,
-      questionForm: this.$form.createForm(this),
-      optionsValues: ["", "", "", "", ""]
-    };
-  },
-  watch: {
-    isVisible: function() {
-      this.isVisibleModal = this.isVisible;
-    }
-  },
-  methods: {
-    onCloseModal() {
-      this.$emit("close");
-    },
-    checkSentence(rule, value, callback) {
-      const words = value.trim().split(" ");
+	name: "ModalSortWords",
+	props: {
+		isVisible: {
+			type: Boolean,
+			default: false
+		},
+		quizz: {
+			default: ""
+		}
+	},
+	data() {
+		return {
+			time: "1",
+			points: "1",
+			answer: 0,
+			quizzId: this.quizz,
+			isValidSentence: false,
+			isAvailableOption: [true, true, false, false, false],
+			isRequiredOption: [true, true, false, false, false],
+			textOptions: [
+				{
+					name: 'optionA',
+					indicator: 'A',
+				},
+				{
+					name: 'optionB',
+					indicator: 'B',
+				},
+				{
+					name: 'optionC',
+					indicator: 'C',
+				},
+				{
+					name: 'optionD',
+					indicator: 'D',
+				},
+				{
+					name: 'optionE',
+					indicator: 'E',
+				}
+			],
+			isVisibleModal: this.isVisible,
+			questionForm: this.$form.createForm(this),
+			optionsValues: ["", "", "", "", ""],
+		};
+	},
+	watch: {
+		isVisible: function() {
+			this.isVisibleModal = this.isVisible;
+		}
+	},
+	methods: {
+		onCloseModal() {
+			this.$emit('close');
+		},
+		checkSentence(rule, value, callback) {
+			const words = value.trim().split(' ');
 
-      if (words.length < 2)
-        callback("Al menos debe haber 2 palabras en la frase.");
-      else {
-        this.isValidSentence = true;
-        callback();
-      }
-    },
-    onSubmitQuestion(e) {
-      e.preventDefault();
-      this.questionForm.validateFields(
-        ["time", "points"],
-        async (err, values) => {
-          if (!err && this.isValidSentence) {
-            values = this.questionForm.getFieldsValue();
-            const sentence = values.question.trim().split(" ");
+			if (words.length < 2)
+				callback('Al menos debe haber 2 palabras en la frase.')
+			else {
+				this.isValidSentence = true;
+				callback();
+			}
+		},
+		onSubmitQuestion(e) {
+			e.preventDefault();
+			this.questionForm.validateFields(['time', 'points'], async (err, values) => {
+				if (!err && this.isValidSentence) {
+					values = this.questionForm.getFieldsValue();
 
-            const shuffledSentence = sentence.sort(() => Math.random() - 0.5);
+					const sentence = values.question.trim().split(' ').map((val, index) => {
+						return {
+							index,
+							data: val
+						};
+					});
 
-            const contentJSON = JSON.stringify({
-              unorder: shuffledSentence
-            });
+					const shuffledSentence = sentence.slice();
+					shuffledSentence.sort(function (a, b) { return 0.5 - Math.random() })
 
-            const answerJSON = JSON.stringify({
-              order: sentence
-            });
+					const contentJSON = JSON.stringify({
+						unorder: shuffledSentence
+					});
 
-            const questionInformation = {
-              content: contentJSON,
-              answer: answerJSON,
-              points: Number.parseInt(values.points),
-              time: Number.parseInt(values.time),
-              questionType: 4,
-              quizzId: this.quizzId
-            };
+					const answerJSON = JSON.stringify({
+						order: sentence
+					});
+					
+					const questionInformation = {
+						content: contentJSON,
+						answer: answerJSON,
+						points: Number.parseInt(values.points),
+						time: Number.parseInt(values.time),
+						questionType: 4,
+						quizzId: this.quizzId
+					};
+					
+					try {
+						const responseData = await this.$emit('register', questionInformation);
+						
+						this.onCloseModal();
+						this.questionForm.resetFields();
+						this.answer = 0;
+					
 
-            try {
-              const responseData = await this.$emit(
-                "register",
-                questionInformation
-              );
-
-              this.onCloseModal();
-              this.questionForm.resetFields();
-              this.answer = 0;
-
-              console.log(JSON.stringify(questionInformation));
-            } catch (error) {
-              console.log("Hubo un error: ", error);
-            }
-          }
-        }
-      );
-    }
-  }
+						console.log(questionInformation);
+						console.log(JSON.stringify(questionInformation));
+					} catch (error) {
+						console.log('Hubo un error: ', error);
+					}
+				}
+			})
+		}
+	}
 };
 </script>
 
