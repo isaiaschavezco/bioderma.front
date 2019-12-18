@@ -73,7 +73,7 @@
           <a-col>
             <a-button shape="circle" icon="plus" size="large" @click="openModal" />
           </a-col>
-          <a-col class="title-span-tag">AÑADIR CAMPAÑA</a-col>
+          <a-col class="title-span-tag">Añadir campaña</a-col>
         </a-row>
       </a-col>
     </a-row>
@@ -139,11 +139,9 @@ export default {
     },
     openModal() {
       this.loadFileModal = true;
-      console.log("Open", this.loadFileModal);
     },
     closeModal() {
       this.loadFileModal = false;
-      console.log(this.loadFileModal);
     },
     updateCampaings() {
       this.getCamapings();
@@ -226,10 +224,14 @@ export default {
   width: 100%;
   text-align: center;
   object-fit: cover;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .campaing__img {
   text-align: center;
-  height: 200px;
+  max-height: 100%;
   width: 100%;
   object-fit: contain;
   cursor: pointer;

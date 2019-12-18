@@ -22,7 +22,7 @@
 
       <a-col :xs="{ span: 6 }" style="margin-left: 30px;">
         <div class="container-notification">
-          <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
+          <a-card title="RECORD" style="text-align:center;">
             <!-- <a-list :dataSource="quizz">
               <div slot="renderItem" slot-scope="item, index" style="padding: 0px">
                 <span style="font-weight: bold;">{{ item.date }}</span>

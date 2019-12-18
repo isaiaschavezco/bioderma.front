@@ -36,7 +36,6 @@
 					`answer`,
 					{rules: [{ required: true }]}
 				]"
-				:disabled="true"
 				@change="(e) => onChangeAnswer()"
 			>
 				<a-row style="margin-left: 4rem; margin-right: 4rem;" v-for="(option, index) in textOptions" :key="index">

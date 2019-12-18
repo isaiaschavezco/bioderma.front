@@ -90,8 +90,9 @@ export default {
         description: message
       });
     },
-    updateFilters(filters) {
+    updateFilters(filters, resetFilters) {
       this.filters = filters.slice();
+      this.deleteFilters = resetFilters;
     },
     handleChangeFileUpload(info) {
       let fileList = [...info.fileList];
@@ -136,7 +137,7 @@ export default {
               );
 
               // Clear array of filter ids.
-              this.filters.splice(0, this.filters.length);
+              this.filters = [];
               this.loadFileModal = false;
               this.fileForm.resetFields();
               this.fileList = [];
