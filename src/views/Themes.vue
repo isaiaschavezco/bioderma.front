@@ -32,6 +32,7 @@
             <a-form-item>
               <div class="dropbox">
                 <a-upload-dragger
+                  :alue="this.imageAux"
                   v-decorator="[
                 'upload',
                 {
@@ -185,6 +186,7 @@ export default {
       wordStore: "Desactivar",
       addImageModal: false,
       image: "",
+      imageAux: null,
       imageForm: this.$form.createForm(this),
       isClubBiodermaActive: true,
       isBiodermaGameActive: true,
@@ -380,8 +382,8 @@ export default {
           this.failAddingImage();
         }
       });
-      //this.addImageModal = false;
-      this.imageForm.resetFields();
+      this.addImageModal = false;
+      this.fileList = [];
     }
   }
 };
