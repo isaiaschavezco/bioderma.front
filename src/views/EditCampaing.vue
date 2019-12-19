@@ -8,7 +8,7 @@
               <span slot="action" slot-scope="text, record">
                 <a-button shape="circle" icon="edit" size="large" @click="() => editQuestion(text.key)" />
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" />
+                <a-button shape="circle" icon="delete" size="large" @click="() => removeConfirmationModal = true" />
               </span>
             </a-table>
           </a-card>
@@ -82,7 +82,9 @@
     </a-row>
 
     <!-- MODALES -->
- 
+
+    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="campaña" @confirm="removeQuestion" @close="onCloseModal" />
+
     <!-- OPCION MULTIPLE -->
     <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
@@ -101,6 +103,7 @@
   </div>
 </template>
 <script>
+import ModalRemoveConfirmation from "../components/modals/Campaing/Confirmation/ModalRemoveConfirmation.vue";
 import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMultipleOption.vue";
 import ModalCompleteSentence from "../components/modals/Campaing/Questions/ModalCompleteSentence.vue";
 import ModalMultipleImageOption from "../components/modals/Campaing/Questions/ModalMultipleImageOption.vue";
@@ -109,11 +112,12 @@ import ModalColumnsRelation from "../components/modals/Campaing/Questions/ModalC
 
 export default {
   components: {
+    ModalRemoveConfirmation,
     ModalMultipleOption,
     ModalCompleteSentence,
     ModalMultipleImageOption,
     ModalSortWords,
-    ModalColumnsRelation,
+    ModalColumnsRelation
   },
   data() {
     return {
@@ -158,7 +162,8 @@ export default {
       multipleOptionModal: false,
       columnRelationModal: false,
       completeSentenceModal: false,
-      multipleImageOptionModal: false
+      multipleImageOptionModal: false,
+      removeConfirmationModal: false
     };
   },
   async mounted() {
@@ -230,6 +235,7 @@ export default {
       this.completeSentenceModal = false;
       this.multipleImageOptionModal = false;
       this.columnRelationModal = false;
+      this.removeConfirmationModal = false;
 
       this.getQuestions();
     },
@@ -252,6 +258,9 @@ export default {
     },
     editQuestion(id) {
       console.log(id);
+    },
+    removeQuestion() {
+
     }
   }
 };

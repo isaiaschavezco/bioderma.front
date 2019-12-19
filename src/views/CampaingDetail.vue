@@ -8,7 +8,7 @@
               <span slot="action" slot-scope="text, record">
                 <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId, record.name)" />
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" />
+                <a-button shape="circle" icon="delete" size="large" @click="() => onOpenModalRemove()" />
                 
                 <a-divider type="vertical" />
                 <a-button shape="circle" icon="caret-right" size="large" @click="() => {validityModalForm = true; currentModalId = record.quizzId;}" />
@@ -47,6 +47,8 @@
         </div>
       </a-col>
     </a-row>
+
+    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="trivia" @confirm="removeQuizz" @close="onCloseRemoveConfirmationModal" />
 
     <a-modal title="NUEVA ENTRADA" centered v-model="quizzModalRegister">
       <a-form :form="quizzForm">
@@ -118,6 +120,7 @@
 </template>
 <script>
 import moment from "moment";
+import ModalRemoveConfirmation from "../components/modals/Campaing/Confirmation/ModalRemoveConfirmation.vue";
 
 const columns = [
   {
@@ -153,6 +156,9 @@ const columns = [
 ];
 
 export default {
+  components: {
+    ModalRemoveConfirmation
+  },
   data() {
     return {
       currentModalId: -1,
@@ -175,6 +181,7 @@ export default {
       inviteUserLoading: false,
       campaingId: this.$route.query.id,
       campaingName: this.$route.params.name,
+      removeConfirmationModal: false,
       quizz: []
     };
   },
@@ -191,6 +198,9 @@ export default {
   },
   methods: {
     moment,
+    onOpenModalRemove() {
+      this.removeConfirmationModal = true;
+    },
     disabledAllDates(current) {
       return true;
     },
@@ -384,7 +394,13 @@ export default {
     editQuizz(quizzId, quizzName) {
       console.log(quizzName);
       this.$router.push({ name: 'editCampaing', query: { quizzId }, params: {campaingName: this.campaingName, quizzName} });
-    }
+    },
+    removeQuizz() {
+
+    },
+    onCloseRemoveConfirmationModal() {
+      this.removeConfirmationModal = false;
+    },
   }
 };
 </script>

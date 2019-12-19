@@ -30,7 +30,7 @@
                               </a-col>
 
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="delete" />
+                                <a-icon class="campaing__action" type="delete" @click="removeCampaing"/>
                               </a-col>
                             </a-row>
                           </a-col>
@@ -71,17 +71,20 @@
       <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
         <a-row style="margin-top: -13px; margin-left: 27px;">
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="openModal" />
+            <a-button shape="circle" icon="plus" size="large" @click="onOpenNewCampaingModal" />
           </a-col>
           <a-col class="title-span-tag">Añadir campaña</a-col>
         </a-row>
       </a-col>
     </a-row>
+
+    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="campaña" @confirm="removeCampaing" @close="onCloseRemoveConfirmationModal" />
+
     <a-modal
       :title="`NUEVA CAMPAÑA ${bioGamesTab?'BIODERMA GAMES':''}`"
-      v-model="loadFileModal"
+      v-model="newCampaingModal"
       :confirmLoading="loadingFileForm"
-      :afterClose="closeModal"
+      :afterClose="onCloseModal"
       centered
       width="50%"
       :footer="null"
@@ -89,21 +92,24 @@
       <ModalCampaingRegister
         :biodermaGames="bioGamesTab"
         @campaingAdded="updateCampaings"
-        @closeModal="closeModal"
+        @closeModal="onCloseModal"
       />
     </a-modal>
   </div>
 </template>
 <script>
+import ModalRemoveConfirmation from "../components/modals/Campaing/Confirmation/ModalRemoveConfirmation.vue";
 import ModalCampaingRegister from "../components/modals/Campaing/ModalCampaingRegister.vue";
 import Filter from "../components/forms/filters/FilterHelper";
 
 export default {
   components: {
+    ModalRemoveConfirmation,
     ModalCampaingRegister
   },
   data() {
     return {
+      campaingRemoveId: -1,
       loadingCampaings: true,
       FilterHelper: Filter,
       campaings: [],
@@ -113,9 +119,10 @@ export default {
       files: [],
       loadingMore: false,
       showLoadingMore: true,
-      loadFileModal: false,
+      newCampaingModal: false,
       submenuItems: [],
-      bioGamesTab: false
+      bioGamesTab: false,
+      removeConfirmationModal: false
     };
   },
   mounted: function() {
@@ -137,11 +144,11 @@ export default {
 
       this.loadingCampaings = false;
     },
-    openModal() {
-      this.loadFileModal = true;
+    onOpenNewCampaingModal() {
+      this.newCampaingModal = true;
     },
-    closeModal() {
-      this.loadFileModal = false;
+    onCloseModal() {
+      this.newCampaingModal = false;
     },
     updateCampaings() {
       this.getCamapings();
@@ -171,6 +178,9 @@ export default {
       const response = await this.$axios(`submenu/items/${menuId}`);
       this.submenuItems = response.data;
     },
+    onCloseRemoveConfirmationModal() {
+      this.removeConfirmationModal = false;
+    },
     groupCampaings() {
       const totalGroups = Math.ceil(this.campaings.length / 4);
       const groupsCampaings = [];
@@ -190,6 +200,10 @@ export default {
     },
     editCampaing(campaingId, campaingName) {
       this.$router.push({ name: 'campaingDetail', query: { id: campaingId }, params: {name: campaingName} });
+    },
+    removeCampaing(campaingId) {
+      this.campaingRemoveId = campaingId;
+      this.removeConfirmationModal = true;
     }
   }
 };
