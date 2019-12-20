@@ -162,6 +162,7 @@
           <a-card style="height:500px; margin-left:60px;">
             <h1 class="title-theme">TIENDA</h1>
             <a-divider />
+            <img :src="StoreStatus" style="width: 100%; height: 100%" />
           </a-card>
         </a-row>
       </a-col>
@@ -192,6 +193,7 @@ export default {
       isBiodermaGameActive: true,
       biodermaGameImage: "",
       fileList: [],
+      StoreStatus: "",
       switchBGame: true,
       switchClubB: true,
       theme: 1,
@@ -217,6 +219,17 @@ export default {
       this.general = responseGeneral.data.general;
       this.switchClubB = responseGeneral.data.general.isClubBiodermaActive;
       this.switchBGame = responseGeneral.data.general.isBiodermaGameActive;
+      this.storeStatusImage(this.switchClubB);
+    },
+    storeStatusImage(value) {
+      console.log(value);
+      if (value == false) {
+        this.StoreStatus =
+          "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
+      } else if (value == true) {
+        this.StoreStatus =
+          "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
+      }
     },
     StoreCheck(value) {
       //console.log(value);
@@ -228,6 +241,8 @@ export default {
           onOk() {
             component.postStore(value);
             component.wordStore = "Desactivar";
+            component.StoreStatus =
+              "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
           },
           onCancel() {
             component.switchClubB = false;
@@ -240,6 +255,8 @@ export default {
           onOk() {
             component.postStore(value);
             component.wordStore = "Activar";
+            component.StoreStatus =
+              "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
           },
           onCancel() {
             component.switchClubB = true;

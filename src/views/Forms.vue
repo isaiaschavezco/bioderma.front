@@ -821,6 +821,7 @@ export default {
     this.getPosition();
     this.getChains();
     this.success();
+    //this.successRegisterModal = true;
   },
   methods: {
     handleChange(info) {
@@ -844,7 +845,7 @@ export default {
     onSubmitFileForm() {},
     success() {
       this.$info({
-        icon: "none",
+        iconType: "null",
         content: (
           <div>
             <p style="text-align:center">
