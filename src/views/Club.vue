@@ -24,7 +24,11 @@
                     <strong>{{ item.points }} puntos</strong>
                   </p>
                   <div style="height:90px;">
-                    <img style="max-width:13rem; margin-left:50px;" alt="example" :src="item.image" />
+                    <img
+                      style="max-width:13rem; max-height:8rem; margin-left:50px;"
+                      alt="example"
+                      :src="item.image"
+                    />
                   </div>
                   <div style="height:115px">
                     <span style="font-weight: 700;">
@@ -329,6 +333,7 @@ export default {
         }
       });
       this.fileFormEdit.resetFields();
+      this.getListProducts();
     },
     handleChange() {},
     confirmClose() {},
