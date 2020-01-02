@@ -217,6 +217,16 @@ export default {
       this.general = responseGeneral.data.general;
       this.switchClubB = responseGeneral.data.general.isClubBiodermaActive;
       this.switchBGame = responseGeneral.data.general.isBiodermaGameActive;
+      if(this.switchBGame==true){
+        this.word="Desactivar";
+      }else{
+        this.word="Activar"
+      }
+      if(this.switchClubB==true){
+        this.wordStore="Desactivar";
+      }else{
+        this.wordStore="Activar"
+      }
     },
     StoreCheck(value) {
       //console.log(value);
