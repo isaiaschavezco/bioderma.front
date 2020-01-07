@@ -83,7 +83,7 @@
           <h1 class="title-theme">SELECCIONA UN TEMA PARA LA APLICACIÓN</h1>
         </a-row>
         <a-row class="main-phones">
-          <div>
+          <div v-bind:class="[{ borderPhone: selected.phone1 }]">
             <!-- Spring -->
             <a-row class="container-phone">
               <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
@@ -101,7 +101,7 @@
               >APLICAR</a-button>
             </a-row>
           </div>
-          <div>
+          <div v-bind:class="[{ borderPhone: selected.phone2 }]">
             <!-- Summer -->
             <a-row class="container-phone">
               <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
@@ -119,7 +119,7 @@
               >APLICAR</a-button>
             </a-row>
           </div>
-          <div>
+          <div v-bind:class="[{ borderPhone: selected.phone3 }]">
             <!-- Autumn -->
             <a-row class="container-phone">
               <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
@@ -137,7 +137,7 @@
               >APLICAR</a-button>
             </a-row>
           </div>
-          <div>
+          <div v-bind:class="[{ borderPhone: selected.phone4 }]">
             <!-- Winter -->
             <a-row class="container-phone">
               <img class="img-phone" src="../assets/theme/iPhone_001.png" alt />
@@ -162,6 +162,7 @@
           <a-card style="height:500px; margin-left:60px;">
             <h1 class="title-theme">TIENDA</h1>
             <a-divider />
+            <img :src="StoreStatus" style="width: 100%; height: 100%" />
           </a-card>
         </a-row>
       </a-col>
@@ -182,6 +183,12 @@ const data = [];
 export default {
   data() {
     return {
+      selected: {
+        phone1: false,
+        phone2: false,
+        phone3: false,
+        phone4: false
+      },
       word: "Desactivar",
       wordStore: "Desactivar",
       addImageModal: false,
@@ -192,6 +199,7 @@ export default {
       isBiodermaGameActive: true,
       biodermaGameImage: "",
       fileList: [],
+      StoreStatus: "",
       switchBGame: true,
       switchClubB: true,
       theme: 1,
@@ -217,6 +225,52 @@ export default {
       this.general = responseGeneral.data.general;
       this.switchClubB = responseGeneral.data.general.isClubBiodermaActive;
       this.switchBGame = responseGeneral.data.general.isBiodermaGameActive;
+      this.storeStatusImage(this.switchClubB);
+      this.themesStatus(responseGeneral.data.general.themes);
+      if (this.switchBGame == true) {
+        this.word = "Desactivar";
+      } else {
+        this.word = "Activar";
+      }
+      if (this.switchClubB == true) {
+        this.wordStore = "Desactivar";
+      } else {
+        this.wordStore = "Activar";
+      }
+    },
+    storeStatusImage(value) {
+      //console.log(value);
+      if (value == false) {
+        this.StoreStatus =
+          "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
+      } else if (value == true) {
+        this.StoreStatus =
+          "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
+      }
+    },
+    themesStatus(num) {
+      //console.log(num);
+      if (num == 1) {
+        this.selected.phone1 = true;
+        this.selected.phone2 = false;
+        this.selected.phone3 = false;
+        this.selected.phone4 = false;
+      } else if (num == 2) {
+        this.selected.phone2 = true;
+        this.selected.phone1 = false;
+        this.selected.phone3 = false;
+        this.selected.phone4 = false;
+      } else if (num == 3) {
+        this.selected.phone3 = true;
+        this.selected.phone2 = false;
+        this.selected.phone1 = false;
+        this.selected.phone4 = false;
+      } else if (num == 4) {
+        this.selected.phone4 = true;
+        this.selected.phone2 = false;
+        this.selected.phone3 = false;
+        this.selected.phone1 = false;
+      }
     },
     StoreCheck(value) {
       //console.log(value);
@@ -228,6 +282,8 @@ export default {
           onOk() {
             component.postStore(value);
             component.wordStore = "Desactivar";
+            component.StoreStatus =
+              "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
           },
           onCancel() {
             component.switchClubB = false;
@@ -240,6 +296,8 @@ export default {
           onOk() {
             component.postStore(value);
             component.wordStore = "Activar";
+            component.StoreStatus =
+              "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
           },
           onCancel() {
             component.switchClubB = true;
@@ -401,7 +459,9 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
+.borderPhone {
+  border: 1px solid #000000;
+}
 .img-phone {
   width: 55%;
   margin: 0 auto;
