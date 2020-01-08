@@ -9,7 +9,7 @@
                 <a-input
                   placeholder="Ingresa el titulo de la notificación"
                   v-decorator="[
-                    'name',
+                    'title',
                     {
                       rules: [
                         { required: true, message: 'Favor de llenar el campo' }
@@ -20,10 +20,10 @@
               </a-form-item>
               <a-form-item>
                 <a-textarea
-                  placeholder="Ingresa la descripcion de la notificación"
+                  placeholder="Ingresa el contenido de la notificación"
                   :rows="4"
                   v-decorator="[
-                    'description',
+                    'content',
                     {
                       rules: [
                         { required: true, message: 'Favor de llenar el campo' }
@@ -36,7 +36,7 @@
 
             <a-divider class="divider" />
 
-            <CampaingFilter/>
+            <CampaingFilter @updateFilters="updateFilters" :resetFilters="deleteFilters" />
 
             <a-divider class="divider" />
 
@@ -53,10 +53,11 @@
       <a-col :xs="{ span: 7 }" style="margin-top: 30px">
         <div class="container-notification" style>
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
-            <a-list :dataSource="data">
+            <a-list :dataSource="notificationList">
               <div slot="renderItem" slot-scope="item, index" style="padding: 15px">
-                <span style="font-weight: bold;">{{ item.date }}</span>
-                <p style="margin-bottom:30px">{{ item.description }}</p>
+                <span style="font-weight: bold;">{{ item.header }}</span>
+                <span style="font-weight: bold; margin-left:30%;">{{ item.createdAt }}</span>
+                <p style="margin-bottom:0.5rem; margin-top:0.5rem;">{{ item.content }}</p>
                 <a-divider class="divider" />
               </div>
             </a-list>
@@ -100,9 +101,12 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
         }
       ],
+      notificationList: [],
       fileForm: this.$form.createForm(this),
-      // checked: true,
-      // disabled: false
+      deleteFilters: false,
+      filters: [],
+      notificationTitle: "",
+      notificationContent: ""
     };
   },
   computed: {},
@@ -111,52 +115,71 @@ export default {
       //alert("Subir");
       this.fileForm.validateFields((err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
-          this.showConfirm();
-          // this.notifications = values;
-          // console.log("Datos guardados: ", this.notifications);
-          //alert("Exito");
+          if (this.filters.length > 0) {
+            this.notificationTitle = values.title;
+            this.notificationContent = values.content;
+            this.showConfirm(this.sendNotification);
+          } else {
+            this.showNotification(
+              "warning",
+              "Filtros insuficientes",
+              "La notificación debe tener al menos un filtro."
+            );
+          }
         }
       });
     },
-    showConfirm() {
+    showConfirm(sendData) {
       this.$confirm({
         title: "¿Estás seguro que deseas enviar esta notificación?",
         content: h => <div style="color:#000;"></div>,
+        okText: "ENVIAR",
+        cancelText: "CANCELAR",
         onOk() {
-          console.log("ENVIAR");
+          sendData();
         },
-        onCancel() {
-          console.log("ATRAS");
-        },
+        onCancel() {},
         class: "test"
       });
     },
-    // toggleChecked() {
-    //   this.checked = !this.checked;
-    // },
-    toggleDisable() {
-      this.disabled = !this.disabled;
+    updateFilters(filters, resetFilters) {
+      this.filters = filters.slice();
+      this.deleteFilters = resetFilters;
     },
-    onChange(e) {
-      this.checked = e.target.checked;
+    showNotification(type, title, message) {
+      this.$notification[type]({
+        message: title,
+        description: message
+      });
     },
-    handleChange(value) {
-      console.log(`selected ${value}`);
+    async sendNotification() {
+      try {
+        const notificationData = {
+          title: this.notificationTitle,
+          content: this.notificationContent,
+          targets: [...this.filters]
+        };
+        const response = await this.$axios.post(
+          "notification/send",
+          notificationData
+        );
+        this.getLastNotifications();
+      } catch (err) {
+        console.log("err: ", err);
+      }
     },
-    // handleBlur() {
-    //   console.log("blur");  
-    // },
-    // handleFocus() {
-    //   console.log("focus");
-    // },
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text
-          .toLowerCase()
-          .indexOf(input.toLowerCase()) >= 0
-      );
+    async getLastNotifications() {
+      try {
+        const response = await this.$axios("notification/list");
+        console.log("response: ", response.data);
+        this.notificationList = response.data.notificacions;
+      } catch (err) {
+        console.log("err: ", err);
+      }
     }
+  },
+  mounted() {
+    this.getLastNotifications();
   }
 };
 </script>
