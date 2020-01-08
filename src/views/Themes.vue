@@ -1,38 +1,85 @@
 <template>
   <div>
-    <a-Row :gutter="2">
-      <a-col :span="21">
+    <a-Row :gutter="24">
+      <a-col :span="7">
         <a-row>
           <a-card style="width:100%; min-height:300px;">
             <h1 class="title-theme">BIODERMA GAMES</h1>
             <a-divider />
             <div style="height:90px; text-align:center">
               <img
-                style="max-width:35rem; margin-left:50px; max-height: 10rem"
+                style="max-width:15rem; max-height: 10rem"
                 :src="general.biodermaGameImage"
                 centered
               />
             </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModal=true"
+              />Añadir Imagen
+            </template>
+          </a-card>
+        </a-row>
+      </a-col>
+      <a-col :span="7">
+        <a-row>
+          <a-card style="width:100%; min-height:300px;">
+            <h1 class="title-theme">Bioderma Games Campaña</h1>
+            <a-divider />
+            <div style="height:90px; text-align:center">
+              <img
+                style="max-width:15rem; max-height: 10rem"
+                :src="general.biodermaGameImageCampaign"
+                centered
+              />
+            </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModal=true"
+              />Añadir Imagen
+            </template>
+          </a-card>
+        </a-row>
+      </a-col>
+      <a-col :span="7">
+        <a-row>
+          <a-card style="width:100%; min-height:300px;">
+            <h1 class="title-theme">Bioderma Games Blog</h1>
+            <a-divider />
+            <div style="height:90px; text-align:center">
+              <img
+                style="max-width:15rem; max-height: 10rem"
+                :src="general.biodermaGameImageBlog"
+                centered
+              />
+            </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModal=true"
+              />Añadir Imagen
+            </template>
           </a-card>
         </a-row>
       </a-col>
       <a-col :span="3">
-        <a-button
-          shape="circle"
-          icon="plus"
-          size="large"
-          style="margin-left:60px; margin-top:50px;"
-          @click="addImageModal=true"
-        />
-        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AÑADIR IMAGEN
-        <br />
-        <br />
         <a-modal title="Añadir una imagen" v-model="addImageModal" centered>
           <a-form :form="imageForm">
             <a-form-item>
               <div class="dropbox">
                 <a-upload-dragger
-                  :alue="this.imageAux"
+                  :value="this.imageAux"
                   v-decorator="[
                 'upload',
                 {
@@ -92,13 +139,15 @@
                 <div class="color-palette" style="background: #449C44"></div>
                 <div class="color-palette" style="background: #1C541C"></div>
               </a-row>
-              <a-button
-                key="submit"
-                type="primary"
-                style="background: #449C44; border: none;"
-                class="btn-cel"
-                @click="changeSessionColor(1)"
-              >APLICAR</a-button>
+              <div style="text-align:center;">
+                <a-button
+                  key="submit"
+                  type="primary"
+                  style="background: #449C44; border: none;"
+                  class="btn-cel"
+                  @click="changeSessionColor(1)"
+                >APLICAR</a-button>
+              </div>
             </a-row>
           </div>
           <div v-bind:class="[{ borderPhone: selected.phone2 }]">
@@ -198,6 +247,8 @@ export default {
       isClubBiodermaActive: true,
       isBiodermaGameActive: true,
       biodermaGameImage: "",
+      biodermaGameImageCampaign: "",
+      biodermaGameImageBlog: "",
       fileList: [],
       StoreStatus: "",
       switchBGame: true,
@@ -209,7 +260,9 @@ export default {
           isClubBiodermaActive: true,
           theme: 1,
           isBiodermaGameActive: true,
-          biodermaGameImage: ""
+          biodermaGameImage: "",
+          biodermaGameImageCampaign: "",
+          biodermaGameImageBlog: ""
         }
       ],
       data
@@ -402,6 +455,18 @@ export default {
         const responseImage = await this.$axios.post("configutarion/image", {
           biodermaGameImage: this.fileList[0].response
         });
+        const responseImageCampaign = await this.$axios.post(
+          "configutarion/image",
+          {
+            biodermaGameImageCampaign: this.fileList[1].response
+          }
+        );
+        const responseImageBlog = await this.$axios.post(
+          "configutarion/image",
+          {
+            biodermaGameImageBlog: this.fileList[2].response
+          }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -460,7 +525,8 @@ export default {
   flex-direction: column;
 }
 .borderPhone {
-  border: 1px solid #000000;
+  background: #d8d8d8;
+  border-radius: 10px;
 }
 .img-phone {
   width: 55%;
