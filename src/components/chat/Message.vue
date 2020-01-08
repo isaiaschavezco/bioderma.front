@@ -1,23 +1,14 @@
 <template>
 	<div class="message">
-		<a-row type="flex" align="middle" class="message-user-info" v-if="showName">
-				<a-col :span="1">
-					<a-avatar icon="user" />
-				</a-col>
-
-				<a-col :span="23">
-					<div class="user-info-name">
-						{{ message.data.name }}
-					</div>
-				</a-col>
-		</a-row>
-			
 		<a-row style="margin-top:0.4rem;">
 			<a-col :span="10" :offset="isOrigin?14:0">
-				<div class="message-content">
+				<div class="message-content" :style="{
+					backgroundColor: isOrigin?'rgba(230, 230, 230, 0.5)':'#1890ff',
+					color: isOrigin?'':'white'
+				}">
 					<div class="message-content__date">
-						<span>06/01/20</span>
-						<span>10:55am</span>
+						<span>{{ message.data.date.split(" ")[0] }}</span>
+						<span>{{ message.data.date.split(" ")[1] }}</span>
 					</div>
 					<div class="message-content__text">
 						{{ message.data.msn }}
@@ -75,6 +66,6 @@ export default {
 	font-size: 0.6rem;
 }
 .message-content__date span:first-child {
-	margin-right: 3rem;
+	margin-right: 15%;
 }
 </style>

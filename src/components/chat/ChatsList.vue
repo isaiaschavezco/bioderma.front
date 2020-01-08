@@ -3,16 +3,23 @@
 		<div class="container-contacts-title">
 			<span>CHATS</span>
 		</div>
-		<a-list
+    
+    <a-list
 			:grid="{ gutter: 2 }"
 			:style="{ overflow: 'scroll'}"
 			style="height: 38.5rem;margin-top:1rem;"
 			:dataSource="chats"
 		>
-			<a-list-item slot="renderItem" slot-scope="item" key="item.id">
+			<a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
         <a-row>
           <a-col :span="6">
-            <a-avatar icon="user" style="margin-left:1rem" />
+            <a-avatar
+              :style="{
+                color: 'white',
+                backgroundColor: '#1890ff',
+                'margin-left': '1rem'
+              }"
+            >{{item.user.name[0] + item.user.lastName[0]}}</a-avatar>
           </a-col>
 
           <a-col :span="18">
@@ -20,7 +27,7 @@
               <div class="user-name" @click="onOpenConversation(item.user)">
                 <span>{{item.user.name + ' ' + item.user.lastName}}</span>
               </div>
-              <div>
+              <div class="btn-end-chat" @click="deleteConversation(item.user)">
                 <img class="img-endConversation" src="../../assets/chat/Fin_de_conversacion.png" alt />
               </div>
             </div>
@@ -219,21 +226,34 @@ export default {
 	data() {
 		return {
       chats: [],
+      requestList: null
 		}
   },
-  async mounted() {
+  mounted() {
     try {
-      const response = await this.$axios("/message/list");
-
-      this.chats = response.data.conversations;
-      
+      this.getChats();
+      this.requestList = setInterval(this.getChats, 3500); 
     } catch (error) {
       console.log("Hubo un error: ", error.message);
     }
   },
   methods: {
+    async getChats() {
+      try {
+        const response = await this.$axios("message/list");
+        const newChats = response.data.conversations;
+        this.chats = newChats;
+      } catch (error) {
+        console.log("Hubo un error al onbtener la lista: ", error.message);
+      }
+
+
+    },
     onOpenConversation(user) {
-      this.$emit('openConversation', user);
+      this.$emit("openConversation", user);
+    },
+    deleteConversation(user) {
+      this.$emit("deleteConversation", user);
     }
   }
 }

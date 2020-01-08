@@ -2,10 +2,10 @@
   <div>
     <a-row>
       <a-col :xs="{ span: 19 } ">
-        <Chat :email="emailConversation" :dataUser="user" />
+        <Chat :dataUser="user" @deleteConversation="deleteConversation"/>
       </a-col>
       <a-col :xs="{ span: 5 }">
-        <ChatsList @openConversation="openConversation"/>
+        <ChatsList @openConversation="openConversation" @deleteConversation="deleteConversation"/>
       </a-col>
     </a-row>
   </div>
@@ -22,13 +22,24 @@ export default {
   data() {
     return {
       emailConversation: "",
-      User: {}
+      user: {}
     };
   },
   methods: {
     openConversation(user) {
-      this.emailConversation = user.email;
       this.user = user;
+      console.log(user);
+    },
+    async deleteConversation(user) {
+      const email = user.email;
+      
+      const response = await this.$axios.delete(`message/user/${email}`);
+
+      console.log(response.data);
+
+      if (this.user.email && this.user.email === email)
+        console.log("Hola");
+        this.user = {};
     }
   }
 };
