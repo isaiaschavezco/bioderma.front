@@ -2,7 +2,7 @@
   <div>
     <div v-if="User" style="background:#f0f2f5; 0">
       <a-row type="flex" :gutter="1">
-        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 20}" :lg="{span: 6}" justify="end">
+        <a-col :lg="{span: 6}" :md="{span: 20}" :sm="{span: 24}" :xs="{span: 24}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -17,7 +17,7 @@
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :lg="{span: 12}" :md="{span:12}" :sm="{span:24}" :xs="{span:24}">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset:4}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro NAOS" class="forms">
             <a-form :form="form" @submit="handleSubmit1">
               <a-col>
@@ -264,7 +264,7 @@
     </div>
     <div v-if="Pharmacy" style="background:#f0f2f5; 0">
       <a-row :gutter="1">
-        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 20}" :lg="{span: 6}">
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 6}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -279,7 +279,7 @@
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :lg="{span: 18}" :md="{span:12}" :sm="{span:24}" :xs="{span:24}">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:18, offset: 3}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro de Farmacias" class="forms">
             <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
             <a-form :form="form" @submit="handleSubmit2">
@@ -871,26 +871,45 @@ export default {
   margin-left: auto !important;
   margin-right: auto !important;
 }
-@media (min-width: 993px) {
+@media (min-width: 1200px) {
   .forms {
     width: 70% !important;
   }
   .imgPosition {
     width: 300px;
     height: 280px;
+    margin-left: 24rem !important;
+    margin-top: 2.5rem !important;
   }
   .imgSize {
     width: 220px;
     height: 180px;
   }
 }
-@media (max-width: 992px) {
+@media (min-width: 993px) and (max-width: 1199px) {
+  .forms {
+    width: 70% !important;
+  }
+  .imgPosition {
+    width: 300px;
+    height: 280px;
+    margin-left: 4.5rem !important;
+    margin-top: 2.5rem !important;
+  }
+  .imgSize {
+    width: 220px;
+    height: 180px;
+  }
+}
+@media (min-width: 577px) and (max-width: 992px) {
   .forms {
     width: 100% !important;
   }
   .imgPosition {
     width: 17rem;
     height: 13rem;
+    margin-left: 15rem !important;
+    margin-top: 2.5rem !important;
     margin: auto;
   }
   .imgSize {
@@ -905,6 +924,7 @@ export default {
   .imgPosition {
     width: 17rem;
     height: 13rem;
+    margin-top: 2.5rem !important;
     margin: auto;
   }
   .imgSize {
