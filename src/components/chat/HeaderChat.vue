@@ -5,7 +5,7 @@
             <a-avatar
               :style="{
                 color: 'white',
-                backgroundColor: '#1890ff',
+                backgroundColor: user.colour,
                 'margin-left': '1rem'
               }"
 							:size="50"

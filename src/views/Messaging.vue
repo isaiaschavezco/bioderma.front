@@ -26,20 +26,36 @@ export default {
     };
   },
   methods: {
-    openConversation(user) {
+    openConversation(user, colour) {
+      user.colour = colour;
       this.user = user;
-      console.log(user);
     },
     async deleteConversation(user) {
       const email = user.email;
-      
-      const response = await this.$axios.delete(`message/user/${email}`);
 
-      console.log(response.data);
+      const currThis = this;
 
-      if (this.user.email && this.user.email === email)
-        console.log("Hola");
-        this.user = {};
+      this.$confirm({
+        title: "¿Estas seguro de eliminar la conversación?",
+        async onOk() {
+          try {
+            const response = await currThis.$axios.delete(`message/user/${email}`);
+            
+            if (currThis.user.email && currThis.user.email === email)
+              currThis.user = {};
+
+          } catch (error) {
+            currThis.$notification["error"]({
+              message: "Error al eliminar conversación",
+              description:
+                "Hubo un error al eliminar la conversación.",
+            });
+          }      
+          currThis.user = {};
+        }
+      });
+
+
     }
   }
 };
