@@ -5,7 +5,7 @@
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
             <a-tab-pane tab="BLOG" key="1">
-              <a-input-search placeholder="Buscar blog" enterButton />
+              <a-input-search placeholder="Buscar blog" @search="onSearchBlog" enterButton />
               <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
                 <span slot="tags" slot-scope="tags">
                   <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
@@ -23,7 +23,7 @@
               </a-table>
             </a-tab-pane>
             <a-tab-pane tab="BIODERMA GAMES" key="2">
-              <a-input-search placeholder="Buscar blog" enterButton />
+              <a-input-search placeholder="Buscar blog" @search="onSearchBlog" enterButton />
               <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
                 <span slot="tags" slot-scope="tags">
                   <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
@@ -177,6 +177,7 @@ export default {
     return {
       collapsed: false,
       data,
+      blogs: [],
       columns,
       value: 1,
       activeTab: 1,
@@ -266,12 +267,34 @@ export default {
         );
       }
     },
+    showNotification(type, title, message) {
+      this.$notification[type]({
+        message: title,
+        description: message
+      });
+    },
     async getBlogList() {
-      const blogList = await this.$axios.get(
+      const responseblogList = await this.$axios.get(
         `article/list/${this.isBiodermaGame}`
       );
-      this.blogList = blogList.data.blogs;
-      console.log("blogList: ", blogList.data.blogs);
+      this.blogs = responseblogList.data.blogs;
+      this.blogList = this.blogs;
+      //console.log(this.blogs);
+    },
+    onSearchBlog(value) {
+      const newBlog = this.blogs.filter(element => {
+        return element.title.toUpperCase().indexOf(value.toUpperCase()) >= 0;
+      });
+      //console.log(newBlog);
+      if (newBlog.length == 0) {
+        this.showNotification(
+          "info",
+          "No se encontraron coincidencias",
+          "No se encontraron registros para esta búsqueda."
+        );
+      } else {
+        this.blogList = newBlog;
+      }
     }
   },
   async mounted() {
