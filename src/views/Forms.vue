@@ -1,28 +1,27 @@
 <template>
   <div>
-    <div v-if="User" style="background:#f0f2f5; padding:80px 0">
-      <a-Row :gutter="1">
-        <a-col :span="8">
-          <a-card style="width:50%; height:260px; margin-left: 300px;">
+    <div v-if="User" style="background:#f0f2f5; 0">
+      <a-row type="flex" :gutter="1">
+        <a-col :lg="{span: 6}" :md="{span: 20}" :sm="{span: 24}" :xs="{span: 24}">
+          <a-card class="imgPosition">
             <a-upload-dragger
-              setFieldsValue="photo"
               v-decorator="[
-              'photo',
+              'upload',
               {rules:[{ required: false, message: 'Favor de cargar un archivo JPG, PNG o JPGE' }]}]"
-              name="upload"
+              name="photo"
               action="http://localhost:3000/upload/1"
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+              <img alt="editProfile" src="../assets/user.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :span="16">
-          <a-card title="Registro NAOS" style=" width: 70%; margin-left: 0px;">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset:4}" :sm="{span:24}" :xs="{span:24}">
+          <a-card title="Registro NAOS" class="forms">
             <a-form :form="form" @submit="handleSubmit1">
               <a-col>
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="nickName"
@@ -40,7 +39,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="name"
@@ -54,7 +53,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="lastName"
@@ -71,26 +70,22 @@
               </a-col>
               <!-- <a-col :span="10" :offset="2">
               </a-col>-->
-              <a-col :span="12" :offset="2">
+              <a-col :span="18" :offset="2">
                 <a-form-item>
-                  <span>Fecha de cumpleaños</span>
+                  <span>Fecha de cumpleaños &nbsp;</span>
                   <a-date-picker
                     setFieldsValue="birthDate"
                     v-decorator="[
-                  'birthDate',
-                  {
-                  rules: [{required: true,
-                  message: 'Seleccione su fecha de nacimiento'
-                  }]
-                  }]
-                  "
+                    'birthDate',
+                    { rules: [{ required: true, message: 'Seleccione su fecha' }] },
+                  ]"
                     option.initialValue="moment('01-01-2000', dateFormat)"
                     :format="dateFormat"
                   />
                 </a-form-item>
               </a-col>
 
-              <a-col :span="22" :offset="2">
+              <a-col :lg="{span: 22}" :md="{span:22}" :sm="{span:24}" :xs="{span:24}" :offset="2">
                 <a-form-item>
                   <a-radio-group
                     setFieldsValue="gender"
@@ -106,7 +101,7 @@
                   </a-radio-group>
                 </a-form-item>
               </a-col>
-              <a-col :span="5" :offset="2">
+              <a-col :lg="{span: 5}" :md="{span:5}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-bottom: 15px">
                   <a-select
                     setFieldsValue="state"
@@ -126,7 +121,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="5" :offset="2">
+              <a-col :lg="{span: 5}" :md="{span:5}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-botton: 15px">
                   <a-select
                     optionFilterProp="children"
@@ -146,7 +141,14 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :span="5" :offset="2">
+              <a-col
+                :span="5"
+                :lg="{span: 5}"
+                :md="{span:5}"
+                :sm="{span:20}"
+                :xs="{span:20}"
+                :offset="2"
+              >
                 <a-form-item style="margin-botton: 15px">
                   <a-select
                     optionFilterProp="children"
@@ -204,7 +206,7 @@
                 </a-form-item>
               </a-col>
 
-              <a-col :span="9" :offset="2">
+              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item help="Contraseña al menos 8 caracteres">
                   <a-input
                     pattern=".{8,}"
@@ -225,7 +227,7 @@
                 </a-form-item>
               </a-col>
 
-              <a-col :span="9" :offset="2">
+              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item>
                   <a-input
                     placeholder="CONFIRMAR CONTRASEÑA"
@@ -258,12 +260,12 @@
             </a-form>
           </a-card>
         </a-col>
-      </a-Row>
+      </a-row>
     </div>
-    <div v-if="Pharmacy" style="background:#f0f2f5; padding:80px 0">
-      <a-Row :gutter="1">
-        <a-col :span="8">
-          <a-card style="width:50%; height:260px; margin-left: 300px;">
+    <div v-if="Pharmacy" style="background:#f0f2f5; 0">
+      <a-row :gutter="1">
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 6}">
+          <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
               'upload',
@@ -273,12 +275,12 @@
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" width="170px" height="180px" />
+              <img alt="editProfile" src="../assets/user.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :span="16">
-          <a-card title="Registro de Farmacias" style="width: 70%; margin-left: 0px;">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:18, offset: 3}" :sm="{span:24}" :xs="{span:24}">
+          <a-card title="Registro de Farmacias" class="forms">
             <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
             <a-form :form="form" @submit="handleSubmit2">
               <a-row>
@@ -297,7 +299,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col>
-                  <a-col :span="9" :offset="2">
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         setFieldsValue="name"
@@ -311,7 +313,13 @@
                       />
                     </a-form-item>
                   </a-col>
-                  <a-col :span="10" :offset="1">
+                  <a-col
+                    :lg="{span: 9}"
+                    :md="{span: 9}"
+                    :sm="{span:20}"
+                    :xs="{span:20}"
+                    :offset="2"
+                  >
                     <a-form-item>
                       <a-input
                         setFieldsValue="lastName"
@@ -329,7 +337,13 @@
 
                 <a-col>
                   <!-- Genero -->
-                  <a-col :span="12" :offset="2">
+                  <a-col
+                    :lg="{span: 22}"
+                    :md="{span:22}"
+                    :sm="{span:24}"
+                    :xs="{span:24}"
+                    :offset="2"
+                  >
                     <a-form-item>
                       <a-radio-group
                         setFieldsValue="gender"
@@ -362,7 +376,7 @@
                   </a-col>
                 </a-col>
                 <!-- Cadena -->
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       setFieldsValue="chain"
@@ -382,7 +396,7 @@
                   </a-form-item>
                 </a-col>
                 <!-- Sucursal -->
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       placeholder="Sucursal"
@@ -397,7 +411,7 @@
                   </a-form-item>
                 </a-col>
                 <!-- Estado -->
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       optionFilterProp="children"
@@ -419,7 +433,7 @@
                 </a-col>
                 <!-- Municipio -->
                 <a-col>
-                  <a-col :span="9" :offset="2">
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item style="margin-bottom: 15px">
                       <a-select
                         optionFilterProp="children"
@@ -455,7 +469,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Colonia -->
-                  <a-col :span="9" :offset="2">
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Colonia"
@@ -470,7 +484,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Codigo Postal -->
-                  <a-col :span="9" :offset="2">
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         pattern="[0-9]{5}"
@@ -486,7 +500,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Cargo -->
-                  <a-col :span="9" :offset="2">
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Cargo"
@@ -501,7 +515,7 @@
                     </a-form-item>
                   </a-col>
                 </a-col>
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       pattern="[0-9]{10}"
@@ -536,7 +550,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col :span="9" :offset="2">
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item help="Contraseña al menos 8 caracteres">
                     <a-input
                       pattern=".{8,}"
@@ -557,7 +571,14 @@
                   </a-form-item>
                 </a-col>
 
-                <a-col :span="9" :offset="2" style="margin-bottom:10px">
+                <a-col
+                  :lg="{span: 9}"
+                  :md="{span:9}"
+                  :sm="{span:20}"
+                  :xs="{span:20}"
+                  :offset="2"
+                  style="margin-bottom:10px"
+                >
                   <a-form-item>
                     <a-input
                       placeholder="CONFIRMAR CONTRASEÑA"
@@ -582,7 +603,7 @@
                     <a-button
                       class="btn-submit"
                       type="primary"
-                      style="background-color:#001529; height: 60px; border: 1px solid #001529; width: 100%"
+                      style="background-color:#001529; border: 1px solid #001529; width: 100%"
                       @click="onSubmitFileForm"
                       html-type="submit"
                     >Registrar</a-button>
@@ -592,7 +613,7 @@
             </a-form>
           </a-card>
         </a-col>
-      </a-Row>
+      </a-row>
     </div>
   </div>
 </template>
@@ -844,5 +865,71 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+.forms {
+  margin-top: 2.5rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (min-width: 1200px) {
+  .forms {
+    width: 70% !important;
+  }
+  .imgPosition {
+    width: 300px;
+    height: 280px;
+    margin-left: 24rem !important;
+    margin-top: 2.5rem !important;
+  }
+  .imgSize {
+    width: 220px;
+    height: 180px;
+  }
+}
+@media (min-width: 993px) and (max-width: 1199px) {
+  .forms {
+    width: 70% !important;
+  }
+  .imgPosition {
+    width: 300px;
+    height: 280px;
+    margin-left: 4.5rem !important;
+    margin-top: 2.5rem !important;
+  }
+  .imgSize {
+    width: 220px;
+    height: 180px;
+  }
+}
+@media (min-width: 577px) and (max-width: 992px) {
+  .forms {
+    width: 100% !important;
+  }
+  .imgPosition {
+    width: 17rem;
+    height: 13rem;
+    margin-left: 15rem !important;
+    margin-top: 2.5rem !important;
+    margin: auto;
+  }
+  .imgSize {
+    width: 9rem;
+    height: 8rem;
+  }
+}
+@media (max-width: 576px) {
+  .forms {
+    width: 100% !important;
+  }
+  .imgPosition {
+    width: 17rem;
+    height: 13rem;
+    margin-top: 2.5rem !important;
+    margin: auto;
+  }
+  .imgSize {
+    width: 9rem;
+    height: 8rem;
+  }
+}
 </style>

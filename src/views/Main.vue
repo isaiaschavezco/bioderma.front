@@ -51,7 +51,7 @@
             </a-menu-item>
             <a-menu-item class="item" key="8">
               <img src="../assets/icons/Temas_Inactivo.png" class="icon" alt />
-              <span>Temas</span>
+              <span>Configuración</span>
             </a-menu-item>
           </a-menu>
         </div>
@@ -59,7 +59,7 @@
     </div>
     <a-layout>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', minHeight: '280px' }">
-        <router-view/>
+        <router-view />
       </a-layout-content>
     </a-layout>
   </a-layout>

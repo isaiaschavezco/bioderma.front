@@ -1,38 +1,88 @@
 <template>
   <div>
-    <a-Row :gutter="2">
-      <a-col :span="21">
+    <a-Row :gutter="24">
+      <a-col :span="7">
         <a-row>
           <a-card style="width:100%; min-height:300px;">
             <h1 class="title-theme">BIODERMA GAMES</h1>
             <a-divider />
             <div style="height:90px; text-align:center">
               <img
-                style="max-width:35rem; margin-left:50px; max-height: 10rem"
+                style="max-width:15rem; max-height: 10rem"
                 :src="general.biodermaGameImage"
                 centered
               />
             </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModal=true"
+              />
+              <span class="spaceButton">Añadir Imagen</span>
+            </template>
+          </a-card>
+        </a-row>
+      </a-col>
+      <a-col :span="7">
+        <a-row>
+          <a-card style="width:100%; min-height:300px;">
+            <h1 class="title-theme">Bioderma Games Campaña</h1>
+            <a-divider />
+            <div style="height:90px; text-align:center">
+              <img
+                style="max-width:15rem; max-height: 10rem"
+                :src="general.biodermaGameCampaingImage"
+                centered
+              />
+            </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModalC=true"
+              />
+              <span class="spaceButton">Añadir Imagen</span>
+            </template>
+          </a-card>
+        </a-row>
+      </a-col>
+      <a-col :span="7">
+        <a-row>
+          <a-card style="width:100%; min-height:300px;">
+            <h1 class="title-theme">Bioderma Games Blog</h1>
+            <a-divider />
+            <div style="height:90px; text-align:center">
+              <img
+                style="max-width:15rem; max-height: 10rem"
+                :src="general.biodermaGameBlogImage"
+                centered
+              />
+            </div>
+            <template>
+              <a-button
+                style="margin-top:5rem;"
+                shape="circle"
+                icon="plus"
+                size="small"
+                @click="addImageModalB=true"
+              />
+              <span class="spaceButton">Añadir Imagen</span>
+            </template>
           </a-card>
         </a-row>
       </a-col>
       <a-col :span="3">
-        <a-button
-          shape="circle"
-          icon="plus"
-          size="large"
-          style="margin-left:60px; margin-top:50px;"
-          @click="addImageModal=true"
-        />
-        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AÑADIR IMAGEN
-        <br />
-        <br />
         <a-modal title="Añadir una imagen" v-model="addImageModal" centered>
           <a-form :form="imageForm">
             <a-form-item>
               <div class="dropbox">
                 <a-upload-dragger
-                  :alue="this.imageAux"
+                  :value="this.imageAux"
                   v-decorator="[
                 'upload',
                 {
@@ -68,6 +118,88 @@
             >Aceptar</a-button>
           </template>
         </a-modal>
+        <a-modal title="Añadir una imagen" v-model="addImageModalB" centered>
+          <a-form :form="imageFormB">
+            <a-form-item>
+              <div class="dropbox">
+                <a-upload-dragger
+                  :value="this.imageAuxB"
+                  v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
+                  name="upload"
+                  action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
+                  accept=".png, .jpg, jpge"
+                  @change="handleChangeFileUpload"
+                  :beforeUpload="beforeUpload"
+                  :fileList="fileList"
+                >
+                  <p class="ant-upload-drag-icon">
+                    <a-icon type="picture" />
+                  </p>
+                  <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+                  <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+                </a-upload-dragger>
+              </div>
+            </a-form-item>
+          </a-form>
+          <template slot="footer">
+            <a-button
+              type="primary"
+              style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+              @click="onSubmitPictureFormB"
+            >Aceptar</a-button>
+          </template>
+        </a-modal>
+        <a-modal title="Añadir una imagen" v-model="addImageModalC" centered>
+          <a-form :form="imageFormC">
+            <a-form-item>
+              <div class="dropbox">
+                <a-upload-dragger
+                  :value="this.imageAuxC"
+                  v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
+                  name="upload"
+                  action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
+                  accept=".png, .jpg, jpge"
+                  @change="handleChangeFileUpload"
+                  :beforeUpload="beforeUpload"
+                  :fileList="fileList"
+                >
+                  <p class="ant-upload-drag-icon">
+                    <a-icon type="picture" />
+                  </p>
+                  <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+                  <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+                </a-upload-dragger>
+              </div>
+            </a-form-item>
+          </a-form>
+          <template slot="footer">
+            <a-button
+              type="primary"
+              style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+              @click="onSubmitPictureFormC"
+            >Aceptar</a-button>
+          </template>
+        </a-modal>
         <a-switch
           style="margin-left:60px; margin-top:30px;"
           defaultChecked
@@ -92,13 +224,15 @@
                 <div class="color-palette" style="background: #449C44"></div>
                 <div class="color-palette" style="background: #1C541C"></div>
               </a-row>
-              <a-button
-                key="submit"
-                type="primary"
-                style="background: #449C44; border: none;"
-                class="btn-cel"
-                @click="changeSessionColor(1)"
-              >APLICAR</a-button>
+              <div style="text-align:center;">
+                <a-button
+                  key="submit"
+                  type="primary"
+                  style="background: #449C44; border: none;"
+                  class="btn-cel"
+                  @click="changeSessionColor(1)"
+                >APLICAR</a-button>
+              </div>
             </a-row>
           </div>
           <div v-bind:class="[{ borderPhone: selected.phone2 }]">
@@ -192,13 +326,23 @@ export default {
       word: "Desactivar",
       wordStore: "Desactivar",
       addImageModal: false,
+      addImageModalB: false,
+      addImageModalC: false,
       image: "",
       imageAux: null,
+      imageAuxC: null,
+      imageAuxB: null,
       imageForm: this.$form.createForm(this),
+      imageFormB: this.$form.createForm(this),
+      imageFormC: this.$form.createForm(this),
       isClubBiodermaActive: true,
       isBiodermaGameActive: true,
       biodermaGameImage: "",
+      biodermaGameCampaingImage: "",
+      biodermaGameBlogImage: "",
       fileList: [],
+      fileListC: [],
+      fileListB: [],
       StoreStatus: "",
       switchBGame: true,
       switchClubB: true,
@@ -209,7 +353,9 @@ export default {
           isClubBiodermaActive: true,
           theme: 1,
           isBiodermaGameActive: true,
-          biodermaGameImage: ""
+          biodermaGameImage: "",
+          biodermaGameCampaingImage: "",
+          biodermaGameBlogImage: ""
         }
       ],
       data
@@ -242,10 +388,10 @@ export default {
       //console.log(value);
       if (value == false) {
         this.StoreStatus =
-          "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
+          "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaCerrada.png";
       } else if (value == true) {
         this.StoreStatus =
-          "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
+          "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaAbierta.png";
       }
     },
     themesStatus(num) {
@@ -279,11 +425,13 @@ export default {
         this.$confirm({
           title: "TIENDA",
           content: "¿Deseas activar Tienda?",
+          okText: "ACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postStore(value);
             component.wordStore = "Desactivar";
             component.StoreStatus =
-              "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
+              "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaAbierta.png";
           },
           onCancel() {
             component.switchClubB = false;
@@ -293,11 +441,13 @@ export default {
         this.$confirm({
           title: "TIENDA",
           content: "¿Deseas desactivar Tienda?",
+          okText: "DESACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postStore(value);
             component.wordStore = "Activar";
             component.StoreStatus =
-              "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
+              "https://st2.depositphotos.com/1259239/9745/vhttps://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaCerrada.png";
           },
           onCancel() {
             component.switchClubB = true;
@@ -323,6 +473,8 @@ export default {
         this.$confirm({
           title: "BIODERMA GAMES",
           content: "¿Deseas activar Bioderma Games?",
+          okText: "ACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postBiodermaG(value);
             component.word = "Desactivar";
@@ -335,6 +487,8 @@ export default {
         this.$confirm({
           title: "BIODERMA GAMES",
           content: "¿Deseas desactivar Bioderma Games?",
+          okText: "DESACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postBiodermaG(value);
             component.word = "Activar";
@@ -390,6 +544,8 @@ export default {
       this.$confirm({
         title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
         content: "",
+        okText: "ACTIVAR",
+        cancelText: "CANCELAR",
         onOk() {
           component.getThemes(num);
         },
@@ -402,6 +558,32 @@ export default {
         const responseImage = await this.$axios.post("configutarion/image", {
           biodermaGameImage: this.fileList[0].response
         });
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async postImageCampaign() {
+      try {
+        const responseImageCampaign = await this.$axios.post(
+          "configutarion/campaingimage",
+          {
+            biodermaGameCampaingImage: this.fileList[0].response
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async postImageBlog() {
+      try {
+        const responseImageBlog = await this.$axios.post(
+          "configutarion/blogimage",
+          {
+            biodermaGameBlogImage: this.fileList[0].response
+          }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -423,12 +605,16 @@ export default {
       });
       return status;
     },
-    failAddingImage() {
-      this.$notification["error"]({
-        message: "ERROR AL AÑADIR UNA IMAGEN",
-        description:
-          "Se ha proudcido un error añdiendo una imagen, favor de intentarlo más tarde."
+    beforeUploadB(file) {
+      let status = true;
+      this.imageFormB.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
       });
+      return status;
     },
     onSubmitPictureForm() {
       this.imageForm.validateFields((err, values) => {
@@ -442,6 +628,32 @@ export default {
       });
       this.addImageModal = false;
       this.fileList = [];
+    },
+    onSubmitPictureFormB() {
+      this.imageFormB.validateFields((err, values) => {
+        if (!err) {
+          image: values.upload.fileList[0].response;
+          //console.log(this.fileList[0].response);
+          this.postImageBlog();
+        } else {
+          this.failAddingImage();
+        }
+      });
+      this.addImageModalB = false;
+      this.fileList = [];
+    },
+    onSubmitPictureFormC() {
+      this.imageFormC.validateFields((err, values) => {
+        if (!err) {
+          image: values.upload.fileList[0].response;
+          //console.log(this.fileList[0].response;
+          this.postImageCampaign();
+        } else {
+          this.failAddingImage();
+        }
+      });
+      this.addImageModalC = false;
+      this.fileList = [];
     }
   }
 };
@@ -450,6 +662,9 @@ export default {
 .title-theme {
   text-align: left;
   color: #526987;
+}
+.spaceButton {
+  padding-left: 1rem !important;
 }
 .main-phones {
   display: flex;
@@ -460,7 +675,8 @@ export default {
   flex-direction: column;
 }
 .borderPhone {
-  border: 1px solid #000000;
+  background: #d8d8d8;
+  border-radius: 10px;
 }
 .img-phone {
   width: 55%;
