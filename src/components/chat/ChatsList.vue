@@ -16,7 +16,7 @@
             <a-avatar
               :style="{
                 color: 'white',
-                backgroundColor: '#1890ff',
+                backgroundColor: colours[index % colours.length],
                 'margin-left': '1rem'
               }"
             >{{item.user.name[0] + item.user.lastName[0]}}</a-avatar>
@@ -24,7 +24,7 @@
 
           <a-col :span="18">
             <div class="container-contacts-name">
-              <div class="user-name" @click="onOpenConversation(item.user)">
+              <div class="user-name" @click="onOpenConversation(item.user, colours[index % colours.length])">
                 <span>{{item.user.name + ' ' + item.user.lastName}}</span>
               </div>
               <div class="btn-end-chat" @click="deleteConversation(item.user)">
@@ -226,6 +226,13 @@ export default {
 	data() {
 		return {
       chats: [],
+      colours: [
+        "#66bb6a",
+        "#7e57c2",
+        "#EF5350",
+        "#5C6BC0",
+        "#8d6e63"
+      ],
       requestList: null
 		}
   },
@@ -249,8 +256,8 @@ export default {
 
 
     },
-    onOpenConversation(user) {
-      this.$emit("openConversation", user);
+    onOpenConversation(user, colour) {
+      this.$emit("openConversation", user, colour);
     },
     deleteConversation(user) {
       this.$emit("deleteConversation", user);

@@ -3,7 +3,7 @@
 		<a-row style="margin-top:0.4rem;">
 			<a-col :span="10" :offset="isOrigin?14:0">
 				<div class="message-content" :style="{
-					backgroundColor: isOrigin?'rgba(230, 230, 230, 0.5)':'#1890ff',
+					backgroundColor: isOrigin?'rgba(230, 230, 230, 0.5)':bg,
 					color: isOrigin?'':'white'
 				}">
 					<div class="message-content__date">
@@ -36,13 +36,18 @@ export default {
 			default: {
 				data: null
 			}
+		},
+		colour: {
+			type: String,
+			default: "rgba(230, 230, 230, 0.5)"
 		}
 	},
 	data() {
 		return {
 			showName: this.infoUser,
 			rightMessage: this.isOrigin,
-			message: this.dataMessage
+			message: this.dataMessage,
+			bg: this.colour
 		};
 	}
 }

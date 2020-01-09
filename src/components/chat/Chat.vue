@@ -3,7 +3,7 @@
 		<HeaderChat :dataUser="user" @deleteConversation="deleteConversation" />
 		<div class="conversation-chat">
 			<div class="list-messages" v-if="!isLoadingMessages">
-				<Message v-for="message in messages" :key="message.id" :isOrigin="message.type!=='client'" :infoUser="message.type!=='client'" :dataMessage="message" />
+				<Message v-for="message in messages" :key="message.id" :isOrigin="message.type!=='client'" :infoUser="message.type!=='client'" :dataMessage="message" :colour="user.colour" />
 			</div>
 			<a-skeleton avatar active :paragraph="{rows: 4}" v-if="isLoadingMessages" />
 		</div>
@@ -34,7 +34,8 @@ export default {
 			isLoadingMessages: false,
 			user: this.dataUser,
 			requestChat: null,
-			message: ""
+			message: "",
+			enable: true
 		};
 	},
 	watch: {
@@ -52,16 +53,26 @@ export default {
 	methods: {
 		async sendMessage(e) {
 			const message = this.message.trim();
-			if (e.code === "Enter" && message.length > 0) {
-				const response = await this.$axios.post("message/admin", {
-					userEmail: this.user.email,
-					data: message
-				});
+			if (e.code === "Enter" && message.length > 0 && this.enable) {
+				try {
+					this.enable = false;
+					const response = await this.$axios.post("message/admin", {
+						userEmail: this.user.email,
+						data: message
+					});
 
-				this.message = "";
-				const newMessages = response.data.session;
-
-				this.messages = newMessages;
+					this.message = "";
+					const newMessages = response.data.session;
+					this.messages = newMessages;
+					this.enable = true;
+				} catch (error) {
+					this.$notification["error"]({
+						message: "Error al eliminar enviar mensaje",
+						description:
+							"Hubo un error al enviar el mensaje.",
+					});
+					this.enable = true;
+				}
 			}
 		},
 		async getConversation() {
