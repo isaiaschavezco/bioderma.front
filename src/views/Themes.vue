@@ -20,7 +20,8 @@
                 icon="plus"
                 size="small"
                 @click="addImageModal=true"
-              />Añadir Imagen
+              />
+              <span class="spaceButton">Añadir Imagen</span>
             </template>
           </a-card>
         </a-row>
@@ -33,7 +34,7 @@
             <div style="height:90px; text-align:center">
               <img
                 style="max-width:15rem; max-height: 10rem"
-                :src="general.biodermaGameImageCampaign"
+                :src="general.biodermaGameCampaingImage"
                 centered
               />
             </div>
@@ -43,8 +44,9 @@
                 shape="circle"
                 icon="plus"
                 size="small"
-                @click="addImageModal=true"
-              />Añadir Imagen
+                @click="addImageModalC=true"
+              />
+              <span class="spaceButton">Añadir Imagen</span>
             </template>
           </a-card>
         </a-row>
@@ -57,7 +59,7 @@
             <div style="height:90px; text-align:center">
               <img
                 style="max-width:15rem; max-height: 10rem"
-                :src="general.biodermaGameImageBlog"
+                :src="general.biodermaGameBlogImage"
                 centered
               />
             </div>
@@ -67,8 +69,9 @@
                 shape="circle"
                 icon="plus"
                 size="small"
-                @click="addImageModal=true"
-              />Añadir Imagen
+                @click="addImageModalB=true"
+              />
+              <span class="spaceButton">Añadir Imagen</span>
             </template>
           </a-card>
         </a-row>
@@ -112,6 +115,88 @@
               type="primary"
               style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
               @click="onSubmitPictureForm"
+            >Aceptar</a-button>
+          </template>
+        </a-modal>
+        <a-modal title="Añadir una imagen" v-model="addImageModalB" centered>
+          <a-form :form="imageFormB">
+            <a-form-item>
+              <div class="dropbox">
+                <a-upload-dragger
+                  :value="this.imageAuxB"
+                  v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
+                  name="upload"
+                  action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
+                  accept=".png, .jpg, jpge"
+                  @change="handleChangeFileUpload"
+                  :beforeUpload="beforeUpload"
+                  :fileList="fileList"
+                >
+                  <p class="ant-upload-drag-icon">
+                    <a-icon type="picture" />
+                  </p>
+                  <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+                  <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+                </a-upload-dragger>
+              </div>
+            </a-form-item>
+          </a-form>
+          <template slot="footer">
+            <a-button
+              type="primary"
+              style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+              @click="onSubmitPictureFormB"
+            >Aceptar</a-button>
+          </template>
+        </a-modal>
+        <a-modal title="Añadir una imagen" v-model="addImageModalC" centered>
+          <a-form :form="imageFormC">
+            <a-form-item>
+              <div class="dropbox">
+                <a-upload-dragger
+                  :value="this.imageAuxC"
+                  v-decorator="[
+                'upload',
+                {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
+                    }
+                  ]
+                }
+              ]"
+                  name="upload"
+                  action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
+                  accept=".png, .jpg, jpge"
+                  @change="handleChangeFileUpload"
+                  :beforeUpload="beforeUpload"
+                  :fileList="fileList"
+                >
+                  <p class="ant-upload-drag-icon">
+                    <a-icon type="picture" />
+                  </p>
+                  <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
+                  <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+                </a-upload-dragger>
+              </div>
+            </a-form-item>
+          </a-form>
+          <template slot="footer">
+            <a-button
+              type="primary"
+              style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+              @click="onSubmitPictureFormC"
             >Aceptar</a-button>
           </template>
         </a-modal>
@@ -241,15 +326,23 @@ export default {
       word: "Desactivar",
       wordStore: "Desactivar",
       addImageModal: false,
+      addImageModalB: false,
+      addImageModalC: false,
       image: "",
       imageAux: null,
+      imageAuxC: null,
+      imageAuxB: null,
       imageForm: this.$form.createForm(this),
+      imageFormB: this.$form.createForm(this),
+      imageFormC: this.$form.createForm(this),
       isClubBiodermaActive: true,
       isBiodermaGameActive: true,
       biodermaGameImage: "",
-      biodermaGameImageCampaign: "",
-      biodermaGameImageBlog: "",
+      biodermaGameCampaingImage: "",
+      biodermaGameBlogImage: "",
       fileList: [],
+      fileListC: [],
+      fileListB: [],
       StoreStatus: "",
       switchBGame: true,
       switchClubB: true,
@@ -261,8 +354,8 @@ export default {
           theme: 1,
           isBiodermaGameActive: true,
           biodermaGameImage: "",
-          biodermaGameImageCampaign: "",
-          biodermaGameImageBlog: ""
+          biodermaGameCampaingImage: "",
+          biodermaGameBlogImage: ""
         }
       ],
       data
@@ -332,6 +425,8 @@ export default {
         this.$confirm({
           title: "TIENDA",
           content: "¿Deseas activar Tienda?",
+          okText: "ACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postStore(value);
             component.wordStore = "Desactivar";
@@ -346,6 +441,8 @@ export default {
         this.$confirm({
           title: "TIENDA",
           content: "¿Deseas desactivar Tienda?",
+          okText: "DESACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postStore(value);
             component.wordStore = "Activar";
@@ -376,6 +473,8 @@ export default {
         this.$confirm({
           title: "BIODERMA GAMES",
           content: "¿Deseas activar Bioderma Games?",
+          okText: "ACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postBiodermaG(value);
             component.word = "Desactivar";
@@ -388,6 +487,8 @@ export default {
         this.$confirm({
           title: "BIODERMA GAMES",
           content: "¿Deseas desactivar Bioderma Games?",
+          okText: "DESACTIVAR",
+          cancelText: "CANCELAR",
           onOk() {
             component.postBiodermaG(value);
             component.word = "Activar";
@@ -443,6 +544,8 @@ export default {
       this.$confirm({
         title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
         content: "",
+        okText: "ACTIVAR",
+        cancelText: "CANCELAR",
         onOk() {
           component.getThemes(num);
         },
@@ -455,16 +558,30 @@ export default {
         const responseImage = await this.$axios.post("configutarion/image", {
           biodermaGameImage: this.fileList[0].response
         });
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async postImageCampaign() {
+      try {
         const responseImageCampaign = await this.$axios.post(
-          "configutarion/image",
+          "configutarion/campaingimage",
           {
-            biodermaGameImageCampaign: this.fileList[1].response
+            biodermaGameCampaingImage: this.fileList[0].response
           }
         );
+      } catch (error) {
+        console.log(error);
+      }
+      this.getGeneral();
+    },
+    async postImageBlog() {
+      try {
         const responseImageBlog = await this.$axios.post(
-          "configutarion/image",
+          "configutarion/blogimage",
           {
-            biodermaGameImageBlog: this.fileList[2].response
+            biodermaGameBlogImage: this.fileList[0].response
           }
         );
       } catch (error) {
@@ -488,12 +605,16 @@ export default {
       });
       return status;
     },
-    failAddingImage() {
-      this.$notification["error"]({
-        message: "ERROR AL AÑADIR UNA IMAGEN",
-        description:
-          "Se ha proudcido un error añdiendo una imagen, favor de intentarlo más tarde."
+    beforeUploadB(file) {
+      let status = true;
+      this.imageFormB.validateFields((err, values) => {
+        if (err) {
+          if (err.menu || err.submenu || err.title) {
+            status = false;
+          }
+        }
       });
+      return status;
     },
     onSubmitPictureForm() {
       this.imageForm.validateFields((err, values) => {
@@ -507,6 +628,32 @@ export default {
       });
       this.addImageModal = false;
       this.fileList = [];
+    },
+    onSubmitPictureFormB() {
+      this.imageFormB.validateFields((err, values) => {
+        if (!err) {
+          image: values.upload.fileList[0].response;
+          //console.log(this.fileList[0].response);
+          this.postImageBlog();
+        } else {
+          this.failAddingImage();
+        }
+      });
+      this.addImageModalB = false;
+      this.fileList = [];
+    },
+    onSubmitPictureFormC() {
+      this.imageFormC.validateFields((err, values) => {
+        if (!err) {
+          image: values.upload.fileList[0].response;
+          //console.log(this.fileList[0].response;
+          this.postImageCampaign();
+        } else {
+          this.failAddingImage();
+        }
+      });
+      this.addImageModalC = false;
+      this.fileList = [];
     }
   }
 };
@@ -515,6 +662,9 @@ export default {
 .title-theme {
   text-align: left;
   color: #526987;
+}
+.spaceButton {
+  padding-left: 1rem !important;
 }
 .main-phones {
   display: flex;
