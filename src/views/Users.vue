@@ -5,7 +5,7 @@
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
             <a-tab-pane tab="USUARIOS" key="1">
-              <a-input-search placeholder="Buscar usuario" enterButton />
+              <a-input-search placeholder="Buscar usuario" enterButton @search="onSearchUsers" />
               <a-table :columns="columns" :dataSource="usersListInfo" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
                   <a-button @click="onShowUserInfo(record.key)" shape="circle" icon="info" size="large" />
@@ -276,6 +276,7 @@ export default {
     return {
       collapsed: false,
       usersListInfo: usersListInfo,
+      users: usersListInfo,
       columns,
       chainColumns,
       value: 1,
@@ -428,6 +429,7 @@ export default {
         });
 
        this.usersListInfo = usersList;
+       this.users = usersList;
 
       } catch (error) {
         console.log("%cError al obtener los usuarios", "color:red;");
@@ -523,6 +525,11 @@ export default {
         },
         onCancel() {}
       });
+    },
+    onSearchUsers(value) {
+      console.log("Usuarios", value);
+      value = value.trim();
+      this.usersListInfo = this.users.filter(user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0);
     },
     onSearchChains(value) {
       const newChain = this.chains.filter(element => {

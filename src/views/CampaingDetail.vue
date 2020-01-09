@@ -276,8 +276,6 @@ export default {
     async onSubmitQuizz() {
       this.quizzForm.validateFields(async (err, values) => {
         if (!err) {
-          const urlQuizzRegister = "quizz";
-
           try {
             const quizzInfo = {
               campaingId: this.campaingId,
@@ -287,7 +285,7 @@ export default {
             console.log(quizzInfo);
 
             const response = await this.$axios.post(
-              urlQuizzRegister,
+              "quizz",
               quizzInfo
             );
 

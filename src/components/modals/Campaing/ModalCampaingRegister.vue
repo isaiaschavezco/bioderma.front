@@ -115,9 +115,6 @@ export default {
         this.deleteFilters = false;
         if (!err) {
           if (this.filters.length > 0) {
-            const urlRegisterCampaing =
-              "https://bioderma-api-inmersys.herokuapp.com/campaing";
-
             try {
               console.log(values);
 
@@ -132,7 +129,7 @@ export default {
               console.log(campaingData);
 
               const response = await this.$axios.post(
-                urlRegisterCampaing,
+                "campaing",
                 campaingData
               );
 
