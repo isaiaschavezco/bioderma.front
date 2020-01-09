@@ -341,8 +341,6 @@ export default {
       biodermaGameCampaingImage: "",
       biodermaGameBlogImage: "",
       fileList: [],
-      fileListC: [],
-      fileListB: [],
       StoreStatus: "",
       switchBGame: true,
       switchClubB: true,
@@ -372,50 +370,15 @@ export default {
       this.switchClubB = responseGeneral.data.general.isClubBiodermaActive;
       this.switchBGame = responseGeneral.data.general.isBiodermaGameActive;
       this.storeStatusImage(this.switchClubB);
-      this.themesStatus(responseGeneral.data.general.themes);
-      if (this.switchBGame == true) {
-        this.word = "Desactivar";
-      } else {
-        this.word = "Activar";
-      }
-      if (this.switchClubB == true) {
-        this.wordStore = "Desactivar";
-      } else {
-        this.wordStore = "Activar";
-      }
     },
     storeStatusImage(value) {
-      //console.log(value);
+      console.log(value);
       if (value == false) {
         this.StoreStatus =
-          "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaCerrada.png";
+          "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
       } else if (value == true) {
         this.StoreStatus =
-          "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaAbierta.png";
-      }
-    },
-    themesStatus(num) {
-      //console.log(num);
-      if (num == 1) {
-        this.selected.phone1 = true;
-        this.selected.phone2 = false;
-        this.selected.phone3 = false;
-        this.selected.phone4 = false;
-      } else if (num == 2) {
-        this.selected.phone2 = true;
-        this.selected.phone1 = false;
-        this.selected.phone3 = false;
-        this.selected.phone4 = false;
-      } else if (num == 3) {
-        this.selected.phone3 = true;
-        this.selected.phone2 = false;
-        this.selected.phone1 = false;
-        this.selected.phone4 = false;
-      } else if (num == 4) {
-        this.selected.phone4 = true;
-        this.selected.phone2 = false;
-        this.selected.phone3 = false;
-        this.selected.phone1 = false;
+          "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
       }
     },
     StoreCheck(value) {
@@ -431,7 +394,7 @@ export default {
             component.postStore(value);
             component.wordStore = "Desactivar";
             component.StoreStatus =
-              "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaAbierta.png";
+              "http://diccionariofacil.org/docs/keywords/6-2511-1.jpg";
           },
           onCancel() {
             component.switchClubB = false;
@@ -447,7 +410,7 @@ export default {
             component.postStore(value);
             component.wordStore = "Activar";
             component.StoreStatus =
-              "https://st2.depositphotos.com/1259239/9745/vhttps://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/TiendaCerrada.png";
+              "https://st2.depositphotos.com/1259239/9745/v/950/depositphotos_97453094-stock-illustration-red-and-white-circular-cerrado.jpg";
           },
           onCancel() {
             component.switchClubB = true;
