@@ -1,16 +1,16 @@
 <template>
-	<div class="container-contacts" style>
-		<div class="container-contacts-title">
-			<span>CHATS</span>
-		</div>
-    
+  <div class="container-contacts" style>
+    <div class="container-contacts-title">
+      <span>CHATS</span>
+    </div>
+
     <a-list
-			:grid="{ gutter: 2 }"
-			:style="{ overflow: 'scroll'}"
-			style="height: 38.5rem;margin-top:1rem;"
-			:dataSource="chats"
-		>
-			<a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
+      :grid="{ gutter: 2 }"
+      :style="{ overflow: 'scroll'}"
+      style="height: 38.5rem;margin-top:1rem;"
+      :dataSource="chats"
+    >
+      <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
         <a-row>
           <a-col :span="6">
             <a-avatar
@@ -24,25 +24,32 @@
 
           <a-col :span="18">
             <div class="container-contacts-name">
-              <div class="user-name" @click="onOpenConversation(item.user, colours[index % colours.length])">
+              <div
+                class="user-name"
+                @click="onOpenConversation(item.user, colours[index % colours.length])"
+              >
                 <span>{{item.user.name + ' ' + item.user.lastName}}</span>
               </div>
               <div class="btn-end-chat" @click="deleteConversation(item.user)">
-                <img class="img-endConversation" src="../../assets/chat/Fin_de_conversacion.png" alt />
+                <img
+                  class="img-endConversation"
+                  src="../../assets/chat/Fin_de_conversacion.png"
+                  alt
+                />
               </div>
             </div>
           </a-col>
         </a-row>
-			</a-list-item>
-		</a-list>
-	</div>
+      </a-list-item>
+    </a-list>
+  </div>
 </template>
 
 <script>
 const data = [
   {
     id: "1",
-    user:{
+    user: {
       name: "John Brown",
       email: "prueba@inmersys.com",
       profile: "NAOS",
@@ -52,7 +59,7 @@ const data = [
   },
   {
     id: "2",
-    user:{
+    user: {
       name: "Jim Green",
       email: "prueba@inmersys.com",
       profile: "NAOS",
@@ -62,7 +69,7 @@ const data = [
   },
   {
     id: "3",
-    user:{
+    user: {
       name: "Joe Black",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -72,7 +79,7 @@ const data = [
   },
   {
     id: "4",
-    user:{
+    user: {
       name: "Sam Fisher",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -82,7 +89,7 @@ const data = [
   },
   {
     id: "5",
-    user:{
+    user: {
       name: "Master Chief",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -92,7 +99,7 @@ const data = [
   },
   {
     id: "6",
-    user:{
+    user: {
       name: "Ella no te ama",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -102,7 +109,7 @@ const data = [
   },
   {
     id: "7",
-    user:{
+    user: {
       name: "Josh Nicols",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -112,7 +119,7 @@ const data = [
   },
   {
     id: "8",
-    user:{
+    user: {
       name: "Pantera Rosa",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -122,7 +129,7 @@ const data = [
   },
   {
     id: "9",
-    user:{
+    user: {
       name: "Jefferson Gutierritos",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -132,7 +139,7 @@ const data = [
   },
   {
     id: "10",
-    user:{
+    user: {
       name: "Alvin Yakitori",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -142,7 +149,7 @@ const data = [
   },
   {
     id: "1",
-    user:{
+    user: {
       name: "John Brown",
       email: "prueba@inmersys.com",
       profile: "NAOS",
@@ -152,7 +159,7 @@ const data = [
   },
   {
     id: "2",
-    user:{
+    user: {
       name: "Jim Green",
       email: "prueba@inmersys.com",
       profile: "NAOS",
@@ -162,7 +169,7 @@ const data = [
   },
   {
     id: "3",
-    user:{
+    user: {
       name: "Joe Black",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -172,7 +179,7 @@ const data = [
   },
   {
     id: "4",
-    user:{
+    user: {
       name: "Sam Fisher",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -182,7 +189,7 @@ const data = [
   },
   {
     id: "5",
-    user:{
+    user: {
       name: "Master Chief",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -192,7 +199,7 @@ const data = [
   },
   {
     id: "6",
-    user:{
+    user: {
       name: "Ella no te ama",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -202,7 +209,7 @@ const data = [
   },
   {
     id: "7",
-    user:{
+    user: {
       name: "Josh Nicols",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -212,7 +219,7 @@ const data = [
   },
   {
     id: "8",
-    user:{
+    user: {
       name: "Pantera Rosa",
       email: "prueba@inmersys.com",
       profile: "Farmacia",
@@ -222,24 +229,18 @@ const data = [
   }
 ];
 export default {
-	name: "ChatsList",
-	data() {
-		return {
+  name: "ChatsList",
+  data() {
+    return {
       chats: [],
-      colours: [
-        "#66bb6a",
-        "#7e57c2",
-        "#EF5350",
-        "#5C6BC0",
-        "#8d6e63"
-      ],
+      colours: ["#66bb6a", "#7e57c2", "#EF5350", "#5C6BC0", "#8d6e63"],
       requestList: null
-		}
+    };
   },
   mounted() {
     try {
       this.getChats();
-      this.requestList = setInterval(this.getChats, 3500); 
+      this.requestList = setInterval(this.getChats, 3500);
     } catch (error) {
       console.log("Hubo un error: ", error.message);
     }
@@ -253,8 +254,6 @@ export default {
       } catch (error) {
         console.log("Hubo un error al onbtener la lista: ", error.message);
       }
-
-
     },
     onOpenConversation(user, colour) {
       this.$emit("openConversation", user, colour);
@@ -262,8 +261,11 @@ export default {
     deleteConversation(user) {
       this.$emit("deleteConversation", user);
     }
+  },
+  destroyed() {
+    clearInterval(this.requestList);
   }
-}
+};
 </script>
 
 <style scoped>
