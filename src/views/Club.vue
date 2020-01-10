@@ -10,10 +10,6 @@
             style="height: 100%;"
           >
             <a-list-item slot="renderItem" slot-scope="item">
-              <a-tooltip
-                placement="topLeft"
-                title="Da click en la imágen para ver las los productos"
-              >
                 <a-card
                   hoverable
                   style="height: 25rem; width: 22rem;"
@@ -23,21 +19,11 @@
                   <p class="center">
                     <strong>{{ item.points }} puntos</strong>
                   </p>
-                  <div style="height:90px;">
-                    <img
-                      style="max-width:13rem; max-height:8rem; margin-left:50px;"
-                      alt="example"
-                      :src="item.image"
-                    />
+                  <div style="height:9rem; text-align:center;">
+                    <img style="max-width:13rem; max-height:8rem;" alt="example" :src="item.image" />
                   </div>
-                  <div style="height:115px">
-                    <span style="font-weight: 700;">
-                      <br />
-                      <br />
-                      <br />
-                      <br />
-                      {{ item.description }}
-                    </span>
+                  <div style="height:4rem;" class="productDescription">
+                    <span style="font-weight: 700;">{{ item.description }}</span>
                   </div>
                   <template class="ant-card-actions" slot="actions">
                     <a-icon
@@ -135,6 +121,7 @@
           Costo
           <a-input
             type="number"
+            min=0
             setFieldsValue="points"
             :placeholder="this.newPoints"
             class="input-cost"
@@ -149,11 +136,13 @@
         </a-form-item>
       </a-form>
       <template slot="footer">
+        <div style="text-align:center;">
         <a-button
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitEditProduct"
         >Aceptar</a-button>
+        </div>
       </template>
     </a-modal>
     <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" centered>
@@ -216,6 +205,7 @@
           Costo
           <a-input
             type="number"
+            min=0
             setFieldsValue="points"
             placeholder="Pts"
             class="input-cost"
@@ -230,11 +220,13 @@
         </a-form-item>
       </a-form>
       <template slot="footer">
+        <div style="text-align: center;">
         <a-button
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitPictureForm"
         >Publicar</a-button>
+        </div>
       </template>
     </a-modal>
   </div>
@@ -432,5 +424,9 @@ export default {
   position: relative;
   width: 350px;
   height: 350px;
+}
+.productDescription {
+  overflow-y: auto;
+  margin: 1rem 0 2rem 0;
 }
 </style>
