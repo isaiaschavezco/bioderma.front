@@ -42,6 +42,11 @@ export default {
 	props: {
 		pointsHistory : Array
 	},
+	watch: {
+		pointsHistory: function() {
+			this.history = this.pointsHistory
+		}
+	},
 	data() {
 		return {
 			accumulatedPoints: [

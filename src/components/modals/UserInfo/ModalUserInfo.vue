@@ -18,6 +18,12 @@ export default {
 	props: {
 		userInfo : Object
 	},
+	watch: {
+		userInfo: function() {
+			this.user = this.userInfo;
+			console.log("New user:", this.user);
+		}
+	},
 	data() {
 		return{
 			user: this.userInfo

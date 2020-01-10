@@ -8,10 +8,10 @@
 						<p class="date-history-info">
 							Fecha {{ record.date }}
 						</p>
-						<p class="name-history-info"> {{ record.product.name.toUpperCase() }} </p>
+						<p class="name-history-info"> {{ record.name.toUpperCase() }} </p>
 					</a-col>
 					<a-col class="amount-history-info" span="12">
-						<p>{{ record.product.points }} PTS</p>
+						<p>{{ record.points }} PTS</p>
 					</a-col>
 				</a-row>
 			</a-list-item>
@@ -24,6 +24,11 @@ export default {
 	name: 'UserPointsHistoryInfo',
 	props: {
 		pointsHistory : Array
+	},
+	watch: {
+		pointsHistory: function() {
+			this.history = this.pointsHistory;
+		}
 	},
 	data() {
 		return {
@@ -46,7 +51,7 @@ p {
 }
 
 .scroll {
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-height: 400px;
 }
 

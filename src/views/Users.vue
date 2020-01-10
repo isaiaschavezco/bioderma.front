@@ -8,9 +8,9 @@
               <a-input-search placeholder="Buscar usuario" enterButton @search="onSearchUsers" />
               <a-table :columns="columns" :dataSource="usersListInfo" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
-                  <a-button @click="onShowUserInfo(record.key)" shape="circle" icon="info" size="large" />
+                  <a-button @click="onShowUserInfo(record.email)" shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
-                  <a-button shape="circle" icon="delete" size="large" />
+                  <a-button shape="circle" icon="delete" size="large" @click="showDeleteConfirmUser(record.email, onDeleteUser)" />
                 </span>
               </a-table>
             </a-tab-pane>
@@ -27,7 +27,7 @@
                     shape="circle"
                     icon="delete"
                     size="large"
-                    @click="showDeleteConfirm(record.id, onDeleteChain)"
+                    @click="showDeleteConfirmChain(record.id, onDeleteChain)"
                   />
                 </span>
               </a-table>
@@ -39,7 +39,7 @@
         <div v-if="activeTab == 1">
           <a-row>
             <a-col>
-              <a-button shape="circle" icon="reload" size="large" />
+              <a-button shape="circle" icon="reload" size="large" @click="showResetConfirmation" />
             </a-col>
             <a-col class="title-span-tag">Resetear puntos</a-col>
           </a-row>
@@ -513,7 +513,7 @@ export default {
         );
       }
     },
-    showDeleteConfirm(chaindId, onDelete) {
+    showDeleteConfirmChain(chaindId, onDelete) {
       this.$confirm({
         title: "¿Estás seguro que deseas eliminar esta cadena?",
         okText: "ELIMINAR",
@@ -526,8 +526,58 @@ export default {
         onCancel() {}
       });
     },
+    showDeleteConfirmUser(email, onDelete) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas eliminar este usuario?",
+        okText: "ELIMINAR",
+        okType: "danger",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onDelete(email);
+        },
+        onCancel() {}
+      });
+    },
+    async onDeleteUser(email) {
+      try {
+        const response = await this.$axios.delete(`user/${email}`);
+        this.getUsersListInfo();
+      } catch (error) {
+        this.$notification[type]({
+          message: "Error al eliminar usuario",
+          description:
+            "Hubo un error al eliminar el usuario.",
+        });
+      }
+    },
+    showResetConfirmation() {
+      const onReset = this.onResetPoints;
+      this.$confirm({
+        title: "¿Estás seguro que deseas reiniciar los puntos?",
+        okText: "ELIMINAR",
+        okType: "danger",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onReset();
+        },
+        onCancel() {}
+      });
+    },
+    async onResetPoints() {
+      try {
+        const response = await this.$axios.put("user/resetpoints");
+        this.getUsersListInfo();
+      } catch (error) {
+        this.$notification[type]({
+          message: "Error al reiniciar puntos",
+          description:
+            "Hubo un error al reiniciar los puntos.",
+        });
+      }   
+    },
     onSearchUsers(value) {
-      console.log("Usuarios", value);
       value = value.trim();
       this.usersListInfo = this.users.filter(user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0);
     },
@@ -575,13 +625,25 @@ export default {
         }
       });
     },
-    onShowUserInfo(userId) {
+    async onShowUserInfo(email) {
       console.log(
         "%cObteniendo informacion usuario.",
         "color:green;font-size:0.7rem;"
       );
 
-      console.log(userId)
+      const responseList = await this.$axios.post("pointsbyuser/history", {
+        email,
+        page: 0
+      });
+
+      const response = await this.$axios(`user/${email}`);
+
+      console.log(responseList.data);
+
+      response.data.profile.pointsHistory = responseList.data.points;
+
+
+      this.userInfoModal = response.data.profile;
 
       this.showUserInfoModal = true;
     },

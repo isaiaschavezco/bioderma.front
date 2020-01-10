@@ -1,10 +1,10 @@
 <template>
 	<a-col id="sidebar-info" span="8">
 		<h2>
-			Alias de usuario
+			{{ user.nickname }}
 		</h2>
 		
-		<img src="../../../assets/icons/Usuarios_Inactivo.png" id="sidebar-user-img" alt="Usuario">
+		<img :src="user.image" id="sidebar-user-img" alt="Usuario">
 		
 		<div id="sidebar-total-points">
 			<h4 class="title-points">PUNTOS TOTALES</h4>
@@ -23,37 +23,37 @@
 
 			<div class="sidebar-info">
 				<span class="label-info">Genero:</span>
-				<span class="data-info"> {{ user.gender }}</span>
+				<span class="data-info"> {{ user.gender?"Hombre":"Mujer" }}</span>
 			</div>
 
 			<div class="sidebar-info">
 				<span class="label-info">Ciudad:</span>
-				<span class="data-info"> {{ user.city }}</span>
+				<span class="data-info"> {{ user.address.city.name }}</span>
 			</div>
 
 			<div class="sidebar-info">
 				<span class="label-info">Farmacia:</span>
-				<span class="data-info"> {{ user.pharmacy }}</span>
+				<span class="data-info"> {{ user.branchOffice }}</span>
 			</div>
 
 			<div class="sidebar-info">
 				<span class="label-info">Cadena:</span>
-				<span class="data-info"> {{ user.chain }}</span>
+				<span class="data-info"> {{ user.branchChain?user.branchChain.name:"" }}</span>
 			</div>
 
 			<div class="sidebar-info">
-				<span class="label-info">Direccòn:</span>
-				<span class="data-info"> {{ user.address }}</span>
+				<span class="label-info">Direccón:</span>
+				<span class="data-info"> {{ getAddressFormat(user.address) }}</span>
 			</div>
 
 			<div class="sidebar-info">
-				<span class="label-info">Cargo / Posiciòn:</span>
-				<span class="data-info"> {{ user.position }}</span>
+				<span class="label-info">Cargo / Posición:</span>
+				<span class="data-info"> {{ user.workPosition?user.workPosition.name:user.charge }}</span>
 			</div>
 
 			<div class="sidebar-info">
 				<span class="label-info">Celular:</span>
-				<span class="data-info"> {{ user.phone }}</span>
+				<span class="data-info"> {{ user.phonenumber }}</span>
 			</div>
 
 			<div class="sidebar-info">
@@ -70,10 +70,24 @@ export default {
 	props: {
 		userInfo : Object
 	},
+	watch: {
+		userInfo: function() {
+			console.log("Sidebar:", this.user);
+			this.user = this.userInfo;
+	}
+	},
 	data() {
 		return {
 			user: this.userInfo
 		};
+	},
+	methods: {
+		getAddressFormat(address) {
+			let format = [address.state.name, address.city.name, address.mayoralty, address.suburb];
+
+			format = format.filter(val => val !== null);
+			return format.join(',');
+		}
 	}
 }
 </script>
