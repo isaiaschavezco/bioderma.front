@@ -278,6 +278,9 @@ export default {
         message: title,
         description: message
       });
+    },
+    fakeTab() {
+      javascript: void 0;
     }
   },
   mounted() {
