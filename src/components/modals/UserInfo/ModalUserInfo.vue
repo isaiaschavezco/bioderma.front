@@ -1,8 +1,16 @@
 <template>
-	<a-row style="margin-top: 1rem;">
-		<SidebarUserInfo :userInfo="user"/>
-		<UserPointsInfo :pointsHistory="user.pointsHistory"/>
-	</a-row>
+	<a-modal
+		centered
+		width="70%"    
+		@cancel="$emit('cancel')"
+		:visible="isVisible"
+		:footer="null"
+	>
+		<a-row style="margin-top: 1rem;">
+			<SidebarUserInfo :userInfo="user"/>
+			<UserPointsInfo :dataPoints="dataUserPoints"/>
+		</a-row>
+	</a-modal>
 </template>
 
 <script>
@@ -16,17 +24,31 @@ export default {
 		UserPointsInfo
 	},
 	props: {
-		userInfo : Object
+		userInfo : Object,
+		visible : Boolean
 	},
 	watch: {
 		userInfo: function() {
 			this.user = this.userInfo;
-			console.log("New user:", this.user);
+			this.dataUserPoints = {
+				pointsHistory: this.user.pointsHistory,
+				total: this.userInfo.totalPoints,
+				biodermaGame: this.userInfo.biodermaGamePoints
+			}
+		},
+		visible: function() {
+			this.isVisible = this.visible;
 		}
 	},
 	data() {
 		return{
-			user: this.userInfo
+			user: this.userInfo,
+			dataUserPoints: {
+				pointsHistory: this.userInfo.pointsHistory,
+				total: this.userInfo.totalPoints,
+				biodermaGame: this.userInfo.biodermaGamePoints
+			},
+			isVisible: this.visible
 		};
 	}
 }

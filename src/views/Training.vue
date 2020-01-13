@@ -4,12 +4,12 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container" style="height: 50rem;">
           <a-tabs type="card" @change="onChangeTab" style="height: 4rem;">
-            <a-tab-pane tab="¿QUIENES SOMOS?" key="6"></a-tab-pane>
             <a-tab-pane tab="BIODERMA PATOLOGÍA" key="1"></a-tab-pane>
             <a-tab-pane tab="BIODERMA PRODUCTOS" key="2"></a-tab-pane>
-            <a-tab-pane tab="INSTITUT ESTHEDERM" key="5"></a-tab-pane>
             <a-tab-pane tab="VADEMÉCUM" key="3"></a-tab-pane>
             <a-tab-pane tab="TÉCNICA DE VENTAS" key="4"></a-tab-pane>
+            <a-tab-pane tab="INSTITUT ESTHEDERM" key="5"></a-tab-pane>
+            <a-tab-pane tab="¿QUIENES SOMOS?" key="6"></a-tab-pane>
           </a-tabs>
           <a-list
             class="demo-loadmore-list"
@@ -36,12 +36,7 @@
               <a-list-item-meta
                 :description="item.title === '' ? 'SIN ASIGNAR' : item.title + ' - ' + item.fileName"
               >
-                <a
-                  target="_blank"
-                  title="Ver archivo"
-                  :href="item.url != '' ? item.url : fakeTab()"
-                  slot="title"
-                >{{item.name.toUpperCase()}}</a>
+                <a slot="title">{{item.name.toUpperCase()}}</a>
                 <a-avatar
                   slot="avatar"
                   size="large"
@@ -164,11 +159,6 @@ export default {
       const response = await this.$axios(`submenu/${menuId}`);
       console.log(response.data);
       this.files = response.data;
-      if (this.activeTab == 2) {
-        this.files.sort(function(a, b) {
-          return a.id - b.id;
-        });
-      }
       this.loadingMore = false;
     },
     onSubmitFileForm() {
@@ -212,7 +202,7 @@ export default {
     },
     showDeleteConfirm(blogId, onDelete) {
       this.$confirm({
-        title: "¿Estás seguro que deseas eliminar este archivo?",
+        title: "¿Estás seguro que deseas eliminar esta entrada?",
         okText: "ELIMINAR",
         okType: "danger",
         cancelText: "CANCELAR",
@@ -227,12 +217,12 @@ export default {
       try {
         const response = await this.$axios.delete(`submenu/file/${blogId}`);
         console.log(response.data.status);
-        if (response.data.status == 0) {
-          this.getFiles(this.activeTab);
+        if (response.data.status != 0) {
+          this.getChains();
           this.showNotification(
             "success",
             "Archivo eliminado",
-            "El archivo ha sido eliminado exitosamente."
+            "El archivo ha sido eliminada exitosamente."
           );
         }
       } catch (err) {
@@ -242,6 +232,7 @@ export default {
           "Ha ocurrido un error al intentar eliminar el archivo."
         );
       }
+      this.getFiles("1");
     },
     showNotification(type, title, message) {
       this.$notification[type]({
@@ -277,9 +268,6 @@ export default {
         message: title,
         description: message
       });
-    },
-    fakeTab() {
-      javascript: void 0;
     }
   },
   mounted() {

@@ -33,13 +33,14 @@
               </a-table>
             </a-tab-pane>
           </a-tabs>
+          <a-skeleton :loading="isLoadingTable" />
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <div v-if="activeTab == 1">
           <a-row>
             <a-col>
-              <a-button shape="circle" icon="reload" size="large" @click="showResetConfirmation" />
+              <a-button shape="circle" icon="reload" size="large" @click="openResetPointsModal" />
             </a-col>
             <a-col class="title-span-tag">Resetear puntos</a-col>
           </a-row>
@@ -149,19 +150,22 @@
         >REGISTRAR</a-button>
       </template>
     </a-modal>
-    <a-modal
-      v-model="showUserInfoModal"
-      :footer="null"
-      centered
-      width="70%"
+
+    <ModalUserInfo
+      :userInfo="userInfoModal"
       @cancel="onCloseInfoUser"
-    >
-      <ModalUserInfo :userInfo="userInfoModal" />
-    </a-modal>
+      :visible="showUserInfoModal"
+    />
+    <ModalResetPoints
+      :visible="showResetPoints"
+      @updateList="getUsersListInfo"
+      @cancel="closeResetPointsModal"
+    />
   </div>
 </template>
 <script>
 import ModalUserInfo from "../components/modals/UserInfo/ModalUserInfo.vue";
+import ModalResetPoints from "../components/modals/UserInfo/ModalResetPoints.vue";
 
 const columns = [
   {
@@ -241,42 +245,16 @@ const chainColumns = [
     scopedSlots: { customRender: "action" }
   }
 ];
-
-const usersListInfo = [
-  {
-    key: "1",
-    name: "John Brown",
-    email: "prueba@inmersys.com",
-    profile: "NAOS",
-    position: "Gerente",
-    points: 500
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    email: "prueba@inmersys.com",
-    profile: "NAOS",
-    position: "Gerente",
-    points: 500
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    email: "prueba@inmersys.com",
-    profile: "Farmacia",
-    position: "-",
-    points: 500
-  }
-];
 export default {
   components: {
-    ModalUserInfo
+    ModalUserInfo,
+    ModalResetPoints
   },
   data() {
     return {
       collapsed: false,
-      usersListInfo: usersListInfo,
-      users: usersListInfo,
+      usersListInfo: [],
+      users: [],
       columns,
       chainColumns,
       value: 1,
@@ -284,11 +262,13 @@ export default {
       chainModal: false,
       chainForm: this.$form.createForm(this),
       inviteUserForm: this.$form.createForm(this),
+      showResetPoints: false,
       chains: [],
       tableChains: [],
       inviteUserModal: false,
       inviteUserLoading: false,
       showUserInfoModal: false,
+      isLoadingTable: true,
       userInfoModal: {
         name: "Nombre",
         lastName: "Apellidos",
@@ -415,6 +395,7 @@ export default {
     },
     async getUsersListInfo() {
       try {
+        this.isLoadingTable = true;
         const response = await this.$axios('user');
 
         const usersList = response.data.users.map((val, index) => {
@@ -428,9 +409,10 @@ export default {
           };
         });
 
-       this.usersListInfo = usersList;
-       this.users = usersList;
-
+        this.usersListInfo = usersList;
+        this.users = usersList;
+        this.isLoadingTable = false;
+      
       } catch (error) {
         console.log("%cError al obtener los usuarios", "color:red;");
         console.log(error);
@@ -551,32 +533,6 @@ export default {
         });
       }
     },
-    showResetConfirmation() {
-      const onReset = this.onResetPoints;
-      this.$confirm({
-        title: "¿Estás seguro que deseas reiniciar los puntos?",
-        okText: "ELIMINAR",
-        okType: "danger",
-        cancelText: "CANCELAR",
-        centered: true,
-        onOk() {
-          onReset();
-        },
-        onCancel() {}
-      });
-    },
-    async onResetPoints() {
-      try {
-        const response = await this.$axios.put("user/resetpoints");
-        this.getUsersListInfo();
-      } catch (error) {
-        this.$notification[type]({
-          message: "Error al reiniciar puntos",
-          description:
-            "Hubo un error al reiniciar los puntos.",
-        });
-      }   
-    },
     onSearchUsers(value) {
       value = value.trim();
       this.usersListInfo = this.users.filter(user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0);
@@ -638,8 +594,6 @@ export default {
 
       const response = await this.$axios(`user/${email}`);
 
-      console.log(responseList.data);
-
       response.data.profile.pointsHistory = responseList.data.points;
 
 
@@ -649,6 +603,12 @@ export default {
     },
     onCloseInfoUser() {
       this.showUserInfoModal = false;
+    },
+    openResetPointsModal() {
+      this.showResetPoints = true;
+    },
+    closeResetPointsModal() {
+      this.showResetPoints = false;
     }
   }
 };

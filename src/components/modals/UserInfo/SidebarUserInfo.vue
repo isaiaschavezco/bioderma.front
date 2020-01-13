@@ -4,12 +4,10 @@
 			{{ user.nickname }}
 		</h2>
 		
-		<img :src="user.image" id="sidebar-user-img" alt="Usuario">
-		
-		<div id="sidebar-total-points">
-			<h4 class="title-points">PUNTOS TOTALES</h4>
-			<p class="total-points-user points-info-user-amount">{{ user.totalPoints }}</p>
-		</div>
+		<img :src="user.image" id="sidebar-user-img" alt="Usuario" v-if="user.image && user.image !== 'URL'">
+		<a-avatar style="color: white; backgroundColor: #1890ff; font-size:5rem;" :size="150" v-if="!(user.image && user.image !== 'URL')">
+			{{ `${user.name[0]}${user.lastName[0]}` }}
+		</a-avatar>
 
 		<div id="sidebar-general-info">
 			<div id="sidebar-name">
@@ -96,51 +94,35 @@ export default {
 span {
 	font-size: 0.7rem;
 }
-
 h2 {
 	width: 50%;
 	text-align: center;
 }
-
 #sidebar-info {
 	padding-left: 2.5rem;
 	padding-right: 4.5rem;
 }
-
 #sidebar-user-img {
 	width: 50%;
 }
-
-#sidebar-total-points {
-	width: 40%;
-	text-align: center;
-}
-
-
 #sidebar-name {
 	font-weight: bold;
 }
-
 #sidebar-general-info {
 	margin-top: 3.5rem;
 }
-
 .title-points {
 	color: inherit;
 	font-weight: 620;
 }
-
-
 .sidebar-info, #sidebar-name {
 	margin-bottom: 0rem;
 	line-height: 1.5rem;
 }
-
 .label-info {
 	color: dimgrey!important;
 
 }
-
 .data-info {
 	color: #526987;
 	font-weight: bold;
