@@ -28,7 +28,7 @@
                   <template class="ant-card-actions" slot="actions">
                     <a-icon
                       type="edit"
-                      @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points)"
+                      @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
                     />
                     <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
                   </template>
@@ -61,15 +61,15 @@
     >
       <p>¿Estás seguro de querer eliminar este producto?</p>
     </a-modal>
-    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" centered>
+    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" :maskClosable="false" centered >
       <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
             setFieldsValue="title"
-            :placeholder="this.newTitle"
             v-decorator="[
               'title',
               {
+                initialValue: this.newTitle,
                 rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
             ]"
@@ -78,11 +78,11 @@
         <a-form-item>
           <a-textarea
             setFieldsValue="description"
-            :placeholder="this.newDescription"
             :rows="4"
             v-decorator="[
               'description',
               {
+                initialValue: this.newDescription,
                 rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
             ]"
@@ -96,7 +96,7 @@
                 {
                   rules: [
                     {
-                      required: false,
+                      required: true,
                       message: 'Favor de cargar un archivo JPG, PNG o JPGE'
                     }
                   ]
@@ -105,12 +105,13 @@
               name="upload"
               action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
               accept=".png, .jpg, jpge"
+              listType="picture"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
               :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
-                <a-icon type="picture" />
+                <img style="max-width:13rem; max-height:8rem;" alt="example" :src="this.newImage" />
               </p>
               <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
               <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
@@ -119,17 +120,17 @@
         </a-form-item>
         <a-form-item class="center">
           Costo
-          <a-input
+          <a-input-number
             type="number"
-            min=0
+            :min="0"
             setFieldsValue="points"
-            :placeholder="this.newPoints"
             class="input-cost"
             size="small"
             v-decorator="[
               'points',
               {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+                initialValue: this.newPoints,
+                rules: [{ required: true, message: 'Favor de llenar el campo'}]
               }
             ]"
           />Pts
@@ -145,7 +146,7 @@
         </div>
       </template>
     </a-modal>
-    <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" centered>
+    <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" :maskClosable="false" centered>
       <a-form :form="fileForm">
         <a-form-item>
           <a-input
@@ -180,7 +181,7 @@
                 {
                   rules: [
                     {
-                      required: false,
+                      required: true,
                       message: 'Favor de cargar un archivo JPG, PNG o JPGE'
                     }
                   ]
@@ -189,6 +190,7 @@
               name="upload"
               action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
               accept=".png, .jpg, jpge"
+              listType="picture"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
               :fileList="fileList"
@@ -203,9 +205,9 @@
         </a-form-item>
         <a-form-item class="center">
           Costo
-          <a-input
+          <a-input-number
             type="number"
-            min=0
+            :min="0"
             setFieldsValue="points"
             placeholder="Pts"
             class="input-cost"
@@ -213,7 +215,7 @@
             v-decorator="[
               'points',
               {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+                rules: [{ required: true,  message: 'Favor de llenar el campo' }],
               }
             ]"
           />Pts
@@ -250,6 +252,7 @@ export default {
       newTitle: "",
       newDescription: "",
       newPoints: "",
+      newImage:"",
       proudcts: [
         {
           id: 0,
@@ -281,10 +284,11 @@ export default {
       this.deleteProduct(this.newId);
       this.deleteProductModal = false;
     },
-    gettingData(title, description, points) {
+    gettingData(title, description, points, image) {
       this.newTitle = title;
       this.newDescription = description;
       this.newPoints = points;
+      this.newImage = image;
     },
     gettingId(id) {
       this.newId = id;
@@ -312,9 +316,11 @@ export default {
                 points: values.points
               }
             );
-            console.log(response.data);
+            //console.log(response.data);
             if (response.data.status == 0) {
               this.success();
+              this.fileFormEdit.resetFields();
+              this.fileList = [];
             } else {
               this.failEditingProduct();
             }
@@ -324,7 +330,6 @@ export default {
           }
         }
       });
-      this.fileFormEdit.resetFields();
       this.getListProducts();
     },
     handleChange() {},
@@ -380,6 +385,8 @@ export default {
             );
             if (response.data.status == 0) {
               this.success();
+              this.fileForm.resetFields();
+              this.fileList = [];
             } else {
               this.failAddingProduct();
             }
@@ -389,7 +396,6 @@ export default {
           }
         }
       });
-      this.fileForm.resetFields();
     },
     handleChangeFileUpload(info) {
       let fileList = [...info.fileList];
