@@ -5,8 +5,8 @@
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
             <a-tab-pane tab="USUARIOS" key="1">
-              <a-input-search placeholder="Buscar usuario" enterButton @search="onSearchUsers" />
-              <a-table :columns="columns" :dataSource="usersListInfo" style="margin-top: 1rem;">
+              <a-input-search placeholder="Buscar usuario" enterButton @search="onSearchUsers" v-model="userSearch" />
+              <a-table :columns="userColumns" :dataSource="usersListInfo" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
                   <a-button @click="onShowUserInfo(record.email)" shape="circle" icon="info" size="large" />
                   <a-divider type="vertical" />
@@ -15,7 +15,7 @@
               </a-table>
             </a-tab-pane>
             <a-tab-pane tab="CADENAS" key="2">
-              <a-input-search placeholder="Buscar cadena" @search="onSearchChains" enterButton />
+              <a-input-search placeholder="Buscar cadena" @search="onSearchChains" v-model="chainSearch" enterButton />
               <a-table
                 :columns="chainColumns"
                 :dataSource="tableChains"
@@ -33,7 +33,7 @@
               </a-table>
             </a-tab-pane>
           </a-tabs>
-          <a-skeleton :loading="isLoadingTable" />
+          <a-skeleton :loading="isLoadingTable" active />
         </div>
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
@@ -76,6 +76,8 @@
       title="Invita a un nuevo miembro a ser parte de Bioderma"
       centered
       v-model="inviteUserModal"
+      :maskClosable="false"
+      @cancel="closeInvitationModal"
     >
       <a-form :form="inviteUserForm">
         <a-form-item>
@@ -167,12 +169,21 @@
 import ModalUserInfo from "../components/modals/UserInfo/ModalUserInfo.vue";
 import ModalResetPoints from "../components/modals/UserInfo/ModalResetPoints.vue";
 
-const columns = [
+const userColumns = [
   {
     dataIndex: "name",
     key: "name",
     title: "Nombre de usuario",
-    align: "center"
+    align: "center",
+    sorter: (a, b) => {
+      if (a.name.toUpperCase() < b.name.toUpperCase()) {
+        return -1;
+      }
+      if (a.name.toUpperCase() > b.name.toUpperCase()) {
+        return 1;
+      }
+      return 0;
+    }
   },
   {
     title: "E MAIL",
@@ -253,9 +264,11 @@ export default {
   data() {
     return {
       collapsed: false,
+      userSearch: "",
+      chainSearch: "",
       usersListInfo: [],
       users: [],
-      columns,
+      userColumns,
       chainColumns,
       value: 1,
       activeTab: 1,
@@ -270,119 +283,19 @@ export default {
       showUserInfoModal: false,
       isLoadingTable: true,
       userInfoModal: {
-        name: "Nombre",
-        lastName: "Apellidos",
-        birthday: "12 Ago",
-        gender: "Mujer",
-        city: "Mi ciudad",
-        pharmacy: "Nombre farmacia",
-        chain: "Mi cadena",
-        address:
-          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit tempora sit voluptatibus perferendis. Nobis nemo hic nostrum commodi eaque! Ea, molestias natus. Exercitationem, officia a. Nulla aliquid ad dicta ratione.",
-        position: "Mi cargo",
-        phone: "555-5555-555",
-        email: "user@user.com",
-        totalPoints: "2570",
-        pointsHistory: [
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          },
-          {
-            date: "15/Ago/2019",
-            product: {
-              name: "Producto X",
-              points: 500
-            }
-          }
-        ]
+        name: "",
+        lastName: "",
+        birthday: "",
+        gender: "",
+        city: "",
+        pharmacy: "",
+        chain: "",
+        address: "",
+        position: "",
+        phone: "",
+        email: "",
+        totalPoints: "",
+        pointsHistory: []
       }
     };
   },
@@ -422,19 +335,27 @@ export default {
       this.activeTab = activeTabKey;
       switch (activeTabKey) {
         case "1":
-          console.log("Consulto usuarios");
+          this.getUsersListInfo();
+          this.userSearch = "";
           break;
         case "2":
           this.getChains();
+          this.chainSearch = "";
           break;
         default:
           break;
       }
     },
     async getChains() {
-      const responseChains = await this.$axios("chain");
-      this.chains = responseChains.data.chains;
-      this.tableChains = this.chains;
+      try {
+        this.isLoadingTable = true;
+        const responseChains = await this.$axios("chain");
+        this.chains = responseChains.data.chains;
+        this.tableChains = this.chains;
+      } catch (error) {
+        console.log("Hubo un error al obtener las cadenas: ", error);
+      }
+      this.isLoadingTable = false;
     },
     onSubmitChainForm() {
       this.chainForm.validateFields(async (err, values) => {
@@ -563,12 +484,22 @@ export default {
             this.inviteUserLoading = false;
             this.inviteUserForm.resetFields();
             this.inviteUserModal = false;
+
+            console.log(response.data);
+
             if (response.data == 0) {
               this.showNotification(
                 "success",
                 "Invitación enviada",
                 "La invitación ha sido enviada correctamente."
               );
+            }
+            else if (response.data === 5) {
+              this.$notification["warning"]({
+                message: "Usuario ya invitado",
+                description:
+                  "El usuario ya fue invitado anteriormente.",
+              });
             }
           } catch (err) {
             this.inviteUserLoading = false;
@@ -609,6 +540,9 @@ export default {
     },
     closeResetPointsModal() {
       this.showResetPoints = false;
+    },
+    closeInvitationModal() {
+      this.inviteUserForm.resetFields();
     }
   }
 };
