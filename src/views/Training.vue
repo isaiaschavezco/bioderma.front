@@ -26,7 +26,12 @@
             </div>
             <a-list-item slot="renderItem" slot-scope="item, index">
               <a slot="actions">
-                <a-button shape="circle" icon="delete" size="large" />
+                <a-button
+                  shape="circle"
+                  icon="delete"
+                  size="large"
+                  @click="showDeleteConfirm(item.id, onDeleteBlog)"
+                />
               </a>
               <a-list-item-meta
                 :description="item.title === '' ? 'SIN ASIGNAR' : item.title + ' - ' + item.fileName"
@@ -193,6 +198,46 @@ export default {
             );
           }
         }
+      });
+    },
+    showDeleteConfirm(blogId, onDelete) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas eliminar esta entrada?",
+        okText: "ELIMINAR",
+        okType: "danger",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onDelete(blogId);
+        },
+        onCancel() {}
+      });
+    },
+    async onDeleteBlog(blogId) {
+      try {
+        const response = await this.$axios.delete(`submenu/file/${blogId}`);
+        console.log(response.data.status);
+        if (response.data.status != 0) {
+          this.getChains();
+          this.showNotification(
+            "success",
+            "Archivo eliminado",
+            "El archivo ha sido eliminada exitosamente."
+          );
+        }
+      } catch (err) {
+        this.showNotification(
+          "error",
+          "Error al eliminar el archivo",
+          "Ha ocurrido un error al intentar eliminar el archivo."
+        );
+      }
+      this.getFiles("1");
+    },
+    showNotification(type, title, message) {
+      this.$notification[type]({
+        message: title,
+        description: message
       });
     },
     handleChangeMenu(value) {
