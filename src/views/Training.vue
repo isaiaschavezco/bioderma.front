@@ -36,7 +36,12 @@
               <a-list-item-meta
                 :description="item.title === '' ? 'SIN ASIGNAR' : item.title + ' - ' + item.fileName"
               >
-                <a slot="title">{{item.name.toUpperCase()}}</a>
+                <a
+                  target="_blank"
+                  title="Ver archivo"
+                  :href="item.url != '' ? item.url : fakeTab()"
+                  slot="title"
+                >{{item.name.toUpperCase()}}</a>
                 <a-avatar
                   slot="avatar"
                   size="large"
@@ -157,7 +162,7 @@ export default {
     async getFiles(menuId) {
       this.loadingMore = true;
       const response = await this.$axios(`submenu/${menuId}`);
-      // console.log(response.data);
+      console.log(response.data);
       this.files = response.data;
       if (this.activeTab == 2) {
         this.files.sort(function(a, b) {
@@ -272,6 +277,9 @@ export default {
         message: title,
         description: message
       });
+    },
+    fakeTab() {
+      javascript: void 0;
     }
   },
   mounted() {
