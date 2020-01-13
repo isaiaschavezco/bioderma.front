@@ -5,7 +5,6 @@
         <a-col :xs="{ span: 11 }" style="height: 100%;">
           <a-card
             class="container-logos"
-            hoverable
             style="padding: 2rem; height: 100%;"
             align="middle"
           >
@@ -77,10 +76,10 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      this.loadingSignIn = true;
 
       this.form.validateFields(async (err, values) => {
         if (!err) {
+          this.loadingSignIn = true;
           try {
             const loginInfo = {
               email: values.user,
@@ -96,7 +95,6 @@ export default {
               if (responseLogin.status == 2)
                 messageLogin = "Contraseña incorrecta";
               
-              this.loadingSignIn = false;
               this.$message.error(messageLogin);
             }
             else {
@@ -115,6 +113,7 @@ export default {
             console.log("%cHubo un error.", "color:red;font-size:1rem");
             this.$message.error("Hubo un error");
           }
+          this.loadingSignIn = false;
         }
       });
     }
