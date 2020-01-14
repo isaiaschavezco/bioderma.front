@@ -34,7 +34,8 @@
             :beforeUpload="beforeUpload"
             :fileList="fileList"
           >
-            <p class="ant-upload-drag-icon">
+            <img :src="campaingImage" alt="" v-if="campaingImage" class="campaingImage" />
+            <p class="ant-upload-drag-icon" v-else>
               <a-icon type="picture" />
             </p>
             <p class="ant-upload-text">Selecciona o suelta una imagen para la campaña</p>
@@ -75,6 +76,7 @@ export default {
       deleteFilters: false,
       filters: [],
       fileList: [],
+      campaingImage: null,
       loadingFileForm: false,
       isBiodermaGame: this.biodermaGames,
       fileForm: this.$form.createForm(this)
@@ -98,6 +100,7 @@ export default {
       let fileList = [...info.fileList];
       fileList = fileList.slice(-1);
       this.fileList = fileList;
+      this.campaingImage = fileList[0].response;
     },
     beforeUpload(file) {
       let status = true;
@@ -180,5 +183,9 @@ export default {
 <style scoped>
 .text-center {
   text-align: center;
+}
+.campaingImage {
+  height: 100px;
+  object-fit: cover;
 }
 </style>

@@ -42,7 +42,7 @@
                 @click="() => quizzModalRegister = true"
               />
             </a-col>
-            <a-col>Añadi trivia</a-col>
+            <a-col>Añadir trivia</a-col>
           </a-row>
         </div>
       </a-col>
@@ -253,7 +253,7 @@ export default {
             newTrivia.status = "No enviada";
 
           if (newTrivia.startedAt === "Invalid date")
-            newTrivia.validity = "No asigninada";
+            newTrivia.validity = "No asignada";
           else
             newTrivia.validity = `${newTrivia.startedAt} - ${newTrivia.finishedAt}`;
 

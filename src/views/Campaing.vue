@@ -165,10 +165,15 @@ export default {
       this.getFiles(this.activeTab);
     },
     async getFiles(menuId) {
-      this.loadingMore = true;
-      const response = await this.$axios(`submenu/${menuId}`);
-      console.log("Response: ",response);
-      this.files = response.data;
+      try {
+        this.loadingMore = true;
+        const response = await this.$axios(`submenu/${menuId}`);
+        console.log("Response: ",response);
+        this.files = response.data;
+      } catch (error) {
+        console.log("Hubo un error al obtener los archivos: ", error.message);
+      }
+      
       this.loadingMore = false;
     },
     handleChangeMenu(value) {
