@@ -1,9 +1,9 @@
 <template>
   <div :style="{ height: 'calc(100vh - 64px)' }" breakpoint="md" collapsed-width="0">
-    <div v-if="User" style="background:#f0f2f5; padding:80px 0">
+    <div v-if="User" style="background:#f0f2f5; 0">
       <a-Row :gutter="1">
-        <a-col :span="8">
-          <a-card style="width:50%; height:30%; margin-left: 45%">
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 6}">
+          <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
                 'photo',
@@ -17,15 +17,15 @@
                 }
               ]"
               name="upload"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/5"
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" class="imgSize" />
+              <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset:4}" :sm="{span:24}" :xs="{span:24}">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:18, offset: 3}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro NAOS" class="forms">
             <a-form :form="form" @submit="handleSubmit1">
               <a-col>
@@ -94,7 +94,7 @@
               </a-col>-->
               <a-col :span="18" :offset="2">
                 <a-form-item>
-                  <span>Fecha de cumpleaños &nbsp;</span>
+                  <span>Fecha de nacimiento &nbsp;</span>
                   <a-date-picker
                     setFieldsValue="birthDate"
                     v-decorator="[
@@ -134,7 +134,7 @@
                   </a-radio-group>
                 </a-form-item>
               </a-col>
-              <a-col :lg="{span: 5}" :md="{span:5}" :sm="{span:20}" :xs="{span:20}" :offset="2">
+              <a-col :lg="{span: 8}" :md="{span:8}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-bottom: 15px">
                   <a-select
                     setFieldsValue="state"
@@ -158,7 +158,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col :lg="{span: 5}" :md="{span:5}" :sm="{span:20}" :xs="{span:20}" :offset="2">
+              <a-col :lg="{span: 8}" :md="{span:8}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-botton: 15px">
                   <a-select
                     optionFilterProp="children"
@@ -184,8 +184,8 @@
               </a-col>
               <a-col
                 :span="5"
-                :lg="{span: 5}"
-                :md="{span:5}"
+                :lg="{span: 12}"
+                :md="{span:12}"
                 :sm="{span:20}"
                 :xs="{span:20}"
                 :offset="2"
@@ -270,10 +270,11 @@
                   />
                 </a-form-item>
               </a-col>
-
-              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
+              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20,offset:2}" :xs="{span:20}" :offset="2">
                 <a-form-item help="Contraseña al menos 8 caracteres">
-                  <a-input
+                  <a-input-search
+                    enterButton="Mostrar"
+                    @search="showPassword"
                     class="password"
                     pattern=".{8,}"
                     placeholder="CONTRASEÑA"
@@ -292,14 +293,15 @@
                         ]
                       }
                     ]"
-                    type="password"
+                    :type="passw"
                   />
                 </a-form-item>
               </a-col>
-
               <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
-                <a-form-item>
-                  <a-input
+                <a-form-item >
+                  <a-input-search
+                    enterButton="Mostrar"
+                    @search="showConfirmPw"
                     placeholder="CONFIRMAR CONTRASEÑA"
                     v-decorator="[
                       'confirm',
@@ -315,12 +317,11 @@
                         ]
                       }
                     ]"
-                    type="password"
+                    :type="passwCon"
                     @blur="handleConfirmBlur"
                   />
                 </a-form-item>
               </a-col>
-
               <a-col :span="24">
                 <a-form-item>
                   <a-button
@@ -353,11 +354,11 @@
                 }
               ]"
               name="photo"
-              action="http://localhost:3000/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/5"
               accept=".png, .jpg, jpge"
               @change="handleChange"
             >
-              <img alt="editProfile" src="../assets/user.png" class="imgSize" />
+              <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
@@ -469,14 +470,14 @@
                   <!-- <a-col :span="10" :offset="2"></a-col> -->
                   <a-col :span="18" :offset="2">
                     <a-form-item>
-                      <span>Fecha de cumpleaños &nbsp;</span>
+                      <span>Fecha de nacimiento &nbsp;</span>
                       <a-date-picker
                         setFieldsValue="birthDate"
                         v-decorator="[
                           'birthDate',
                           {
                             rules: [
-                              { required: true, message: 'Seleccione su fecha' }
+                              { required: true, message: 'Seleccione su fecha de nacimiento' }
                             ]
                           }
                         ]"
@@ -727,7 +728,9 @@
                 </a-col>
                 <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item help="Contraseña al menos 8 caracteres">
-                    <a-input
+                    <a-input-search
+                    enterButton="Mostrar"
+                    @search="showPassword"
                       pattern=".{8,}"
                       placeholder="CONTRASEÑA"
                       setFieldsValue="password"
@@ -745,21 +748,22 @@
                           ]
                         }
                       ]"
-                      type="password"
+                      :type="passw"
                     />
                   </a-form-item>
                 </a-col>
-
                 <a-col
                   :lg="{span: 9}"
-                  :md="{span:9}"
+                  :md="{span: 9}"
                   :sm="{span:20}"
                   :xs="{span:20}"
                   :offset="2"
                   style="margin-bottom:10px"
                 >
-                  <a-form-item>
-                    <a-input
+                  <a-form-item help="Confirme su contraseña">
+                    <a-input-search
+                    enterButton="Mostrar"
+                    @search="showConfirmPw"
                       placeholder="CONFIRMAR CONTRASEÑA"
                       v-decorator="[
                         'confirm',
@@ -775,12 +779,11 @@
                           ]
                         }
                       ]"
-                      type="password"
+                      :type="passwCon"
                       @blur="handleConfirmBlur"
                     />
                   </a-form-item>
                 </a-col>
-
                 <a-col :span="24">
                   <a-form-item>
                     <a-button
@@ -808,6 +811,8 @@ moment.locale("es");
 export default {
   data() {
     return {
+      passw:"password",
+      passwCon:"password",
       name: "",
       photo: "URL",
       lastName: "",
@@ -845,7 +850,7 @@ export default {
     this.getStates();
     this.getPosition();
     this.getChains();
-    this.success();
+    //this.success();
     //this.successRegisterModal = true;
   },
   methods: {
@@ -871,6 +876,7 @@ export default {
     success() {
       this.$info({
         iconType: "null",
+        centered: true,
         content: (
           <div>
             <p style="text-align:center">
@@ -897,6 +903,7 @@ export default {
     },
     failEmail() {
       this.$error({
+        centered: true,
         content: (
           <p style="text-align:center">
             ERROR AL COMPLETAR TU REGISTRO, INTRODUCE UN CORREO DIFERENTE
@@ -930,6 +937,14 @@ export default {
       // axios.get('state.json').then( response => {
       //   this.state = response.data
       // })
+    },
+    showPassword(){
+      if(this.passw=="password") this.passw="text";
+      else this.passw="password";
+    },
+    showConfirmPw(){
+      if(this.passwCon=="password") this.passwCon="text";
+      else this.passwCon="password";
     },
     async getPosition() {
       const responsePosition = await this.$axios("position");
@@ -1078,12 +1093,12 @@ export default {
   }
   .imgPosition {
     width: 300px;
-    height: 280px;
-    margin-left: 24rem !important;
+    height: 300px;
+    margin-left: 22rem !important;
     margin-top: 2.5rem !important;
   }
   .imgSize {
-    width: 220px;
+    width: 180px;
     height: 180px;
   }
 }
@@ -1098,7 +1113,7 @@ export default {
     margin-top: 2.5rem !important;
   }
   .imgSize {
-    width: 220px;
+    width: 180px;
     height: 180px;
   }
 }
@@ -1114,7 +1129,7 @@ export default {
     margin: auto;
   }
   .imgSize {
-    width: 9rem;
+    width: 8rem;
     height: 8rem;
   }
 }
@@ -1129,7 +1144,7 @@ export default {
     margin: auto;
   }
   .imgSize {
-    width: 9rem;
+    width: 8rem;
     height: 8rem;
   }
 }
