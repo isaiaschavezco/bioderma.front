@@ -118,12 +118,16 @@
 							@click="addFilter"
 							type="primary"
 							style="background-color:#009FD1; border: none; margin-top:15px"
+							:loading="isAddingFilter"
 						>Agregar filtro a la lista</a-button>
 					</div>
 				</a-card>
 			</div>
 			<div class="added-filters">
 				<a-card class="mycard" title="FILTROS AGREGADOS">
+					<div class="message-empty" v-if="filters.length === 0">
+						<p>No se han agregado filtros a la lista.</p>
+					</div>
 					<div class="filter-list">
 						<div class="filter__data" v-for="filter in filters" :key="filter.id">
 							<p class="filter__title">FILTRO {{ filter.id }}</p>
@@ -175,6 +179,7 @@ export default {
 				finalAge: 100,
 				gender: 1
 			},
+			isAddingFilter: false,
 			states: [],
 			positions: [],
 			chains: [],
@@ -189,25 +194,41 @@ export default {
 		}
 	},
 	async created() {
-		this.states = await this.getStates();
-		this.positions = await this.getWorkPositions();
-		this.chains = await this.getChains();
+		try {
+			this.states = await this.getStates();
+			this.positions = await this.getWorkPositions();
+			this.chains = await this.getChains();
+		} catch (error) {
+			console.log("Error: ", error.message);
+		}
 	},
 	methods: {
 		async getStates() {
-			const response = await this.$axios("state");
-			
-			return response.data.states;
+			try {
+				const response = await this.$axios("state");
+				return response.data.states;
+			} catch (error) {
+				console.log("Hubo un error.")
+			}
+			return [];
 		},
 		async getWorkPositions() {
-			const response = await this.$axios("position");
-			
-			return response.data.workPositions;
+			try {
+				const response = await this.$axios("position");
+				return response.data.workPositions;
+			} catch (error) {
+				console.log("Hubo un error.")
+			}
+			return [];
 		},
 		async getChains() {
-			const response = await this.$axios("chain");
-
-			return response.data.chains;
+			try {
+				const response = await this.$axios("chain");
+				return response.data.chains;
+			} catch (error) {
+				console.log("Hubo un error.")
+			}
+			return [];
 		},
 		onChangeMainFilter(e) {
 			this.disabledFilters = e.target.checked;
@@ -328,14 +349,10 @@ export default {
 		},
 		async registerFilter(filter) {
 			try {
+				this.isAddingFilter = true;
 				const response = await this.$axios.post("target", filter);
 				this.filters.push(response.data.target);
-				this.updateFilters();
-				// this.$notification["success"]({
-				// 	message: "Registro exitoso",
-        //   description:
-        //     "El filtro se registro exitosamente.",
-        // });
+				this.updateFilters();;
 			} catch (err) {
 				console.log(err);
 				this.$notification["error"]({
@@ -344,6 +361,7 @@ export default {
             "Hubo un error al registrar el filtro.",
         });
 			}
+			this.isAddingFilter = false;
 		},
 		async onRemoveFilter(idFilter) {
 			console.log("Remove filter:", idFilter);

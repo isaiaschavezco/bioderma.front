@@ -77,7 +77,8 @@
                       :beforeUpload="(file) => beforeUpload(file, index)"
                       :fileList="fileList[index]"
                     >
-                      <p class="ant-upload-drag-icon">
+                      <img :src="optionsImages[index]" alt="" v-if="optionsImages[index]" class="optionImage" />
+                      <p class="ant-upload-drag-icon" v-else>
                         <a-icon type="picture" />
                       </p>
                       <p class="ant-upload-text">Selecciona una imagen</p>
@@ -158,7 +159,8 @@ export default {
       time: "1",
       points: "1",
 			answer: 0,
-			fileList: [[], [], [], [], []],
+      fileList: [[], [], [], [], []],
+      optionsImages: [null, null, null, null, null],
       quizzId: this.quizz,
       isAvailableOption: [true, true, false, false, false],
       isRequiredOption: [true, true, false, false, false],
@@ -200,7 +202,8 @@ export default {
     handleChangeFileUpload(info, index) {
       let fileList = [...info.fileList];
       fileList = fileList.slice(-1);
-			this.fileList[index] = fileList;
+      this.fileList[index] = fileList;
+      this.optionsImages[index] = fileList[0].response;
 			this.onChangeOptionValue();
     },
     beforeUpload(file, index) {
@@ -371,6 +374,10 @@ export default {
   font-weight: 550;
   font-size: 0.85rem;
   height: 2.7rem;
+}
+.optionImage {
+  height: 68px;
+  object-fit: cover;
 }
 .form-question__bold-text {
   font-weight: 725;
