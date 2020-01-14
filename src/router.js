@@ -2,8 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Main from "./views/Main.vue";
-import Forms from "./views/Forms";
-import { Form } from "ant-design-vue";
+import Forms from "./views/Forms.vue";
+import Recovery from "./views/Recovery.vue";
 
 Vue.use(Router);
 
@@ -18,6 +18,11 @@ export default new Router({
       path: "/Register",
       name: "forms",
       component: Forms
+    },
+    {
+      path: "/Recovery",
+      name: "recovery",
+      component: Recovery
     },
     {
       path: "/Main",
