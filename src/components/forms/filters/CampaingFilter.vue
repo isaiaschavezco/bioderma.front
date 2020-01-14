@@ -5,7 +5,7 @@
 					<a-row class="container-option">
 						<a-row class="container-item">
 							<a-row class="select-item">
-								<a-checkbox @change="onChangeMainFilter" :checked="disabledFilters">Todos los usuarios</a-checkbox>
+								<a-checkbox @change="onChangeMainFilter" :checked="disabledFilters" :disabled="!allUsers && filters.length > 0">Todos los usuarios</a-checkbox>
 							</a-row>
 
 							<a-row class="select-item">
@@ -119,6 +119,7 @@
 							type="primary"
 							style="background-color:#009FD1; border: none; margin-top:15px"
 							:loading="isAddingFilter"
+							:disabled="allUsers"
 						>Agregar filtro a la lista</a-button>
 					</div>
 				</a-card>
@@ -179,6 +180,7 @@ export default {
 				finalAge: 100,
 				gender: 1
 			},
+			allUsers: false,
 			isAddingFilter: false,
 			states: [],
 			positions: [],
@@ -374,11 +376,6 @@ export default {
 				this.filters = this.filters.filter(filter => filter.id !== idFilter);
 
 				this.updateFilters();
-				// this.$notification["success"]({
-        //   message: "Filtro eliminado",
-        //   description:
-        //     "El filtro se elimino exitosamente.",
-        // });
 			} catch (err) {
 				console.log(err);
 				this.$notification["error"]({
@@ -389,6 +386,13 @@ export default {
 			}
 		},
 		updateFilters() {
+			this.allUsers = false;
+			for (const filter of this.filters) {
+				this.allUsers = this.allUsers || filter.allUsers;
+			}
+
+			console.log("All filters:", this.allUsers, this.filters);
+
 			this.$emit('updateFilters', this.filters.slice());
 		}
 	}
