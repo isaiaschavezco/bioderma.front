@@ -30,7 +30,7 @@
                               </a-col>
 
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="delete" @click="removeCampaing"/>
+                                <a-icon class="campaing__action" type="delete" @click="removeCampaing(item.id)"/>
                               </a-col>
                             </a-row>
                           </a-col>

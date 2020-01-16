@@ -2,14 +2,18 @@
 	<a-modal
       :title="`¿Estas seguro que deseas eliminar la ${target}?`"
       v-model="visible"
-      @ok="removeCampaing"
-			@cancel="onClose"
+			:footer="null"
     >
 		<div class="info-confirmation">
 			<p>Escribe tu contraseña para confirmar que quieres eliminar la {{ target }}</p>
 			<a-input type="password" placeholder="Contraseña" />
 		</div>
-
+		<template>
+			<div class="footer">
+				<a-button @click="onClose">Cancelar</a-button>
+				<a-button @click="removeCampaing" type="danger">Eliminar</a-button>
+			</div>
+		</template>
     </a-modal>
 </template>
 
@@ -49,6 +53,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.footer {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 10rem;
+	margin-top: 1rem;
+}
 </style>

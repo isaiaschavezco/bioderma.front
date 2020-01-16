@@ -6,9 +6,9 @@
           <a-card :title="quizzName">
             <a-table :columns="columnsQuestionsTable" :dataSource="questionsData" style="margin-top: 1rem;">
               <span slot="action" slot-scope="text, record">
-                <a-button shape="circle" icon="edit" size="large" @click="() => editQuestion(text.key)" />
+                <a-button shape="circle" icon="edit" size="large" @click="editQuestion(text.key, text.type)" />
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" @click="() => removeConfirmationModal = true" />
+                <a-button shape="circle" icon="delete" size="large" @click="removeQuestion(text.key)" />
               </span>
             </a-table>
           </a-card>
@@ -82,8 +82,6 @@
     </a-row>
 
     <!-- MODALES -->
-
-    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="campaña" @confirm="removeQuestion" @close="onCloseModal" />
 
     <!-- OPCION MULTIPLE -->
     <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
@@ -257,11 +255,30 @@ export default {
       
       return responseData;
     },
-    editQuestion(id) {
-      console.log(id);
-    },
-    removeQuestion() {
+    async editQuestion(id, questionType) {
+      const url = `question/detail/${id}`;
+      
+      try {
+        const response = await this.$axios(url);
+        const question = response.data.question;
 
+        const content = JSON.parse(question.content);
+        const answer = JSON.parse(question.answer);
+        
+        console.log(question, questionType);
+        console.log(answer)
+        console.log(content);
+      } catch (error) {
+        console.log("Hubo un error al editar la prgunta:", error.message);
+        this.$notification["error"]({
+          message: "Error al editar la pregunta.",
+          description:
+          'Al parecer hubo un error al editar la pregunta, intenta de nuevo.',
+        });
+      }
+    },
+    removeQuestion(id) {
+      console.log("Question: ",  id);
     }
   }
 };
