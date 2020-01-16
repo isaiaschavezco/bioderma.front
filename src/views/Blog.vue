@@ -4,7 +4,7 @@
       <a-col :xs="{ span: 22 }">
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
-            <a-tab-pane tab="BLOG" key="1">
+            <a-tab-pane tab="BLOG NAOS" key="1">
               <a-input-search placeholder="Buscar blog" @search="onSearchBlog" enterButton />
               <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
                 <span slot="tags" slot-scope="tags">
@@ -22,7 +22,25 @@
                 </span>
               </a-table>
             </a-tab-pane>
-            <a-tab-pane tab="BIODERMA GAMES" key="2">
+            <a-tab-pane tab="BLOG FARMACIA" key="2">
+              <a-input-search placeholder="Buscar blog" @search="onSearchBlog" enterButton />
+              <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
+                <span slot="tags" slot-scope="tags">
+                  <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                  <a-button shape="circle" icon="info" size="large" />
+                  <a-divider type="vertical" />
+                  <a-button
+                    shape="circle"
+                    icon="delete"
+                    size="large"
+                    @click="showDeleteConfirm(record.id, onDeleteBlog)"
+                  />
+                </span>
+              </a-table>
+            </a-tab-pane>
+            <a-tab-pane tab="BIODERMA GAMES" key="3">
               <a-input-search placeholder="Buscar blog" @search="onSearchBlog" enterButton />
               <a-table :columns="columns" :dataSource="blogList" style="margin-top: 1rem;">
                 <span slot="tags" slot-scope="tags">
@@ -78,7 +96,7 @@
                   rules: [
                     {
                       required: true,
-                      message: 'Favor de cargar un archivo PDF'
+                      message: 'Favor de cargar una imagen'
                     }
                   ]
                 }
@@ -89,6 +107,7 @@
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
               :fileList="fileList"
+              listType="picture"
             >
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
@@ -186,6 +205,7 @@ export default {
       blogNewModal: false,
       inviteUserLoading: false,
       isBiodermaGame: false,
+      isBlogNaos: true,
       blogList: []
     };
   },
@@ -193,12 +213,14 @@ export default {
     onSubmitBlog() {
       this.fileBlogForm.validateFields(async (err, values) => {
         if (!err) {
+          console.log("this.fileBlogForm: ", this.fileBlogForm);
           this.$router.push({
             name: "newblog",
             params: {
               title: values.title,
               image: values.upload.fileList[0].response,
-              isBiodermaGame: this.isBiodermaGame
+              isBiodermaGame: this.isBiodermaGame,
+              isBlogNaos: this.isBlogNaos
             }
           });
         }
@@ -225,10 +247,17 @@ export default {
       switch (activeTabKey) {
         case "1":
           this.isBiodermaGame = false;
+          this.isBlogNaos = true;
           this.getBlogList();
           break;
         case "2":
+          this.isBiodermaGame = false;
+          this.isBlogNaos = false;
+          this.getBlogList();
+          break;
+        case "3":
           this.isBiodermaGame = true;
+          this.isBlogNaos = false;
           this.getBlogList();
           break;
         default:
@@ -274,9 +303,10 @@ export default {
       });
     },
     async getBlogList() {
-      const responseblogList = await this.$axios.get(
-        `article/list/${this.isBiodermaGame}`
-      );
+      const responseblogList = await this.$axios.post("article/list", {
+        isBiodermaGame: this.isBiodermaGame,
+        isBlogNaos: this.isBlogNaos
+      });
       this.blogs = responseblogList.data.blogs;
       this.blogList = this.blogs;
       //console.log(this.blogs);

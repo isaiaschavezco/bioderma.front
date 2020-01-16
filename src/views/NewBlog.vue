@@ -49,16 +49,20 @@
                     ]"
                     name="upload"
                     action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
-                    accept=".png, .jpg, jpge"
+                    accept=".png, .jpg, .jpge, .mp4"
                     @change="handleChangeFileUpload"
                     :beforeUpload="beforeUpload"
                     :fileList="fileList"
+                    listType="picture"
                   >
                     <p class="ant-upload-drag-icon">
                       <a-icon type="plus-circle" />
                     </p>
-                    <p class="ant-upload-text">Selecciona o suelta hasta 3 imágenes para el carrete</p>
-                    <p class="ant-upload-hint">Únicamente archivos .png, .jpg o .jpge</p>
+                    <p
+                      class="ant-upload-text"
+                    >Selecciona o suelta hasta 3 imágenes/videos para el carrete</p>
+                    <p class="ant-upload-hint">Formatos aceptados .png, .jpg, .jpge o .mp4</p>
+                    <p class="ant-upload-hint">Imágenes &lt; 2MB / Videos &lt; 10MB</p>
                   </a-upload-dragger>
                 </div>
               </a-row>
@@ -213,32 +217,54 @@ export default {
       fileList: [],
       tagForm: this.$form.createForm(this),
       isTagFormLoading: false,
-      isBiodermaGame: false
+      isBiodermaGame: false,
+      isBlogNaos: true,
+      uploadFileStatus: true
     };
   },
   computed: {},
   methods: {
     beforeUpload(file) {
+      let status = true;
       const isJPG = file.type === "image/jpeg";
       const isPNG = file.type === "image/png";
+      const isMP4 = file.type === "video/mp4";
 
-      if (!isJPG && !isPNG) {
+      if (!isJPG && !isPNG && !isMP4) {
         this.$message.error("Este formato no esta permido.");
+        status = false;
       }
 
-      const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.$message.error("Image must smaller than 2MB!");
+      if (isJPG || isPNG) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error("La imagen debe ser menor a 2MB.");
+          status = false;
+        }
       }
-      return (isJPG || isPNG) && isLt2M;
+
+      if (isMP4) {
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+          this.$message.error("El video debe ser menor a 10MB.");
+          status = false;
+        }
+      }
+
+      // console.log("STATUS: ", status);
+      this.uploadFileStatus = status;
+      return status;
     },
     handleChangeFileUpload(info) {
-      let fileList = [...info.fileList];
-      console.log("fileList: ", fileList);
-      if (fileList.length > 3) {
-        fileList = fileList.slice(1, 4);
+      console.log("info: ", info);
+      if (this.uploadFileStatus) {
+        let fileList = [...info.fileList];
+        console.log("fileList: ", fileList);
+        if (fileList.length > 3) {
+          fileList = fileList.slice(1, 4);
+        }
+        this.fileList = fileList;
       }
-      this.fileList = fileList;
     },
     async onSubmitArticle() {
       let imagesArray = [];
@@ -258,7 +284,14 @@ export default {
           for (let index = 0; index < values.upload.fileList.length; index++) {
             imagesArray.push({
               id: index,
-              data: values.upload.fileList[index].response
+              data:
+                values.upload.fileList[index].type === "video/mp4"
+                  ? "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/videoblur.jpeg"
+                  : values.upload.fileList[index].response,
+              video:
+                values.upload.fileList[index].type === "video/mp4"
+                  ? values.upload.fileList[index].response
+                  : ""
             });
           }
         } else {
@@ -275,7 +308,8 @@ export default {
             subtitle: this.articleSubtitle,
             content: this.editorData,
             isBiodermaGame: this.isBiodermaGame,
-            tags: this.tagIds
+            tags: this.tagIds,
+            isBlogNaos: this.isBlogNaos
           });
           console.log("response", response);
           this.$router.push({
@@ -330,6 +364,7 @@ export default {
     this.articleTitle = this.$route.params.title;
     this.articleImage = this.$route.params.image;
     this.isBiodermaGame = this.$route.params.isBiodermaGame;
+    this.isBlogNaos = this.$route.params.isBlogNaos;
   }
 };
 </script>
