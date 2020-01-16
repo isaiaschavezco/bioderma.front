@@ -277,22 +277,22 @@ export default {
         onCancel() {}
       });
     },
-    async onDeleteBlog(chaindId) {
+    async onDeleteBlog(blogId) {
       try {
-        const response = await this.$axios.delete(`chain/${chaindId}`);
-        if (response.data == 1) {
-          this.getChains();
+        const response = await this.$axios.delete(`article/${blogId}`);
+        if (response.data.status == 0) {
+          this.getBlogList();
           this.showNotification(
             "success",
-            "Cadena eliminada",
-            "La cadena ha sido eliminada exitosamente."
+            "Entrada eliminada",
+            "La entrada ha sido eliminada exitosamente."
           );
         }
       } catch (err) {
         this.showNotification(
           "error",
-          "Error al eliminar cadena",
-          "Ha ocurrido un error al intentar eliminar la cadena."
+          "Error al eliminar entrada",
+          "Ha ocurrido un error al intentar eliminar la entrada."
         );
       }
     },
