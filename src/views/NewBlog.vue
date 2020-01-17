@@ -169,7 +169,7 @@
         justify="space-around"
         align="middle"
       >
-        <a-button size="large" style="border-radius: 24px;">CANCELAR</a-button>
+        <a-button size="large" style="border-radius: 24px;" @click="onCancelBlogSubmit">CANCELAR</a-button>
         <a-button
           type="primary"
           size="large"
@@ -282,15 +282,26 @@ export default {
         if (!err) {
           console.log("assetsForm: ", values);
           for (let index = 0; index < values.upload.fileList.length; index++) {
+            let assetUrl = values.upload.fileList[index].response;
+
+            if (values.upload.fileList[index].type === "video/mp4") {
+              let indexUrl = assetUrl.indexOf("/blog/");
+              assetUrl =
+                "https://bioderma-space.sfo2.digitaloceanspaces.com" +
+                assetUrl.substring(indexUrl, assetUrl.length);
+            }
+
+            console.log("assetUrl: ", assetUrl);
+
             imagesArray.push({
               id: index,
               data:
                 values.upload.fileList[index].type === "video/mp4"
                   ? "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/videoblur.jpeg"
-                  : values.upload.fileList[index].response,
+                  : assetUrl,
               video:
                 values.upload.fileList[index].type === "video/mp4"
-                  ? values.upload.fileList[index].response
+                  ? assetUrl
                   : ""
             });
           }
@@ -357,6 +368,11 @@ export default {
       this.tags = result;
       const resultIds = this.tagIds.filter(tempId => tempId !== tagName.id);
       this.tagIds = resultIds;
+    },
+    onCancelBlogSubmit() {
+      this.$router.push({
+        name: "blog"
+      });
     }
   },
   mounted() {

@@ -122,7 +122,7 @@
           Costo
           <a-input-number
             type="number"
-            :min="0"
+            :min="1"
             setFieldsValue="points"
             class="input-cost"
             size="small"
@@ -207,7 +207,7 @@
           Costo
           <a-input-number
             type="number"
-            :min="0"
+            :min="1"
             setFieldsValue="points"
             placeholder="Pts"
             class="input-cost"
