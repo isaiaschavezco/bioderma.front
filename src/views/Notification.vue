@@ -163,7 +163,16 @@ export default {
           "notification/send",
           notificationData
         );
-        this.getLastNotifications();
+        if (response.data.status == 0) {
+          this.getLastNotifications();
+          this.fileForm.resetFields();
+          this.deleteFilters = true;
+          this.showNotification(
+            "success",
+            "Notificación enviada",
+            "Se ha enviado la notificación exitosamente."
+          );
+        }
       } catch (err) {
         console.log("err: ", err);
       }

@@ -3,7 +3,7 @@
     <a-row>
       <a-col :xs="{ span: 15 }" style="margin-top: 30px;">
         <div style="margin-right:25px; margin-bottom:20px">
-          <a-card title="TITULO DEL BLOG" class="container">
+          <a-card :title="articleTitle" class="container">
             <a-form :form="articleForm">
               <a-form-item>
                 <a-input
@@ -205,8 +205,8 @@ export default {
       editor: ClassicEditor,
       editorData: "<p>Ingresa el contenido del artículo.</p>",
       editorConfig: {
-        alignment: {
-          options: ["left", "right"]
+        toolbar: {
+          items: ["bold", "italic", "undo", "redo"]
         }
       },
       tags: [],
