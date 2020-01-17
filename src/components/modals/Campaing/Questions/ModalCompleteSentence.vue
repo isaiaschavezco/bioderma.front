@@ -14,7 +14,10 @@
           placeholder="PREGUNTA _ X"
           v-decorator="[
           'question',
-          {rules: [{ required: true, validator: checkQuestion }]}
+          {
+						rules: [{ required: true, validator: checkQuestion }],
+						initialValue: question
+					}
         ]"
         />
       </a-form-item>
@@ -56,7 +59,10 @@
 									:disabled="!isAvailableOption[index]"
 									v-decorator="[
 										`question${option.indicator}`,
-										{rules: [{ required: isRequiredOption[index], validator: checkWords }]}
+										{
+											rules: [{ required: isRequiredOption[index], validator: checkWords }],
+											initialValue: optionsValues[index]
+										}
 									]"
 									@change="(e) => {onChangeOptionValue(index, e.target.value); }"
 								/>
@@ -78,7 +84,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'time',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: time
+						}
 					]"
 				/>
 
@@ -95,7 +104,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'points',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: points
+						}
 					]"
 				/>
 
@@ -126,6 +138,9 @@ export default {
 		},
 		quizz: {
 			default: ""
+		},
+		questionJSON: {
+			type: Object
 		}
 	},
 	data() {
@@ -133,6 +148,7 @@ export default {
 			time: "1",
 			points: "1",
 			answer: 0,
+			question: "",
 			wordsToComplete: 0,
 			quizzId: this.quizz,
 			isAvailableOption: [true, true, false, false, false],
@@ -167,6 +183,41 @@ export default {
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
+		},
+		questionJSON: function() {
+			this.questionData = this.questionJSON;
+			if (this.questionData.content && this.questionData.answer) {
+				this.question = this.questionData.content.question;
+				
+				if (this.question.length == 1) {
+					this.question = this.question[0].data;
+					
+					if (this.question[0] === ' ')
+						this.question = "_" + this.question;
+					else
+						this.question += "_"; 
+				}
+				else {
+					this.question = this.question.map(val => val.data);
+					this.question = this.question.reduce((acc, val, index) => {
+						return acc + (index > 0?"_":"") + val;
+					});
+				}
+
+				this.time = this.questionData.time;
+				this.points = this.questionData.points;
+				
+
+
+				this.optionsValues.fill("");
+
+				let responses = this.questionData.content.possiblesResponses;
+				responses = responses.map(val => val.response);
+
+				responses.forEach((val, idx) => {
+					this.onChangeOptionValue(idx, val);
+				});
+			}
 		}
 	},
 	methods: {

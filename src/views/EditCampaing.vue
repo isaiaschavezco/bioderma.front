@@ -84,19 +84,19 @@
     <!-- MODALES -->
 
     <!-- OPCION MULTIPLE -->
-    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
+    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="registerQuestion" @close="onCloseModal" />
+
+    <!-- RELACION DE COLUMNAS -->
+    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="registerQuestion" @close="onCloseModal" />
 
     <!-- COMPLETA LA FRASE -->
-    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
+    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="registerQuestion" @close="onCloseModal" />
 
     <!-- OPCION MULTIPLE IMAGEN -->
     <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
     
     <!-- ORDENA LA FRASE -->
     <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
-
-    <!-- RELACION DE COLUMNAS -->
-    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
 
   </div>
 </template>
@@ -124,6 +124,9 @@ export default {
       campaingName: this.$route.params.campaingName,
       collapsed: false,
       questionsData: [],
+      questionDataMultipleOption: {},
+      questionDataColumnRelation: {},
+      questionDataCompleteSentence: {},
       columnsQuestionsTable: [
         {
           dataIndex: "title",
@@ -198,7 +201,12 @@ export default {
                 title += "_"; 
             }
             else
-              title = title.reduce((acc, val, index) => (acc.data + (index > 0?"_":"") + val.data));
+            {
+              title = title.map(val => val.data);
+              title = title.reduce((acc, val, index) => {
+                return acc + (index > 0?"_":"") + val;
+              });
+            }
           }
           else if (question.question_type.id === 4) {
             const orderContent = JSON.parse(question.answer);
@@ -208,8 +216,8 @@ export default {
             title = content.questions[0].data;
           }
         } catch (error) {
-          title = 'Sin titulo';
-          console.log("Hubo un error.")
+          title = "Sin titulo";
+          console.log("Hubo un error al obtener el titulo: ", error.message);
         }
 
         let newQuestion = {
@@ -235,6 +243,7 @@ export default {
       this.multipleImageOptionModal = false;
       this.columnRelationModal = false;
       this.removeConfirmationModal = false;
+      this.questionDataMultipleOption = {};
 
       this.getQuestions();
     },
@@ -262,12 +271,10 @@ export default {
         const response = await this.$axios(url);
         const question = response.data.question;
 
-        const content = JSON.parse(question.content);
-        const answer = JSON.parse(question.answer);
+        question.content = JSON.parse(question.content);
+        question.answer = JSON.parse(question.answer);
         
-        console.log(question, questionType);
-        console.log(answer)
-        console.log(content);
+        this.openEditModal(question, questionType);
       } catch (error) {
         console.log("Hubo un error al editar la prgunta:", error.message);
         this.$notification["error"]({
@@ -275,6 +282,27 @@ export default {
           description:
           'Al parecer hubo un error al editar la pregunta, intenta de nuevo.',
         });
+      }
+    },
+    openEditModal(question, questionType) {
+      if (questionType === "OPCION MULTIPLE IMAGENES") {
+        this.multipleImageOptionModal = true;
+      }
+      else if (questionType === "ORDENA LA FRASE") {
+        this.sortWordsModal = true;
+      }
+      else if (questionType === "COMPLETA LA FRASE") {
+        console.log(question);
+        this.completeSentenceModal = true;
+        this.questionDataCompleteSentence = question;
+      }
+      else if (questionType === "RELACION DE COLUMNAS") {
+        this.columnRelationModal = true;
+        this.questionDataColumnRelation = question;
+      }
+      else if (questionType === "OPCION MULTIPLE") {
+        this.multipleOptionModal = true;
+        this.questionDataMultipleOption = question; 
       }
     },
     removeQuestion(id) {

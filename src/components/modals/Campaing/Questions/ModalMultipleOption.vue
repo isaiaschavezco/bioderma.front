@@ -12,7 +12,10 @@
           placeholder="PREGUNTA"
           v-decorator="[
           'question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
+          {
+						rules: [{ required: true, message: 'Favor de llenar el campo' }],
+						initialValue: question
+					}
         ]"
         />
       </a-form-item>
@@ -54,7 +57,10 @@
 									:disabled="!isAvailableOption[index]"
 									v-decorator="[
 										`question${option.indicator}`,
-										{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
+										{
+											rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }],
+											initialValue: optionsValues[index]
+										}
 									]"
 									@change="(e) => {onChangeOptionValue(index, e.target.value); }"
 								/>
@@ -76,7 +82,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'time',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: time
+						}
 					]"
 				/>
 
@@ -93,7 +102,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'points',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: points
+						}
 					]"
 				/>
 
@@ -124,6 +136,9 @@ export default {
 		},
 		quizz: {
 			default: ""
+		},
+		questionJSON: {
+			type: Object
 		}
 	},
 	data() {
@@ -131,6 +146,8 @@ export default {
 			time: "1",
 			points: "1",
 			answer: 0,
+			question: "",
+			questionData: this.questionJSON,
 			quizzId: this.quizz,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
@@ -164,6 +181,24 @@ export default {
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
+		},
+		questionJSON: function() {
+			this.questionData = this.questionJSON;
+			if (this.questionJSON.content && this.questionJSON.answer) {
+
+				this.question = this.questionData.content.question;
+				this.time = this.questionData.time;
+				this.points = this.questionData.points;
+				
+				this.optionsValues.fill("");
+
+				let responses = this.questionData.content.possiblesResponses;
+				responses = responses.map(val => val.response);
+
+				responses.forEach((val, idx) => {
+					this.onChangeOptionValue(idx, val);
+				});
+			}
 		}
 	},
 	methods: {
@@ -184,6 +219,7 @@ export default {
 			}
 		},
 		onCloseModal() {
+			this.resetFields();
 			this.$emit('close');
 		},
 		setAvailableOptions() {
@@ -251,17 +287,21 @@ export default {
 
 						
 						this.onCloseModal();
-						this.questionForm.resetFields();
-						this.optionsValues.fill("");
-						this.setAvailableOptions();
-						this.answer = 0;
-
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {
 						console.log('Hubo un error al registrar: ', error);
 					}
 				}
-			})
+			});
+		},
+		resetFields() {
+			this.question = "";
+			this.time = 1;
+			this.points = 0;
+			this.questionForm.resetFields();
+			this.optionsValues.fill("");
+			this.setAvailableOptions();
+			this.answer = 0;
 		}
 	}
 };
