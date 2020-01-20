@@ -11,6 +11,7 @@
                   v-decorator="[
                     'subtitle',
                     {
+                      initialValue: articleSubtitle,
                       rules: [
                         { required: true, message: 'Favor de llenar el campo' }
                       ]
@@ -39,6 +40,7 @@
                     v-decorator="[
                       'upload',
                       {
+                        initialValue: fileList,
                         rules: [
                           {
                             required: true,
@@ -174,8 +176,8 @@
           type="primary"
           size="large"
           style="margin-left:3rem; background-color:#009FD1; border-radius: 24px;"
-          @click="showSubmitConfirm(onSubmitArticle)"
-        >PUBLICAR</a-button>
+          @click="showSubmitConfirm(onSubmitArticle, isEditing)"
+        >{{ isEditing ? 'EDITAR' : 'PUBLICAR' }}</a-button>
       </a-col>
     </a-row>
   </div>
@@ -219,7 +221,10 @@ export default {
       isTagFormLoading: false,
       isBiodermaGame: false,
       isBlogNaos: true,
-      uploadFileStatus: true
+      uploadFileStatus: true,
+      blogData: null,
+      isEditing: false,
+      articleId: null
     };
   },
   computed: {},
@@ -281,6 +286,7 @@ export default {
       this.assetsForm.validateFields(async (err, values) => {
         if (!err) {
           console.log("assetsForm: ", values);
+
           for (let index = 0; index < values.upload.fileList.length; index++) {
             let assetUrl = values.upload.fileList[index].response;
 
@@ -312,16 +318,27 @@ export default {
 
       if (isAllValidate) {
         try {
-          const response = await this.$axios.post("article", {
-            title: this.articleTitle,
-            image: this.articleImage,
-            galery: JSON.stringify(imagesArray),
-            subtitle: this.articleSubtitle,
-            content: this.editorData,
-            isBiodermaGame: this.isBiodermaGame,
-            tags: this.tagIds,
-            isBlogNaos: this.isBlogNaos
-          });
+          let response = null;
+          if (this.isEditing) {
+            response = await this.$axios.put("article", {
+              id: this.articleId,
+              image: this.articleImage,
+              subtitle: this.articleSubtitle,
+              content: this.editorData,
+              tags: this.tagIds
+            });
+          } else {
+            response = await this.$axios.post("article", {
+              title: this.articleTitle,
+              image: this.articleImage,
+              galery: JSON.stringify(imagesArray),
+              subtitle: this.articleSubtitle,
+              content: this.editorData,
+              isBiodermaGame: this.isBiodermaGame,
+              tags: this.tagIds,
+              isBlogNaos: this.isBlogNaos
+            });
+          }
           console.log("response", response);
           this.$router.push({
             name: "blog"
@@ -331,10 +348,12 @@ export default {
         }
       }
     },
-    showSubmitConfirm(onSubmit) {
+    showSubmitConfirm(onSubmit, isEditing) {
       this.$confirm({
-        title: "¿Estás seguro que deseas publicar esta entrada?",
-        okText: "PUBLICAR",
+        title: isEditing
+          ? "¿Estás seguro que deseas editar esta entrada?"
+          : "¿Estás seguro que deseas publicar esta entrada?",
+        okText: isEditing ? "EDITAR" : "PUBLICAR",
         okType: "warning",
         cancelText: "CANCELAR",
         centered: true,
@@ -375,12 +394,44 @@ export default {
       });
     }
   },
-  mounted() {
-    console.log(this.$route.params);
-    this.articleTitle = this.$route.params.title;
-    this.articleImage = this.$route.params.image;
-    this.isBiodermaGame = this.$route.params.isBiodermaGame;
-    this.isBlogNaos = this.$route.params.isBlogNaos;
+  async mounted() {
+    if (this.$route.query.blogId) {
+      this.isEditing = true;
+
+      const response = await this.$axios(`article/${this.$route.query.blogId}`);
+
+      this.articleId = this.$route.query.blogId;
+      this.blogData = response.data.blogs;
+
+      console.log("blogData: ", this.blogData);
+
+      this.articleTitle = this.blogData.title;
+      this.editorData = this.blogData.description;
+      this.articleSubtitle = this.blogData.subtitle;
+      this.blogData.tags.forEach(tempTag => {
+        this.tags.push(tempTag);
+        this.tagIds.push(tempTag.id);
+      });
+
+      this.blogData.images.forEach(tempAsset => {
+        let isVideo = tempAsset.video ? tempAsset.video.length > 0 : false;
+        let assetName = isVideo
+          ? tempAsset.video.split("-")
+          : tempAsset.data.split("-");
+
+        this.fileList.push({
+          uid: tempAsset.id,
+          thumbUrl: tempAsset.data,
+          response: isVideo ? tempAsset.video : tempAsset.data,
+          name: assetName[assetName.length - 1]
+        });
+      });
+    } else {
+      this.articleTitle = this.$route.params.title;
+      this.articleImage = this.$route.params.image;
+      this.isBiodermaGame = this.$route.params.isBiodermaGame;
+      this.isBlogNaos = this.$route.params.isBlogNaos;
+    }
   }
 };
 </script>

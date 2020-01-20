@@ -11,7 +11,12 @@
                   <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                  <a-button shape="circle" icon="info" size="large" />
+                  <a-button
+                    shape="circle"
+                    icon="info"
+                    size="large"
+                    @click="editArticle(record.id)"
+                  />
                   <a-divider type="vertical" />
                   <a-button
                     shape="circle"
@@ -29,7 +34,12 @@
                   <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                  <a-button shape="circle" icon="info" size="large" />
+                  <a-button
+                    shape="circle"
+                    icon="info"
+                    size="large"
+                    @click="editArticle(record.id)"
+                  />
                   <a-divider type="vertical" />
                   <a-button
                     shape="circle"
@@ -47,7 +57,12 @@
                   <a-tag v-for="tag in tags" color="green" :key="tag.id">{{tag.name}}</a-tag>
                 </span>
                 <span slot="action" slot-scope="text, record">
-                  <a-button shape="circle" icon="info" size="large" />
+                  <a-button
+                    shape="circle"
+                    icon="info"
+                    size="large"
+                    @click="editArticle(record.id)"
+                  />
                   <a-divider type="vertical" />
                   <a-button
                     shape="circle"
@@ -325,6 +340,15 @@ export default {
       } else {
         this.blogList = newBlog;
       }
+    },
+    editArticle(articleId) {
+      console.log("articleId: ", articleId);
+      this.$router.push({
+        name: "newblog",
+        query: {
+          blogId: articleId
+        }
+      });
     }
   },
   async mounted() {
