@@ -92,12 +92,11 @@
     <!-- COMPLETA LA FRASE -->
     <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="registerQuestion" @close="onCloseModal" />
 
-    <!-- OPCION MULTIPLE IMAGEN -->
-    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
-    
     <!-- ORDENA LA FRASE -->
-    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" @register="registerQuestion" @close="onCloseModal" />
-
+    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" :questionJSON="questionDataSortWords" @register="registerQuestion" @close="onCloseModal" />
+    
+    <!-- OPCION MULTIPLE IMAGEN -->
+    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleImage" @register="registerQuestion" @close="onCloseModal" />
   </div>
 </template>
 <script>
@@ -127,6 +126,8 @@ export default {
       questionDataMultipleOption: {},
       questionDataColumnRelation: {},
       questionDataCompleteSentence: {},
+      questionDataMultipleImage: {},
+      questionDataSortWords: {},
       columnsQuestionsTable: [
         {
           dataIndex: "title",
@@ -287,12 +288,14 @@ export default {
     openEditModal(question, questionType) {
       if (questionType === "OPCION MULTIPLE IMAGENES") {
         this.multipleImageOptionModal = true;
+        console.log(question);
+        this.questionDataMultipleImage = question;
       }
       else if (questionType === "ORDENA LA FRASE") {
         this.sortWordsModal = true;
+        this.questionDataSortWords = question;
       }
       else if (questionType === "COMPLETA LA FRASE") {
-        console.log(question);
         this.completeSentenceModal = true;
         this.questionDataCompleteSentence = question;
       }

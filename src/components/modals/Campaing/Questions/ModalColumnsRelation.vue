@@ -140,7 +140,7 @@ export default {
 	data() {
 		return {
 			time: 1,
-			points: 1,
+			points: 0,
 			quizzId: this.quizz,
 			questionData: this.questionJSON,
 			isAvailableOption: [true, true, false, false, false],
@@ -215,6 +215,15 @@ export default {
 		},
 		onCloseModal() {
 			this.$emit('close');
+			this.resetData();
+		},
+		resetData() {
+			this.questionForm.resetFields();
+			this.reactivesValues.fill("");
+			this.responsesValues.fill("");
+			this.setAvailableOptions();
+			this.time = 1;
+			this.points = 0;
 		},
 		setAvailableOptions() {
 			let newAvailableValues = new Array(5);
@@ -289,10 +298,6 @@ export default {
 						const responseData = await this.$emit('register', questionInformation);
 						
 						this.onCloseModal();
-						this.questionForm.resetFields();
-						this.reactivesValues.fill("");
-						this.responsesValues.fill("");
-						this.setAvailableOptions();
 
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {

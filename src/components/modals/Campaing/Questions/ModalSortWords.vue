@@ -21,7 +21,10 @@
           placeholder="Escribe tu frase..."
           v-decorator="[
           'question',
-          {rules: [{ required: true, validator: checkSentence }]}
+          {
+						rules: [{ required: true, validator: checkSentence }],
+						initialValue: question
+					}
         ]"
         />
       </a-form-item>
@@ -40,7 +43,10 @@
           style="width: 120px"
           v-decorator="[
 						'time',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: time
+						}
 					]"
         />
 
@@ -58,7 +64,10 @@
           style="width: 120px"
           v-decorator="[
 						'points',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: points
+						}
 					]"
         />
 
@@ -89,17 +98,24 @@ export default {
 		},
 		quizz: {
 			default: ""
+		},
+		questionJSON: {
+			type: Object
 		}
 	},
 	data() {
 		return {
-			time: "1",
-			points: "1",
+			time: 1,
+			points: 0,
 			answer: 0,
+			question: "",
 			quizzId: this.quizz,
 			isValidSentence: false,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
+			questionData: {},
+			time: 0,
+			points: 0,
 			textOptions: [
 				{
 					name: 'optionA',
@@ -123,18 +139,35 @@ export default {
 				}
 			],
 			isVisibleModal: this.isVisible,
-			questionForm: this.$form.createForm(this),
-			optionsValues: ["", "", "", "", ""],
-		};
+			questionForm: this.$form.createForm(this)
+			};
 	},
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
+		},
+		questionJSON: function() {
+			this.questionData = this.questionJSON;
+			if (this.questionJSON.content && this.questionJSON.answer) {
+				const sentence = this.questionData.answer.order.map(val => val.data);
+				this.question = sentence.join(" ");
+
+				this.time = this.questionData.time;
+				this.points = this.questionData.points;
+			}
 		}
 	},
 	methods: {
 		onCloseModal() {
 			this.$emit('close');
+			this.resetData();
+		},
+		resetData() {
+			this.questionForm.resetFields();
+			this.question = "";
+			this.answer = 0;
+			this.points = 0;
+			this.time = 1;
 		},
 		checkSentence(rule, value, callback) {
 			const words = value.trim().split(' ');
@@ -183,9 +216,6 @@ export default {
 						const responseData = await this.$emit('register', questionInformation);
 						
 						this.onCloseModal();
-						this.questionForm.resetFields();
-						this.answer = 0;
-					
 
 						console.log(questionInformation);
 						console.log(JSON.stringify(questionInformation));

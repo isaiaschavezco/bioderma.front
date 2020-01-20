@@ -145,8 +145,8 @@ export default {
 	},
 	data() {
 		return {
-			time: "1",
-			points: "1",
+			time: 1,
+			points: 0,
 			answer: 0,
 			question: "",
 			wordsToComplete: 0,
@@ -265,6 +265,15 @@ export default {
 		},
 		onCloseModal() {
 			this.$emit('close');
+			this.resetData();
+		},
+		resetData() {
+			this.questionForm.resetFields();
+			this.optionsValues.fill("");
+			this.setAvailableOptions();
+			this.answer = 0;
+			this.points = 0;
+			this.time = 1;
 		},
 		setAvailableOptions() {
 			let newAvailableValues = new Array(5);
@@ -334,10 +343,6 @@ export default {
 						const responseData = await this.$emit('register', questionInformation);
 						
 						this.onCloseModal();
-						this.questionForm.resetFields();
-						this.optionsValues.fill("");
-						this.setAvailableOptions();
-						this.answer = 0;
 
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {

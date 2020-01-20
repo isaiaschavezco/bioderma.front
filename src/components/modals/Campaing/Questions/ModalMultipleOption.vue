@@ -143,8 +143,8 @@ export default {
 	},
 	data() {
 		return {
-			time: "1",
-			points: "1",
+			time: 1,
+			points: 0,
 			answer: 0,
 			question: "",
 			questionData: this.questionJSON,

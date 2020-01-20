@@ -23,7 +23,10 @@
           placeholder="PREGUNTA"
           v-decorator="[
           'question',
-          {rules: [{ required: true, message: 'Favor de llenar el campo' }]}
+          {
+            rules: [{ required: true, message: 'Favor de llenar el campo' }],
+            initialValue: question
+          }
         ]"
         />
       </a-form-item>
@@ -103,7 +106,10 @@
           style="width: 120px; margin-left: 5px;"
           v-decorator="[
 						'time',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+              rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+              initialValue: time
+            }
 					]"
         />
 
@@ -121,7 +127,10 @@
           style="width: 120px; margin-right: 5px;"
           v-decorator="[
 						'points',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+              rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+              initialValue: points
+            }
 					]"
         />
 
@@ -152,13 +161,17 @@ export default {
     },
     quizz: {
       default: ""
-    }
+    },
+		questionJSON: {
+			type: Object
+		}
   },
   data() {
     return {
-      time: "1",
-      points: "1",
-			answer: 0,
+      time: 1,
+      points: 0,
+      answer: 0,
+      question: "",
       fileList: [[], [], [], [], []],
       optionsImages: [null, null, null, null, null],
       quizzId: this.quizz,
@@ -193,7 +206,17 @@ export default {
   watch: {
     isVisible: function() {
       this.isVisibleModal = this.isVisible;
-    }
+    },
+		questionJSON: function() {
+			this.questionData = this.questionJSON;
+			if (this.questionJSON.content && this.questionJSON.answer) {
+				//const sentence = this.questionData.answer.order.map(val => val.data);
+				this.question = this.questionData.content.question;
+
+				this.time = this.questionData.time;
+				this.points = this.questionData.points;
+			}
+		}
   },
   methods: {
     onCloseModal() {
