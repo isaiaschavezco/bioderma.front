@@ -34,7 +34,10 @@
 								:disabled="!isAvailableOption[index]"
 								v-decorator="[
 									`reactive${option.indicator}`,
-									{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
+									{
+										rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }],
+										initialValue: reactivesValues[index]
+									}
 								]"
 								@change="(e) => {onChangeReactiveValue(index, e.target.value); }"
 							/>
@@ -51,7 +54,10 @@
 								:disabled="!isAvailableOption[index]"
 								v-decorator="[
 									`response${option.indicator}`,
-									{rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }]}
+									{
+										rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }],
+										initialValue: responsesValues[index]
+									}
 								]"
 								@change="(e) => {onChangeResponseValue(index, e.target.value); }"
 							/>
@@ -72,7 +78,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'time',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: time
+						}
 					]"
 				/>
 
@@ -89,7 +98,10 @@
 					style="width: 120px"
 					v-decorator="[
 						'points',
-						{rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}]}
+						{
+							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
+							initialValue: points
+						}
 					]"
 				/>
 
@@ -120,13 +132,17 @@ export default {
 		},
 		quizz: {
 			default: ""
+		},
+		questionJSON: {
+			type: Object
 		}
 	},
 	data() {
 		return {
-			time: "1",
-			points: "1",
+			time: 1,
+			points: 0,
 			quizzId: this.quizz,
+			questionData: this.questionJSON,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
 			textOptions: [
@@ -160,6 +176,32 @@ export default {
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
+		},
+		questionJSON: function() {
+			this.questionData = this.questionJSON;
+			if (this.questionData.content && this.questionData.answer) {
+				this.time = this.questionData.time;
+				this.points = this.questionData.points;
+
+				this.reactivesValues.fill("");
+				this.responsesValues.fill("");
+
+				let questions = this.questionData.content.questions;
+				questions = questions.map(val => val.data);
+
+				questions.forEach((val, idx) => {
+					this.onChangeReactiveValue(idx, val);
+				});
+
+				let responses = this.questionData.answer.responses;
+
+				responses = responses.map(val => val.data);
+
+				responses.forEach((val, idx) => {
+					this.onChangeResponseValue(idx, val);
+				});
+
+			}
 		}
 	},
 	methods: {
@@ -173,6 +215,15 @@ export default {
 		},
 		onCloseModal() {
 			this.$emit('close');
+			this.resetData();
+		},
+		resetData() {
+			this.questionForm.resetFields();
+			this.reactivesValues.fill("");
+			this.responsesValues.fill("");
+			this.setAvailableOptions();
+			this.time = 1;
+			this.points = 0;
 		},
 		setAvailableOptions() {
 			let newAvailableValues = new Array(5);
@@ -247,10 +298,6 @@ export default {
 						const responseData = await this.$emit('register', questionInformation);
 						
 						this.onCloseModal();
-						this.questionForm.resetFields();
-						this.reactivesValues.fill("");
-						this.responsesValues.fill("");
-						this.setAvailableOptions();
 
 						console.log(JSON.stringify(questionInformation));
 					} catch (error) {
