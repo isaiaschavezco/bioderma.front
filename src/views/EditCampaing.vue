@@ -29,7 +29,7 @@
               shape="circle"
               icon="bars"
               size="large"
-              @click="() => multipleOptionModal = true"
+              @click="openQuestionModal(1)"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
@@ -40,7 +40,7 @@
               shape="circle"
               icon="rise"
               size="large"
-              @click="() => columnRelationModal = true"
+              @click="openQuestionModal(2)"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Relacion de Columnas</a-col>
@@ -51,7 +51,7 @@
               shape="circle"
               icon="dash"
               size="large"
-              @click="() => completeSentenceModal = true"
+              @click="openQuestionModal(3)"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Completa la Frase</a-col>
@@ -62,7 +62,7 @@
               shape="circle"
               icon="appstore"
               size="large"
-              @click="() => sortWordsModal = true"
+              @click="openQuestionModal(4)"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Ordena la Frase</a-col>
@@ -73,7 +73,7 @@
               shape="circle"
               icon="picture"
               size="large"
-              @click="() => multipleImageOptionModal = true"
+              @click="openQuestionModal(5)"
             />
           </a-col>
           <a-col class="description-icon title-span-tag">Agregar Opcion Multiple Imagen</a-col>
@@ -84,19 +84,19 @@
     <!-- MODALES -->
 
     <!-- OPCION MULTIPLE -->
-    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="registerQuestion" @close="onCloseModal" />
+    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="action" :textButton="nameAction" @close="onCloseModal" />
 
     <!-- RELACION DE COLUMNAS -->
-    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="registerQuestion" @close="onCloseModal" />
+    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="action" :textButton="nameAction" @close="onCloseModal" />
 
     <!-- COMPLETA LA FRASE -->
-    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="registerQuestion" @close="onCloseModal" />
+    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="action" :textButton="nameAction" @close="onCloseModal" />
 
     <!-- ORDENA LA FRASE -->
-    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" :questionJSON="questionDataSortWords" @register="registerQuestion" @close="onCloseModal" />
+    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" :questionJSON="questionDataSortWords" @register="action" :textButton="nameAction" @close="onCloseModal" />
     
     <!-- OPCION MULTIPLE IMAGEN -->
-    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleImage" @register="registerQuestion" @close="onCloseModal" />
+    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleImage" @register="action" :textButton="nameAction" @close="onCloseModal" />
   </div>
 </template>
 <script>
@@ -118,6 +118,7 @@ export default {
   },
   data() {
     return {
+      idEditQuestion: null,
       quizzId: this.$route.query.quizzId,
       quizzName: this.$route.params.quizzName,
       campaingName: this.$route.params.campaingName,
@@ -128,6 +129,8 @@ export default {
       questionDataCompleteSentence: {},
       questionDataMultipleImage: {},
       questionDataSortWords: {},
+      action: this.registerQuestion,
+      nameAction: "Crear",
       columnsQuestionsTable: [
         {
           dataIndex: "title",
@@ -234,6 +237,25 @@ export default {
 
       return questions;
     },
+    openQuestionModal(questionType) {
+      if (questionType === 1) {
+        this.multipleOptionModal = true;
+      }
+      else if (questionType === 2) {
+        this.columnRelationModal = true;   
+      }
+      else if (questionType === 3) {
+        this.completeSentenceModal = true;
+      }
+      else if (questionType === 4) {
+        this.sortWordsModal = true;
+      }
+      else {
+        this.multipleImageOptionModal = true;
+      }
+
+      this.action = this.registerQuestion;
+    },
     returnToCampaing() {
       this.$router.go(-1);
     },
@@ -265,12 +287,14 @@ export default {
       
       return responseData;
     },
-    async editQuestion(id, questionType) {
-      const url = `question/detail/${id}`;
-      
+    async editQuestion(id, questionType) {    
       try {
+        this.idEditQuestion = id;
+        const url = `question/detail/${id}`;
         const response = await this.$axios(url);
         const question = response.data.question;
+
+        this.nameAction = "GUARDAR CAMBIOS";
 
         question.content = JSON.parse(question.content);
         question.answer = JSON.parse(question.answer);
@@ -288,7 +312,6 @@ export default {
     openEditModal(question, questionType) {
       if (questionType === "OPCION MULTIPLE IMAGENES") {
         this.multipleImageOptionModal = true;
-        console.log(question);
         this.questionDataMultipleImage = question;
       }
       else if (questionType === "ORDENA LA FRASE") {
@@ -306,6 +329,18 @@ export default {
       else if (questionType === "OPCION MULTIPLE") {
         this.multipleOptionModal = true;
         this.questionDataMultipleOption = question; 
+      }
+
+      this.action = this.updateQuestion;
+    },
+    async updateQuestion(questionData) {
+      try {
+        questionData.id = idEditQuestion;
+        const response = await this.$axios.put("/question", questionData);
+
+        console.log("Data:", response.data);
+      } catch (error) {
+        
       }
     },
     removeQuestion(id) {
