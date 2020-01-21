@@ -78,7 +78,7 @@ export default {
       this.recoveryForm.validateFields(async (err, values) => {
         if (!err) {
           try {
-            const response = await this.$axios.post("user/recovery", {
+            const response = await this.$axios.put("user/recovery", {
               email: this.email,
               password: values.password,
               token: this.token
