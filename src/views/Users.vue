@@ -494,11 +494,18 @@ export default {
                 "La invitación ha sido enviada correctamente."
               );
             }
-            else if (response.data === 5) {
-              this.$notification["warning"]({
-                message: "Usuario ya invitado",
+            else if (response.data === 9) {
+              this.$notification["info"]({
+                message: "Usuario activo",
                 description:
-                  "El usuario ya fue invitado anteriormente.",
+                  "El usuario se encuentra activo.",
+              });
+            }
+            else if (response.data === 8) {
+              this.$notification["success"]({
+                message: "Usuario activado",
+                description:
+                  "El usuario se ha activado exitosamente.",
               });
             }
           } catch (err) {
