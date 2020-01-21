@@ -210,18 +210,36 @@ export default {
 		questionJSON: function() {
 			this.questionData = this.questionJSON;
 			if (this.questionJSON.content && this.questionJSON.answer) {
-				//const sentence = this.questionData.answer.order.map(val => val.data);
-				this.question = this.questionData.content.question;
+				const options = this.questionData.content.possiblesResponses.map(val => val.response); 
+        this.question = this.questionData.content.question;
+
+        this.optionsImages.fill(null);
+
+        for (let i = 0; i < options.length; ++i)
+          this.optionsImages[i] = options[i];
 
 				this.time = this.questionData.time;
-				this.points = this.questionData.points;
+        this.points = this.questionData.points;
+        
+        this.answer = this.questionData.answer.response;
+
+        console.log(options);
 			}
 		}
   },
   methods: {
     onCloseModal() {
       this.$emit("close");
-		},
+    },
+    resetData() {
+      this.questionForm.resetFields();
+      this.fileList.fill([]);
+      this.optionsImages.fill(null);
+      this.setAvailableOptions();
+      this.answer = 0;
+      this.time = 1;
+      this.points = 0;
+    },
     handleChangeFileUpload(info, index) {
       let fileList = [...info.fileList];
       fileList = fileList.slice(-1);
@@ -281,57 +299,51 @@ export default {
       e.preventDefault();
 
       this.questionForm.validateFields(async (err, values) => {
-          values = this.questionForm.getFieldsValue();
+        values = this.questionForm.getFieldsValue();
 
           if (!err) {
-            for (let i = 0; i < 5; ++i) {
-              if (this.fileList[i].length === 0) {
-								for (let j = i; j < 5; ++j)
-									this.fileList[j] = [];
-                break;
-              }
-            }
-
-            let options = this.fileList.filter((val, index) => val.length > 0 && this.isAvailableOption[index]).map((option, index) => {
-							return {
-								index: index,
-								response: option[0].response
-							};
-						});
-
-            let question = values.question;
-						
-						const content = JSON.stringify({
-              question,
-              possiblesResponses: options
-            });
-
-            const answer = JSON.stringify({
-              response: this.answer
-            });
-
-            const questionInformation = {
-              quizzId: this.quizzId,
-              questionType: 2,
-              content: content,
-              points: Number.parseInt(values.points),
-              answer: answer,
-              time: Number.parseInt(values.time)
-            };
-
             try {
+              for (let i = 0; i < 5; ++i) {
+                if (this.fileList[i].length === 0) {
+                  for (let j = i; j < 5; ++j)
+                    this.fileList[j] = [];
+                  break;
+                }
+              }
+
+              let options = this.fileList.filter((val, index) => val.length > 0 && this.isAvailableOption[index]).map((option, index) => {
+                return {
+                  index: index,
+                  response: option[0].response
+                };
+              });
+
+              let question = values.question;
+              
+              const content = JSON.stringify({
+                question,
+                possiblesResponses: options
+              });
+
+              const answer = JSON.stringify({
+                response: this.answer
+              });
+
+              const questionInformation = {
+                quizzId: this.quizzId,
+                questionType: 2,
+                content: content,
+                points: Number.parseInt(values.points),
+                answer: answer,
+                time: Number.parseInt(values.time)
+              };
+
               const responseData = await this.$emit(
                 "register",
                 questionInformation
               );
 
               this.onCloseModal();
-              this.questionForm.resetFields();
-              this.fileList.fill([]);
-              this.setAvailableOptions();
-              this.answer = 0;
-
-              console.log(JSON.stringify(questionInformation));
             } catch (error) {
               console.log("Hubo un error: ", error);
             }

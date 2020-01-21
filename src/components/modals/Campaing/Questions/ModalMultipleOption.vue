@@ -119,7 +119,7 @@
 					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>
 				<a-col span="7">
-					<a-button type="primary" html-type="submit">CREAR</a-button>
+					<a-button type="primary" html-type="submit">{{ action }}</a-button>
 				</a-col>
 			</a-row>
     </a-form>
@@ -139,6 +139,9 @@ export default {
 		},
 		questionJSON: {
 			type: Object
+		},
+		textButton: {
+			type: String
 		}
 	},
 	data() {
@@ -147,6 +150,7 @@ export default {
 			points: 0,
 			answer: 0,
 			question: "",
+			action: this.textButton,
 			questionData: this.questionJSON,
 			quizzId: this.quizz,
 			isAvailableOption: [true, true, false, false, false],
@@ -182,10 +186,12 @@ export default {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
 		},
+		textButton: function() {
+			this.action = this.textButton;
+		},
 		questionJSON: function() {
 			this.questionData = this.questionJSON;
 			if (this.questionJSON.content && this.questionJSON.answer) {
-
 				this.question = this.questionData.content.question;
 				this.time = this.questionData.time;
 				this.points = this.questionData.points;
