@@ -6,7 +6,7 @@
           <a-skeleton :loading="loadingQuizz" active>
             <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
               <span slot="action" slot-scope="text, record">
-                <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId, record.name)" />
+                <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId, record.name, text.status)" />
                 <a-divider type="vertical" />
                 <a-button shape="circle" icon="delete" size="large" @click="() => onOpenModalRemove()" />
                 
@@ -389,9 +389,8 @@ export default {
         console.log("Submit dates: ", err);
       }
     },
-    editQuizz(quizzId, quizzName) {
-      console.log(quizzName);
-      this.$router.push({ name: 'editCampaing', query: { quizzId }, params: {campaingName: this.campaingName, quizzName} });
+    editQuizz(quizzId, quizzName, status) {
+      this.$router.push({ name: 'editCampaing', query: { quizzId }, params: {campaingName: this.campaingName, quizzName, status: status.toUpperCase() !== "ACTIVA"} });
     },
     removeQuizz() {
 

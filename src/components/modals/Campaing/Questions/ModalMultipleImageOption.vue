@@ -144,7 +144,7 @@
           <a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
         </a-col>
         <a-col span="7">
-          <a-button type="primary" html-type="submit">CREAR</a-button>
+          <a-button type="primary" html-type="submit">{{ action }}</a-button>
         </a-col>
       </a-row>
     </a-form>
@@ -164,6 +164,9 @@ export default {
     },
 		questionJSON: {
 			type: Object
+    },
+		textButton: {
+			type: String
 		}
   },
   data() {
@@ -173,6 +176,7 @@ export default {
       answer: 0,
       question: "",
       fileList: [[], [], [], [], []],
+			action: this.textButton,
       optionsImages: [null, null, null, null, null],
       quizzId: this.quizz,
       isAvailableOption: [true, true, false, false, false],
@@ -207,6 +211,9 @@ export default {
     isVisible: function() {
       this.isVisibleModal = this.isVisible;
     },
+    textButton: function() {
+			this.action = this.textButton;
+		},
 		questionJSON: function() {
 			this.questionData = this.questionJSON;
 			if (this.questionJSON.content && this.questionJSON.answer) {
@@ -216,20 +223,20 @@ export default {
         this.optionsImages.fill(null);
 
         for (let i = 0; i < options.length; ++i)
-          this.optionsImages[i] = options[i];
+            this.optionsImages[i] = options[i];
 
 				this.time = this.questionData.time;
         this.points = this.questionData.points;
         
         this.answer = this.questionData.answer.response;
-
-        console.log(options);
-			}
+        this.setAvailableOptions();
+      }
 		}
   },
   methods: {
     onCloseModal() {
       this.$emit("close");
+      this.resetData();
     },
     resetData() {
       this.questionForm.resetFields();
@@ -237,6 +244,7 @@ export default {
       this.optionsImages.fill(null);
       this.setAvailableOptions();
       this.answer = 0;
+      this.question = "";
       this.time = 1;
       this.points = 0;
     },
@@ -257,7 +265,6 @@ export default {
         }
 			});
 			
-
       return status;
 		},
 		onChangeOptionValue() {
@@ -265,10 +272,10 @@ export default {
 			this.onChangeAnswer();
 		},
 		onChangeAnswer() {
-			const option = this.fileList[this.answer];
-			if (!this.isAvailableOption[this.answer] || option.length == 0) {
-				for (let i = 4; i >= 0; --i) {
-					if (i < 2 || (this.isAvailableOption[i] && this.fileList[i].length > 0)) {
+			const option = this.optionsImages[this.answer];
+			if (this.answer > 1 && (!this.isAvailableOption[this.answer] || !option)) {
+        for (let i = 4; i >= 0; --i) {
+					if (i < 2 || (this.optionsImages[i] && this.isAvailableOption[i])) {
 						this.answer = i;
 						break;
 					}
@@ -278,17 +285,15 @@ export default {
 		setAvailableOptions() {
 			let newAvailableValues = new Array(5);
 			newAvailableValues.fill(true);
-
+      console.log("Hola");
 			for (let i = 0; i < 5; ++i) {
 				if (i < 2)
 					newAvailableValues[i] = true;
 				else {
 					let available = true;
-
-					for (let j = 0; j < i && available; ++j)
-						available &= (this.fileList[j].length > 0);
+          for (let j = 0; j < i && available; ++j)
+            available &= this.optionsImages[j] !== null;
 					
-
 					newAvailableValues[i] = available;
 				}
 			}
@@ -303,20 +308,24 @@ export default {
 
           if (!err) {
             try {
+              console.log(options, this.optionsImages);
               for (let i = 0; i < 5; ++i) {
-                if (this.fileList[i].length === 0) {
+                if (!this.optionsImages[i] || this.optionsImages[i].length === 0) {
                   for (let j = i; j < 5; ++j)
-                    this.fileList[j] = [];
+                    this.optionsImages[j] = null;
                   break;
                 }
               }
 
-              let options = this.fileList.filter((val, index) => val.length > 0 && this.isAvailableOption[index]).map((option, index) => {
+              let options = this.optionsImages.filter((val, index) => val && val.length > 0 && this.isAvailableOption[index])
+              console.log(options, this.optionsImages);
+              options = options.map((option, index) => {
                 return {
                   index: index,
-                  response: option[0].response
+                  response: option
                 };
               });
+
 
               let question = values.question;
               

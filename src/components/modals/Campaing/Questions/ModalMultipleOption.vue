@@ -195,7 +195,10 @@ export default {
 				this.question = this.questionData.content.question;
 				this.time = this.questionData.time;
 				this.points = this.questionData.points;
-				
+				this.answer = this.questionJSON.answer.response;
+
+				console.log(this.questionJSON);
+
 				this.optionsValues.fill("");
 
 				let responses = this.questionData.content.possiblesResponses;

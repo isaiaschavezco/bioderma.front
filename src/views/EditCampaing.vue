@@ -6,9 +6,9 @@
           <a-card :title="quizzName">
             <a-table :columns="columnsQuestionsTable" :dataSource="questionsData" style="margin-top: 1rem;">
               <span slot="action" slot-scope="text, record">
-                <a-button shape="circle" icon="edit" size="large" @click="editQuestion(text.key, text.type)" />
+                <a-button shape="circle" icon="edit" size="large" @click="editQuestion(text.key, text.type)" :disabled="!availableButtons" />
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" @click="removeQuestion(text.key)" />
+                <a-button shape="circle" icon="delete" size="large" @click="removeQuestion(text.key)" :disabled="!availableButtons" />
               </span>
             </a-table>
           </a-card>
@@ -23,61 +23,63 @@
           </a-col>
           <a-col class="description-icon title-span-tag">Regresar a trivia</a-col>
         </a-row>
-        <a-row class="btn-description">
-          <a-col>
-            <a-button
-              shape="circle"
-              icon="bars"
-              size="large"
-              @click="openQuestionModal(1)"
-            />
-          </a-col>
-          <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
-        </a-row>
-        <a-row class="btn-description">
-          <a-col>
-            <a-button
-              shape="circle"
-              icon="rise"
-              size="large"
-              @click="openQuestionModal(2)"
-            />
-          </a-col>
-          <a-col class="description-icon title-span-tag">Agregar Relacion de Columnas</a-col>
-        </a-row>
-        <a-row class="btn-description">
-          <a-col>
-            <a-button
-              shape="circle"
-              icon="dash"
-              size="large"
-              @click="openQuestionModal(3)"
-            />
-          </a-col>
-          <a-col class="description-icon title-span-tag">Agregar Completa la Frase</a-col>
-        </a-row>
-        <a-row class="btn-description">
-          <a-col>
-            <a-button
-              shape="circle"
-              icon="appstore"
-              size="large"
-              @click="openQuestionModal(4)"
-            />
-          </a-col>
-          <a-col class="description-icon title-span-tag">Agregar Ordena la Frase</a-col>
-        </a-row>
-        <a-row class="btn-description">
-          <a-col>
-            <a-button
-              shape="circle"
-              icon="picture"
-              size="large"
-              @click="openQuestionModal(5)"
-            />
-          </a-col>
-          <a-col class="description-icon title-span-tag">Agregar Opcion Multiple Imagen</a-col>
-        </a-row>
+        <div v-if="availableButtons">
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="bars"
+                size="large"
+                @click="openQuestionModal(1)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
+          </a-row>
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="rise"
+                size="large"
+                @click="openQuestionModal(2)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Relacion de Columnas</a-col>
+          </a-row>
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="dash"
+                size="large"
+                @click="openQuestionModal(3)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Completa la Frase</a-col>
+          </a-row>
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="appstore"
+                size="large"
+                @click="openQuestionModal(4)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Ordena la Frase</a-col>
+          </a-row>
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="picture"
+                size="large"
+                @click="openQuestionModal(5)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Opcion Multiple Imagen</a-col>
+          </a-row>
+        </div>
       </a-col>
     </a-row>
 
@@ -129,8 +131,9 @@ export default {
       questionDataCompleteSentence: {},
       questionDataMultipleImage: {},
       questionDataSortWords: {},
+      availableButtons: this.$route.params.status,
       action: this.registerQuestion,
-      nameAction: "Crear",
+      nameAction: "CREAR",
       columnsQuestionsTable: [
         {
           dataIndex: "title",
@@ -171,7 +174,7 @@ export default {
       removeConfirmationModal: false
     };
   },
-  async mounted() {
+  mounted() {
     this.getQuestions();
   },
   methods: {
@@ -310,6 +313,8 @@ export default {
       }
     },
     openEditModal(question, questionType) {
+      this.action = this.updateQuestion;
+
       if (questionType === "OPCION MULTIPLE IMAGENES") {
         this.multipleImageOptionModal = true;
         this.questionDataMultipleImage = question;
@@ -330,21 +335,24 @@ export default {
         this.multipleOptionModal = true;
         this.questionDataMultipleOption = question; 
       }
-
-      this.action = this.updateQuestion;
     },
     async updateQuestion(questionData) {
       try {
-        questionData.id = idEditQuestion;
+        questionData.id = this.idEditQuestion;
         const response = await this.$axios.put("/question", questionData);
 
-        console.log("Data:", response.data);
+        this.getQuestions();
       } catch (error) {
-        
+        console.log("Hubo un error al actualizar:", error.message);
       }
     },
-    removeQuestion(id) {
-      console.log("Question: ",  id);
+    async removeQuestion(id) {
+      try {
+        const response = await this.$axios.delete(`/question/${id}`);
+        this.getQuestions();
+      } catch (error) {
+        console.log("Hubo un error al eliminar");
+      }
     }
   }
 };

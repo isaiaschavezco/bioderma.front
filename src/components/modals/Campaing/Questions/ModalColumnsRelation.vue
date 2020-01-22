@@ -115,7 +115,7 @@
 					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>
 				<a-col span="7">
-					<a-button type="primary" html-type="submit">CREAR</a-button>
+					<a-button type="primary" html-type="submit">{{ action }}</a-button>
 				</a-col>
 			</a-row>
     </a-form>
@@ -135,6 +135,9 @@ export default {
 		},
 		questionJSON: {
 			type: Object
+		},
+		textButton: {
+			type: String
 		}
 	},
 	data() {
@@ -170,15 +173,19 @@ export default {
 			isVisibleModal: this.isVisible,
 			questionForm: this.$form.createForm(this),
 			reactivesValues: ["", "", "", "", ""],
-			responsesValues: ["", "", "", "", ""]
+			responsesValues: ["", "", "", "", ""],
+			action: this.textButton
 		};
 	},
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
 		},
+		textButton: function() {
+			this.action = this.textButton;
+		},
 		questionJSON: function() {
-			this.questionData = this.questionJSON;
+			this.questionData = this.questionJSON;	
 			if (this.questionData.content && this.questionData.answer) {
 				this.time = this.questionData.time;
 				this.points = this.questionData.points;

@@ -81,13 +81,12 @@
           <a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
         </a-col>
         <a-col span="7">
-          <a-button type="primary" html-type="submit">CREAR</a-button>
+          <a-button type="primary" html-type="submit">{{ action }}</a-button>
         </a-col>
       </a-row>
     </a-form>
   </a-modal>
 </template>
-
 <script>
 export default {
 	name: "ModalSortWords",
@@ -101,6 +100,9 @@ export default {
 		},
 		questionJSON: {
 			type: Object
+		},
+		textButton: {
+			type: String
 		}
 	},
 	data() {
@@ -111,6 +113,7 @@ export default {
 			question: "",
 			quizzId: this.quizz,
 			isValidSentence: false,
+			action: this.textButton,
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
 			questionData: {},
@@ -145,6 +148,9 @@ export default {
 	watch: {
 		isVisible: function() {
 			this.isVisibleModal = this.isVisible;
+		},
+		textButton: function() {
+			this.action = this.textButton;
 		},
 		questionJSON: function() {
 			this.questionData = this.questionJSON;
