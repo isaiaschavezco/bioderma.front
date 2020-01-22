@@ -205,7 +205,7 @@ export default {
       articleForm: this.$form.createForm(this),
       assetsForm: this.$form.createForm(this),
       editor: ClassicEditor,
-      editorData: "<p>Ingresa el contenido del artículo.</p>",
+      editorData: "",
       editorConfig: {
         toolbar: {
           items: ["bold", "italic", "undo", "redo"]
@@ -318,11 +318,12 @@ export default {
 
       if (isAllValidate) {
         try {
+          console.log("imagesArray: ", imagesArray);
           let response = null;
           if (this.isEditing) {
             response = await this.$axios.put("article", {
               id: this.articleId,
-              image: this.articleImage,
+              galery: JSON.stringify(imagesArray),
               subtitle: this.articleSubtitle,
               content: this.editorData,
               tags: this.tagIds
@@ -345,6 +346,10 @@ export default {
           });
         } catch (error) {
           console.log(error);
+          this.$notification["error"]({
+            message: "Error al subir entrada",
+            description: "Ha ocurrido un error al subir la entrada."
+          });
         }
       }
     },
