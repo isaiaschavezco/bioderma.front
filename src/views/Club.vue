@@ -10,30 +10,29 @@
             style="height: 100%;"
           >
             <a-list-item slot="renderItem" slot-scope="item">
-                <a-card
-                  hoverable
-                  style="height: 25rem; width: 22rem;"
-                  class="Cards"
-                  :title="item.title"
-                >
-                  <p class="center">
-                    <strong>{{ item.points }} puntos</strong>
-                  </p>
-                  <div style="height:9rem; text-align:center;">
-                    <img style="max-width:13rem; max-height:8rem;" alt="example" :src="item.image" />
-                  </div>
-                  <div style="height:4rem;" class="productDescription">
-                    <span style="font-weight: 700;">{{ item.description }}</span>
-                  </div>
-                  <template class="ant-card-actions" slot="actions">
-                    <a-icon
-                      type="edit"
-                      @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
-                    />
-                    <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
-                  </template>
-                </a-card>
-              </a-tooltip>
+              <a-card
+                hoverable
+                style="height: 25rem; width: 22rem;"
+                class="Cards"
+                :title="item.title"
+              >
+                <p class="center">
+                  <strong>{{ item.points }} puntos</strong>
+                </p>
+                <div style="height:9rem; text-align:center;">
+                  <img style="max-width:13rem; max-height:8rem;" alt="example" :src="item.image" />
+                </div>
+                <div style="height:4rem;" class="productDescription">
+                  <span style="font-weight: 700;">{{ item.description }}</span>
+                </div>
+                <template class="ant-card-actions" slot="actions">
+                  <a-icon
+                    type="edit"
+                    @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
+                  />
+                  <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
+                </template>
+              </a-card>
             </a-list-item>
           </a-list>
         </div>
@@ -61,7 +60,7 @@
     >
       <p>¿Estás seguro de querer eliminar este producto?</p>
     </a-modal>
-    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" :maskClosable="false" centered >
+    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" :maskClosable="false" centered>
       <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
@@ -138,11 +137,11 @@
       </a-form>
       <template slot="footer">
         <div style="text-align:center;">
-        <a-button
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-          @click="onSubmitEditProduct"
-        >Aceptar</a-button>
+          <a-button
+            type="primary"
+            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+            @click="onSubmitEditProduct"
+          >Aceptar</a-button>
         </div>
       </template>
     </a-modal>
@@ -190,10 +189,10 @@
               name="upload"
               action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
               accept=".png, .jpg, jpge"
-              listType="picture"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
               :fileList="fileList"
+              listType="picture"
             >
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
@@ -223,11 +222,11 @@
       </a-form>
       <template slot="footer">
         <div style="text-align: center;">
-        <a-button
-          type="primary"
-          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-          @click="onSubmitPictureForm"
-        >Publicar</a-button>
+          <a-button
+            type="primary"
+            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+            @click="onSubmitPictureForm"
+          >Publicar</a-button>
         </div>
       </template>
     </a-modal>
@@ -252,7 +251,7 @@ export default {
       newTitle: "",
       newDescription: "",
       newPoints: "",
-      newImage:"",
+      newImage: "",
       proudcts: [
         {
           id: 0,
@@ -268,7 +267,8 @@ export default {
       addProductModal: false,
       editProductModal: false,
       deleteProductModal: false,
-      fileList: []
+      fileList: [],
+      uploadFileStatus: true
     };
   },
   mounted() {
@@ -326,7 +326,10 @@ export default {
             }
             this.editProductModal = false;
           } catch (error) {
-            alert(error);
+            this.$notification["error"]({
+              message: "Ha ocurrido un error",
+              description: "Ha ocurdido un error durante esta acción."
+            });
           }
         }
       });
@@ -342,30 +345,30 @@ export default {
     },
     failAddingProduct() {
       this.$notification["error"]({
-        message: "ERROR AL AÑADIR UN PRODUCTO",
+        message: "Error al añadir un producto",
         description:
-          "Se ha proudcido un error añdiendo un producto, favor de intentarlo más tarde."
+          "Se ha producido un error al añadir un producto, favor de intentarlo más tarde."
       });
     },
     failEditingProduct() {
       this.$notification["error"]({
-        message: "ERROR EDITANDO UN PRODUCTO",
+        message: "Error al editar el producto",
         description:
-          "Se ha proudcido un error editando un producto, favor de intentarlo más tarde."
+          "Se ha producido un error al editar este producto, favor de intentarlo más tarde."
       });
     },
     successDeletingProduct() {
       this.$notification["success"]({
-        message: "ELIMINO UN PRODUCTO",
+        message: "Producto eliminado",
         description: "El producto se elimino correctamente."
       });
       this.getListProducts();
     },
     failDeletingProduct() {
       this.$notification["error"]({
-        message: "ERROR ELIMINANDO UN PRODUCTO",
+        message: "Error al eliminar el producto",
         description:
-          "Se ha proudcido un error eliminando un producto, favor de intentarlo más tarde."
+          "Se ha producido un error al eliminar este producto, favor de intentarlo más tarde."
       });
     },
     onSubmitPictureForm() {
@@ -392,25 +395,41 @@ export default {
             }
             this.addProductModal = false;
           } catch (error) {
-            alert(error);
+            this.$notification["error"]({
+              message: "Ha ocurrido un error",
+              description: "Ha ocurdido un error para esta acción."
+            });
           }
         }
       });
     },
     handleChangeFileUpload(info) {
-      let fileList = [...info.fileList];
-      fileList = fileList.slice(-1);
-      this.fileList = fileList;
+      if (this.uploadFileStatus) {
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-1);
+        this.fileList = fileList;
+      }
     },
     beforeUpload(file) {
       let status = true;
-      this.fileForm.validateFields((err, values) => {
-        if (err) {
-          if (err.menu || err.submenu || err.title) {
-            status = false;
-          }
+      const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
+
+      if (!isJPG && !isPNG) {
+        this.$message.error("Este formato no esta permido.");
+        status = false;
+      }
+
+      if (isJPG || isPNG) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error("La imagen debe ser menor a 2MB.");
+          status = false;
         }
-      });
+      }
+
+      console.log("STATUS: ", status);
+      this.uploadFileStatus = status;
       return status;
     }
   }
