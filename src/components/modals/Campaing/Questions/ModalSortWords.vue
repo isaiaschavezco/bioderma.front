@@ -107,8 +107,8 @@ export default {
 	},
 	data() {
 		return {
-			time: 1,
-			points: 0,
+			time: "1",
+			points: "0",
 			answer: 0,
 			question: "",
 			quizzId: this.quizz,
@@ -117,8 +117,6 @@ export default {
 			isAvailableOption: [true, true, false, false, false],
 			isRequiredOption: [true, true, false, false, false],
 			questionData: {},
-			time: 0,
-			points: 0,
 			textOptions: [
 				{
 					name: 'optionA',
@@ -160,6 +158,7 @@ export default {
 
 				this.time = this.questionData.time;
 				this.points = this.questionData.points;
+				this.isValidSentence = true;
 			}
 		}
 	},
@@ -178,8 +177,14 @@ export default {
 		checkSentence(rule, value, callback) {
 			const words = value.trim().split(' ');
 
-			if (words.length < 2)
-				callback('Al menos debe haber 2 palabras en la frase.')
+			if (words.length < 2) {
+				this.isValidSentence = false;
+				callback("Al menos debe haber 2 palabras en la frase.")
+			}
+			else if (words.length > 6) {
+				this.isValidSentence = false;
+				callback("La frase debe tener a lo mas 6 palabras.");
+			}
 			else {
 				this.isValidSentence = true;
 				callback();

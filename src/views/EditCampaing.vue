@@ -315,6 +315,9 @@ export default {
     openEditModal(question, questionType) {
       this.action = this.updateQuestion;
 
+      question.time = question.time.toString();
+      question.points = question.points.toString();
+
       if (questionType === "OPCION MULTIPLE IMAGENES") {
         this.multipleImageOptionModal = true;
         this.questionDataMultipleImage = question;
@@ -347,12 +350,25 @@ export default {
       }
     },
     async removeQuestion(id) {
-      try {
-        const response = await this.$axios.delete(`/question/${id}`);
-        this.getQuestions();
-      } catch (error) {
-        console.log("Hubo un error al eliminar");
-      }
+      const component = this;
+
+      this.$confirm({
+        title: "¿Estas seguro que deseas eliminar la pregunta?",
+        content: "",
+        okText: "Eliminar",
+        okType: "danger",
+        cancelText: "Cancelar",
+        async onOk() {
+          try {
+            const response = await component.$axios.delete(`/question/${id}`);
+            component.getQuestions();
+          } catch (error) {
+            console.log("Hubo un error al eliminar");
+          }
+        },
+        onCancel() {
+        },
+      });
     }
   }
 };

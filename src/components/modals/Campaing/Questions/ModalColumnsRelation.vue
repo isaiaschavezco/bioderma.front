@@ -142,8 +142,8 @@ export default {
 	},
 	data() {
 		return {
-			time: 1,
-			points: 0,
+			time: "1",
+			points: "0",
 			quizzId: this.quizz,
 			questionData: this.questionJSON,
 			isAvailableOption: [true, true, false, false, false],
