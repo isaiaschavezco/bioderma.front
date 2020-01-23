@@ -5,17 +5,37 @@
         <div class="card-container">
           <a-tabs type="card" @change="onChangeTab" style="elevation: 30deg;">
             <a-tab-pane tab="USUARIOS" key="1">
-              <a-input-search placeholder="Buscar usuario" enterButton @search="onSearchUsers" v-model="userSearch" />
+              <a-input-search
+                placeholder="Buscar usuario"
+                enterButton
+                @search="onSearchUsers"
+                v-model="userSearch"
+              />
               <a-table :columns="userColumns" :dataSource="usersListInfo" style="margin-top: 1rem;">
                 <span slot="action" slot-scope="text, record">
-                  <a-button @click="onShowUserInfo(record.email)" shape="circle" icon="info" size="large" />
+                  <a-button
+                    @click="onShowUserInfo(record.email)"
+                    shape="circle"
+                    icon="info"
+                    size="large"
+                  />
                   <a-divider type="vertical" />
-                  <a-button shape="circle" icon="delete" size="large" @click="showDeleteConfirmUser(record.email, onDeleteUser)" />
+                  <a-button
+                    shape="circle"
+                    icon="delete"
+                    size="large"
+                    @click="showDeleteConfirmUser(record.email, onDeleteUser)"
+                  />
                 </span>
               </a-table>
             </a-tab-pane>
             <a-tab-pane tab="CADENAS" key="2">
-              <a-input-search placeholder="Buscar cadena" @search="onSearchChains" v-model="chainSearch" enterButton />
+              <a-input-search
+                placeholder="Buscar cadena"
+                @search="onSearchChains"
+                v-model="chainSearch"
+                enterButton
+              />
               <a-table
                 :columns="chainColumns"
                 :dataSource="tableChains"
@@ -309,7 +329,7 @@ export default {
     async getUsersListInfo() {
       try {
         this.isLoadingTable = true;
-        const response = await this.$axios('user');
+        const response = await this.$axios("user");
 
         const usersList = response.data.users.map((val, index) => {
           return {
@@ -317,7 +337,7 @@ export default {
             name: val.name,
             email: val.email,
             profile: val.type.name,
-            position: (val.position === null?"":val.position.name),
+            position: val.position === null ? "" : val.position.name,
             points: val.points
           };
         });
@@ -325,7 +345,6 @@ export default {
         this.usersListInfo = usersList;
         this.users = usersList;
         this.isLoadingTable = false;
-      
       } catch (error) {
         console.log("%cError al obtener los usuarios", "color:red;");
         console.log(error);
@@ -449,14 +468,15 @@ export default {
       } catch (error) {
         this.$notification[type]({
           message: "Error al eliminar usuario",
-          description:
-            "Hubo un error al eliminar el usuario.",
+          description: "Hubo un error al eliminar el usuario."
         });
       }
     },
     onSearchUsers(value) {
       value = value.trim();
-      this.usersListInfo = this.users.filter(user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0);
+      this.usersListInfo = this.users.filter(
+        user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0
+      );
     },
     onSearchChains(value) {
       const newChain = this.chains.filter(element => {
@@ -493,19 +513,16 @@ export default {
                 "Invitación enviada",
                 "La invitación ha sido enviada correctamente."
               );
-            }
-            else if (response.data === 9) {
+            } else if (response.data === 9) {
               this.$notification["info"]({
                 message: "Usuario activo",
-                description:
-                  "El usuario se encuentra activo.",
+                description: "El usuario se encuentra activo."
               });
-            }
-            else if (response.data === 8) {
+            } else if (response.data === 8) {
+              this.getUsersListInfo();
               this.$notification["success"]({
                 message: "Usuario activado",
-                description:
-                  "El usuario se ha activado exitosamente.",
+                description: "El usuario se ha activado exitosamente."
               });
             }
           } catch (err) {
@@ -533,7 +550,6 @@ export default {
       const response = await this.$axios(`user/${email}`);
 
       response.data.profile.pointsHistory = responseList.data.points;
-
 
       this.userInfoModal = response.data.profile;
 
