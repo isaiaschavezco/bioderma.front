@@ -252,6 +252,7 @@
                   <a-input
                     setFieldsValue="email"
                     placeholder="EMAIL"
+                    :disabled= "true"
                     v-decorator="[
                       'email',
                       {
@@ -264,7 +265,8 @@
                             required: true,
                             message: 'Ingrese su correo electronico'
                           }
-                        ]
+                        ],
+                        initialValue: userEmail
                       }
                     ]"
                   />
@@ -708,6 +710,7 @@
                     <a-input
                       placeholder="EMAIL"
                       setFieldsValue="email"
+                      :disabled= "true"
                       v-decorator="[
                         'email',
                         {
@@ -720,7 +723,8 @@
                               required: true,
                               message: 'Ingrese su correo electronico'
                             }
-                          ]
+                          ],
+                          initialValue: userEmail
                         }
                       ]"
                     />
@@ -840,7 +844,8 @@ export default {
       cities: [],
       chains: [],
       confirmDirty: false,
-      autoCompleteResult: []
+      autoCompleteResult: [],
+      userEmail: this.$route.query.email
     };
   },
   beforeCreate() {
