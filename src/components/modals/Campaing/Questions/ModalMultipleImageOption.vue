@@ -16,10 +16,9 @@
         class="form-question__headerLabel form-question__labelQuestion margin-horizontal"
       >ESCRIBE TU PREGUNTA</label>
 
-
       <a-form-item class="margin-horizontal" style="margin-bottom: 0">
         <a-input
-					class="form-question__inputQuestion"
+          class="form-question__inputQuestion"
           placeholder="PREGUNTA"
           v-decorator="[
           'question',
@@ -41,7 +40,7 @@
       <a-radio-group
         class="form-question__options"
         v-model="answer"
-				style="margin-top: 1rem;"
+        style="margin-top: 1rem;"
         v-decorator="[
 					`answer`,
 					{rules: [{ required: true, message: 'Favor de llenar el campo' }]}
@@ -68,8 +67,8 @@
                 <a-form-item>
                   <div class="dropbox">
                     <a-upload-dragger
-											:disabled="!isAvailableOption[index]"
-											v-decorator="[
+                      :disabled="!isAvailableOption[index]"
+                      v-decorator="[
 												`question${option.indicator}`,
 												{rules: [{ required: isRequiredOption[index], message: 'Favor de subir una imagen' }]}
 											]"
@@ -80,7 +79,12 @@
                       :beforeUpload="(file) => beforeUpload(file, index)"
                       :fileList="fileList[index]"
                     >
-                      <img :src="optionsImages[index]" alt="" v-if="optionsImages[index]" class="optionImage" />
+                      <img
+                        :src="optionsImages[index]"
+                        alt
+                        v-if="optionsImages[index]"
+                        class="optionImage"
+                      />
                       <p class="ant-upload-drag-icon" v-else>
                         <a-icon type="picture" />
                       </p>
@@ -96,7 +100,9 @@
 
       <a-divider style="margin-top: 0;" />
 
-      <div class="form-question__headerLabel margin-horizontal">ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</div>
+      <div
+        class="form-question__headerLabel margin-horizontal"
+      >ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</div>
 
       <a-form-item class="margin-horizontal">
         <span class="form-question__bold-text">TIEMPO:</span>
@@ -162,12 +168,12 @@ export default {
     quizz: {
       default: ""
     },
-		questionJSON: {
-			type: Object
+    questionJSON: {
+      type: Object
     },
-		textButton: {
-			type: String
-		}
+    textButton: {
+      type: String
+    }
   },
   data() {
     return {
@@ -176,7 +182,7 @@ export default {
       answer: 0,
       question: "",
       fileList: [[], [], [], [], []],
-			action: this.textButton,
+      action: this.textButton,
       optionsImages: [null, null, null, null, null],
       quizzId: this.quizz,
       isAvailableOption: [true, true, false, false, false],
@@ -212,26 +218,28 @@ export default {
       this.isVisibleModal = this.isVisible;
     },
     textButton: function() {
-			this.action = this.textButton;
-		},
-		questionJSON: function() {
-			this.questionData = this.questionJSON;
-			if (this.questionJSON.content && this.questionJSON.answer) {
-				const options = this.questionData.content.possiblesResponses.map(val => val.response); 
+      this.action = this.textButton;
+    },
+    questionJSON: function() {
+      this.questionData = this.questionJSON;
+      if (this.questionJSON.content && this.questionJSON.answer) {
+        const options = this.questionData.content.possiblesResponses.map(
+          val => val.response
+        );
         this.question = this.questionData.content.question;
 
         this.optionsImages.fill(null);
 
         for (let i = 0; i < options.length; ++i)
-            this.optionsImages[i] = options[i];
+          this.optionsImages[i] = options[i];
 
-				this.time = this.questionData.time;
+        this.time = this.questionData.time;
         this.points = this.questionData.points;
-        
+
         this.answer = this.questionData.answer.response;
         this.setAvailableOptions();
       }
-		}
+    }
   },
   methods: {
     onCloseModal() {
@@ -253,114 +261,122 @@ export default {
       fileList = fileList.slice(-1);
       this.fileList[index] = fileList;
       this.optionsImages[index] = fileList[0].response;
-			this.onChangeOptionValue();
+      this.onChangeOptionValue();
     },
     beforeUpload(file, index) {
-			let status = true;
-      this.questionForm.validateFields([`question${this.textOptions[index].indicator}`], (err, values) => {
-				if (err) {
-					if (err.menu || err.submenu || err.title) {
-						status = false;
+      let status = true;
+      this.questionForm.validateFields(
+        [`question${this.textOptions[index].indicator}`],
+        (err, values) => {
+          if (err) {
+            if (err.menu || err.submenu || err.title) {
+              status = false;
+            }
           }
         }
-			});
-			
+      );
+
       return status;
-		},
-		onChangeOptionValue() {
-			this.setAvailableOptions();
-			this.onChangeAnswer();
-		},
-		onChangeAnswer() {
-			const option = this.optionsImages[this.answer];
-			if (this.answer > 1 && (!this.isAvailableOption[this.answer] || !option)) {
+    },
+    onChangeOptionValue() {
+      this.setAvailableOptions();
+      this.onChangeAnswer();
+    },
+    onChangeAnswer() {
+      const option = this.optionsImages[this.answer];
+      if (
+        this.answer > 1 &&
+        (!this.isAvailableOption[this.answer] || !option)
+      ) {
         for (let i = 4; i >= 0; --i) {
-					if (i < 2 || (this.optionsImages[i] && this.isAvailableOption[i])) {
-						this.answer = i;
-						break;
-					}
-				}
-			}
-		},
-		setAvailableOptions() {
-			let newAvailableValues = new Array(5);
-			newAvailableValues.fill(true);
+          if (i < 2 || (this.optionsImages[i] && this.isAvailableOption[i])) {
+            this.answer = i;
+            break;
+          }
+        }
+      }
+    },
+    setAvailableOptions() {
+      let newAvailableValues = new Array(5);
+      newAvailableValues.fill(true);
       console.log("Hola");
-			for (let i = 0; i < 5; ++i) {
-				if (i < 2)
-					newAvailableValues[i] = true;
-				else {
-					let available = true;
+      for (let i = 0; i < 5; ++i) {
+        if (i < 2) newAvailableValues[i] = true;
+        else {
+          let available = true;
           for (let j = 0; j < i && available; ++j)
             available &= this.optionsImages[j] !== null;
-					
-					newAvailableValues[i] = available;
-				}
-			}
 
-			this.isAvailableOption = newAvailableValues;
-		},
+          newAvailableValues[i] = available;
+        }
+      }
+
+      this.isAvailableOption = newAvailableValues;
+    },
     onSubmitQuestion(e) {
       e.preventDefault();
 
       this.questionForm.validateFields(async (err, values) => {
         values = this.questionForm.getFieldsValue();
 
-          if (!err) {
-            try {
-              console.log(options, this.optionsImages);
-              for (let i = 0; i < 5; ++i) {
-                if (!this.optionsImages[i] || this.optionsImages[i].length === 0) {
-                  for (let j = i; j < 5; ++j)
-                    this.optionsImages[j] = null;
-                  break;
-                }
+        if (!err) {
+          try {
+            console.log(options, this.optionsImages);
+            for (let i = 0; i < 5; ++i) {
+              if (
+                !this.optionsImages[i] ||
+                this.optionsImages[i].length === 0
+              ) {
+                for (let j = i; j < 5; ++j) this.optionsImages[j] = null;
+                break;
               }
-
-              let options = this.optionsImages.filter((val, index) => val && val.length > 0 && this.isAvailableOption[index])
-              console.log(options, this.optionsImages);
-              options = options.map((option, index) => {
-                return {
-                  index: index,
-                  response: option
-                };
-              });
-
-
-              let question = values.question;
-              
-              const content = JSON.stringify({
-                question,
-                possiblesResponses: options
-              });
-
-              const answer = JSON.stringify({
-                response: this.answer
-              });
-
-              const questionInformation = {
-                quizzId: this.quizzId,
-                questionType: 2,
-                content: content,
-                points: Number.parseInt(values.points),
-                answer: answer,
-                time: Number.parseInt(values.time)
-              };
-
-              const responseData = await this.$emit(
-                "register",
-                questionInformation
-              );
-
-              this.onCloseModal();
-            } catch (error) {
-              console.log("Hubo un error: ", error);
             }
-          } else {
-            console.log("Errores:", err);
+
+            let options = this.optionsImages.filter(
+              (val, index) =>
+                val && val.length > 0 && this.isAvailableOption[index]
+            );
+            console.log(options, this.optionsImages);
+            options = options.map((option, index) => {
+              return {
+                index: index,
+                response: option
+              };
+            });
+
+            let question = values.question;
+
+            const content = JSON.stringify({
+              question,
+              possiblesResponses: options
+            });
+
+            const answer = JSON.stringify({
+              response: this.answer
+            });
+
+            const questionInformation = {
+              quizzId: this.quizzId,
+              questionType: 2,
+              content: content,
+              points: Number.parseInt(values.points),
+              answer: answer,
+              time: Number.parseInt(values.time)
+            };
+
+            const responseData = await this.$emit(
+              "register",
+              questionInformation
+            );
+
+            this.onCloseModal();
+          } catch (error) {
+            console.log("Hubo un error: ", error);
           }
+        } else {
+          console.log("Errores:", err);
         }
-      );
+      });
     }
   }
 };
@@ -410,7 +426,7 @@ export default {
   text-align: center;
 }
 .form-question__upload {
-	height: 170px;
+  height: 170px;
 }
 .form-question__actions button {
   border-radius: 25px;
@@ -421,7 +437,7 @@ export default {
 }
 .optionImage {
   height: 68px;
-  object-fit: cover;
+  object-fit: contain;
 }
 .form-question__bold-text {
   font-weight: 725;
