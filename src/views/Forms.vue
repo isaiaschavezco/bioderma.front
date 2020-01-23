@@ -2,11 +2,11 @@
   <div :style="{ height: 'calc(100vh - 64px)' }" breakpoint="md" collapsed-width="0">
     <div v-if="User" style="background:#f0f2f5; 0">
       <a-Row :gutter="1">
-        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 6}">
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 5, offset:1}" :lg="{span: 5, offset:1}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
-                'photo',
+                'upload',
                 {
                   rules: [
                     {
@@ -19,13 +19,15 @@
               name="upload"
               action="https://bioderma-api-inmersys.herokuapp.com/upload/5"
               accept=".png, .jpg, jpge"
-              @change="handleChange"
+              @change="handleChangeFileUpload"
+              listType="picture"
+              :fileList="fileList"
             >
               <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :lg="{span: 16,offset:1}" :md="{span:18, offset: 3}" :sm="{span:24}" :xs="{span:24}">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset: 1}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro NAOS" class="forms">
             <a-form :form="form" @submit="handleSubmit1">
               <a-col>
@@ -341,7 +343,7 @@
     </div>
     <div v-if="Pharmacy" style="background:#f0f2f5; 0">
       <a-row :gutter="1">
-        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 6}">
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 5, offset:1}" :lg="{span: 5, offset:1}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -355,16 +357,18 @@
                   ]
                 }
               ]"
-              name="photo"
+              name="upload"
               action="https://bioderma-api-inmersys.herokuapp.com/upload/5"
               accept=".png, .jpg, jpge"
-              @change="handleChange"
+              @change="handleChangeFileUpload"
+              listType="picture"
+              :fileList="fileList"
             >
               <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col :lg="{span: 16,offset:1}" :md="{span:18, offset: 3}" :sm="{span:24}" :xs="{span:24}">
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset: 1}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro de Farmacias" class="forms">
             <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
             <a-form :form="form" @submit="handleSubmit2">
@@ -845,7 +849,8 @@ export default {
       chains: [],
       confirmDirty: false,
       autoCompleteResult: [],
-      userEmail: this.$route.query.email
+      userEmail: this.$route.query.email,
+      fileList: []
     };
   },
   beforeCreate() {
@@ -978,7 +983,7 @@ export default {
                 name: values.name,
                 lastName: values.lastName,
                 nickName: values.nickName,
-                photo: "URL",
+                photo: values.upload.fileList.length >= 0 ? values.upload.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
                 gender: values.gender,
                 phone: values.phone,
@@ -1017,7 +1022,7 @@ export default {
                 name: values.name,
                 lastName: values.lastName,
                 nickName: values.nickName,
-                photo: "URL",
+                photo: values.upload.fileList.length >= 0 ? values.upload.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
                 gender: values.gender,
                 phone: values.phone,
@@ -1074,6 +1079,11 @@ export default {
         form.validateFields(["confirm"], { force: true });
       }
       callback();
+    },
+    handleChangeFileUpload(info) {
+      let fileList = [...info.fileList];
+      fileList = fileList.slice(-1);
+      this.fileList = fileList;
     }
   },
   computed: {
@@ -1092,11 +1102,23 @@ export default {
   margin-left: auto !important;
   margin-right: auto !important;
 }
-@media (min-width: 1200px) {
-  .forms {
-    width: 70% !important;
+
+.imgSize {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 20%;
   }
-  .imgPosition {
+
+.imgPosition {
+    margin-top: 2.5rem !important;
+  }
+
+@media (min-width: 1200px) {
+  /* .forms {
+    width: 70% !important;
+  } */
+  /* .imgPosition {
     width: 300px;
     height: 300px;
     margin-left: 22rem !important;
@@ -1105,13 +1127,13 @@ export default {
   .imgSize {
     width: 180px;
     height: 180px;
-  }
+  } */
 }
 @media (min-width: 993px) and (max-width: 1199px) {
-  .forms {
+  /* .forms {
     width: 70% !important;
-  }
-  .imgPosition {
+  } */
+  /* .imgPosition {
     width: 300px;
     height: 280px;
     margin-left: 4.5rem !important;
@@ -1120,13 +1142,13 @@ export default {
   .imgSize {
     width: 180px;
     height: 180px;
-  }
+  } */
 }
 @media (min-width: 577px) and (max-width: 992px) {
-  .forms {
+  /* .forms {
     width: 100% !important;
-  }
-  .imgPosition {
+  } */
+  /* .imgPosition {
     width: 17rem;
     height: 13rem;
     margin-left: 15rem !important;
@@ -1136,10 +1158,10 @@ export default {
   .imgSize {
     width: 8rem;
     height: 8rem;
-  }
+  } */
 }
 @media (max-width: 576px) {
-  .forms {
+  /* .forms {
     width: 100% !important;
   }
   .imgPosition {
@@ -1151,6 +1173,6 @@ export default {
   .imgSize {
     width: 8rem;
     height: 8rem;
-  }
+  } */
 }
 </style>
