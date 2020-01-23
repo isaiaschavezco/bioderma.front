@@ -875,7 +875,7 @@ export default {
       }
     },
     async onStateChange(stateid) {
-      console.log("stateid: ", stateid);
+      // console.log("stateid: ", stateid);
       this.getCities(stateid);
       /*const direction = "city/" + stateid;
       const responseCity = await this.$axios(direction);
@@ -887,6 +887,11 @@ export default {
       this.$info({
         iconType: "null",
         centered: true,
+        closable: false,
+        okButtonProps: {
+            props: { disabled: true },
+        },
+        okText: '',
         content: (
           <div>
             <p style="text-align:center">
@@ -912,21 +917,20 @@ export default {
       });
     },
     failEmail() {
-      this.$error({
+      this.$info({
         centered: true,
         content: (
           <p style="text-align:center">
-            ERROR AL COMPLETAR TU REGISTRO, INTRODUCE UN CORREO DIFERENTE
+            Este correo ya se encuentra registrado
           </p>
         )
       });
     },
     failIncorrect() {
-      this.$error({
+      this.$info({
         content: (
           <p style="text-align:center">
-            ERROR AL COMPLETAR TU REGISTRO, UN CAMPO NO TIENE EL FORMATO
-            CORRECTO
+            Uno de los campos no cuenta con el formado correcto
           </p>
         )
       });
@@ -975,7 +979,8 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
+          // console.log("Datos recibidos: ", values);
+          // console.log("fileList: ", this.fileList);
           try {
             const response = await this.$axios.post(
               "https://bioderma-api-inmersys.herokuapp.com/user/naos",
@@ -983,7 +988,7 @@ export default {
                 name: values.name,
                 lastName: values.lastName,
                 nickName: values.nickName,
-                photo: values.upload.fileList.length >= 0 ? values.upload.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
+                photo: this.fileList.length > 0 ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
                 gender: values.gender,
                 phone: values.phone,
@@ -994,7 +999,7 @@ export default {
                 naosPosition: values.naosPosition
               }
             );
-            console.log(response.data.status);
+            // console.log(response.data.status);
             if (response.data.status == 0) {
               this.success();
             } else if (response.data.status == 5) {
@@ -1003,6 +1008,7 @@ export default {
               this.failIncorrect();
             }
           } catch (error) {
+            console.log("error: ", error);
             this.fail();
           }
         } else {
@@ -1014,7 +1020,7 @@ export default {
       e.preventDefault();
       this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
+          // console.log("Datos recibidos: ", values);
           try {
             const response = await this.$axios.post(
               "https://bioderma-api-inmersys.herokuapp.com/user/drugstore",
@@ -1022,7 +1028,7 @@ export default {
                 name: values.name,
                 lastName: values.lastName,
                 nickName: values.nickName,
-                photo: values.upload.fileList.length >= 0 ? values.upload.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
+                photo: this.fileList.length > 0  ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
                 gender: values.gender,
                 phone: values.phone,
@@ -1046,7 +1052,7 @@ export default {
               this.failIncorrect();
             }
           } catch (error) {
-            THIS.fail();
+            this.fail();
           }
         } else {
           console.log(err);
