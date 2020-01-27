@@ -29,7 +29,7 @@
       <a-col :span="7">
         <a-row>
           <a-card style="width:100%; min-height:300px;">
-            <h1 class="title-theme">Bioderma Games Campaña</h1>
+            <h1 class="title-theme">Bioderma Games Blog</h1>
             <a-divider />
             <div style="height:90px; text-align:center">
               <img
@@ -54,7 +54,7 @@
       <a-col :span="7">
         <a-row>
           <a-card style="width:100%; min-height:300px;">
-            <h1 class="title-theme">Bioderma Games Blog</h1>
+            <h1 class="title-theme">Bioderma Games Campaña</h1>
             <a-divider />
             <div style="height:90px; text-align:center">
               <img
