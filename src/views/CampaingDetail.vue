@@ -6,12 +6,27 @@
           <a-skeleton :loading="loadingQuizz" active>
             <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
               <span slot="action" slot-scope="text, record">
-                <a-button shape="circle" icon="edit" size="large" @click="() => editQuizz(record.quizzId, record.name, text.status)" />
+                <a-button
+                  shape="circle"
+                  icon="edit"
+                  size="large"
+                  @click="() => editQuizz(record.quizzId, record.name, text.status)"
+                />
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="delete" size="large" @click="() => onOpenModalRemove()" />
-                
+                <a-button
+                  shape="circle"
+                  icon="delete"
+                  size="large"
+                  @click="onOpenModalRemove(record.quizzId)"
+                />
+
                 <a-divider type="vertical" />
-                <a-button shape="circle" icon="caret-right" size="large" @click="() => {validityModalForm = true; currentModalId = record.quizzId;}" />
+                <a-button
+                  shape="circle"
+                  icon="caret-right"
+                  size="large"
+                  @click="() => {validityModalForm = true; currentModalId = record.quizzId;}"
+                />
               </span>
             </a-table>
           </a-skeleton>
@@ -48,7 +63,13 @@
       </a-col>
     </a-row>
 
-    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="trivia" @confirm="removeQuizz" @close="onCloseRemoveConfirmationModal" />
+    <ModalRemoveConfirmation
+      :isVisible="removeConfirmationModal"
+      targetName="trivia"
+      :quizzId="quizzIdToRemove"
+      @close="onCloseRemoveConfirmationModal"
+      @confirm="removeQuizz"
+    />
 
     <a-modal title="NUEVA ENTRADA" centered v-model="quizzModalRegister">
       <a-form :form="quizzForm">
@@ -76,7 +97,9 @@
     <a-modal
       class="modal-validity"
       v-model="validityModalForm"
-      :closable="false" width="40%" centered
+      :closable="false"
+      width="40%"
+      centered
       :bodyStyle="{
         height: '300px'
       }"
@@ -84,7 +107,7 @@
       <h4>ANTES DE ENVIAR LA TRIVIA DEBES ASIGNAR UNA VIGENCIA</h4>
 
       <div class="modal-validity__form">
-        <span>VIGENCIAL DEL: </span>
+        <span>VIGENCIAL DEL:</span>
         <a-date-picker
           :disabledDate="disabledStartValidityDate"
           showTime
@@ -93,7 +116,7 @@
           placeholder="Inicio de trivia"
           @openChange="handleStartOpenChange"
         />
-        <span> AL </span>
+        <span>AL</span>
         <a-date-picker
           :disabledDate="disabledEndValidityDate"
           showTime
@@ -103,16 +126,23 @@
           :open="endOpenDate"
           @openChange="handleEndOpenChange"
         />
-      </div> 
+      </div>
 
       <template slot="footer">
         <div class="validity-form__buttons">
-          <a-button class="validity-form__button" type="primary" size="large" @click="() => validityModalForm = false">
-            Cancelar
-          </a-button>
-          <a-button class="validity-form__button" type="primary" size="large" v-if="continueBtnValidity" @click="onSubmitValidityForm">
-            Enviar
-          </a-button>
+          <a-button
+            class="validity-form__button"
+            type="primary"
+            size="large"
+            @click="() => validityModalForm = false"
+          >Cancelar</a-button>
+          <a-button
+            class="validity-form__button"
+            type="primary"
+            size="large"
+            v-if="continueBtnValidity"
+            @click="onSubmitValidityForm"
+          >Enviar</a-button>
         </div>
       </template>
     </a-modal>
@@ -182,7 +212,8 @@ export default {
       campaingId: this.$route.query.id,
       campaingName: this.$route.params.name,
       removeConfirmationModal: false,
-      quizz: []
+      quizz: [],
+      quizzIdToRemove: 0
     };
   },
   mounted() {
@@ -190,15 +221,18 @@ export default {
   },
   watch: {
     startValidityDate: function() {
-      this.continueBtnValidity = this.startValidityDate !== null && this.endValidityDate !== null;
+      this.continueBtnValidity =
+        this.startValidityDate !== null && this.endValidityDate !== null;
     },
     endValidityDate: function() {
-      this.continueBtnValidity = this.startValidityDate !== null && this.endValidityDate !== null;
+      this.continueBtnValidity =
+        this.startValidityDate !== null && this.endValidityDate !== null;
     }
   },
   methods: {
     moment,
-    onOpenModalRemove() {
+    onOpenModalRemove(quizzId) {
+      this.quizzIdToRemove = quizzId;
       this.removeConfirmationModal = true;
     },
     disabledAllDates(current) {
@@ -206,14 +240,17 @@ export default {
     },
     disabledValidityDate(current) {
       // Can not select days before today and today
-      return current && current < moment().endOf('day');
+      return current && current < moment().endOf("day");
     },
     disabledStartValidityDate(startValidityDate) {
       const endValidityDate = this.endValidityDate;
       if (!startValidityDate || !endValidityDate) {
         return false;
       }
-      return startValidityDate.valueOf() > endValidityDate.valueOf() && disabledValidityDate(startValidityDate);
+      return (
+        startValidityDate.valueOf() > endValidityDate.valueOf() &&
+        disabledValidityDate(startValidityDate)
+      );
     },
     disabledEndValidityDate(endValidityDate) {
       const startValidityDate = this.startValidityDate;
@@ -243,14 +280,10 @@ export default {
           const newTrivia = trivia;
           newTrivia.key = index;
 
-          if (newTrivia.isDeleted)
-            newTrivia.status = "Eliminada";
-          else if (newTrivia.isActive)
-            newTrivia.status = "Activa";
-          else if (newTrivia.isSend)
-            newTrivia.status = "Enviada";
-          else
-            newTrivia.status = "No enviada";
+          if (newTrivia.isDeleted) newTrivia.status = "Eliminada";
+          else if (newTrivia.isActive) newTrivia.status = "Activa";
+          else if (newTrivia.isSend) newTrivia.status = "Enviada";
+          else newTrivia.status = "No enviada";
 
           if (newTrivia.startedAt === "Invalid date")
             newTrivia.validity = "No asignada";
@@ -284,10 +317,7 @@ export default {
 
             console.log(quizzInfo);
 
-            const response = await this.$axios.post(
-              "quizz",
-              quizzInfo
-            );
+            const response = await this.$axios.post("quizz", quizzInfo);
 
             this.quizzModalRegister = false;
             this.quizzForm.resetFields();
@@ -368,14 +398,18 @@ export default {
       const quizzId = this.currentModalId;
       const urlValidityDate = "quizz/send";
 
-      console.log("Submited Dates: ")
-      console.log(quizzId, this.startValidityDate.format('YYYY-MM-DD'), this.endValidityDate.format('YYYY-MM-DD'))
+      console.log("Submited Dates: ");
+      console.log(
+        quizzId,
+        this.startValidityDate.format("YYYY-MM-DD"),
+        this.endValidityDate.format("YYYY-MM-DD")
+      );
 
       try {
         const validityDate = {
           quizzId,
-          startDate: this.startValidityDate.format('YYYY-MM-DD'),
-          finishDate: this.endValidityDate.format('YYYY-MM-DD')
+          startDate: this.startValidityDate.format("YYYY-MM-DD"),
+          finishDate: this.endValidityDate.format("YYYY-MM-DD")
         };
         const response = await this.$axios.post(urlValidityDate, validityDate);
 
@@ -384,20 +418,61 @@ export default {
         this.startValidityDate = null;
         this.endValidityDate = null;
         console.log("Response validity:", response.data);
-      }
-      catch (err) {
+      } catch (err) {
         console.log("Submit dates: ", err);
       }
     },
     editQuizz(quizzId, quizzName, status) {
-      this.$router.push({ name: 'editCampaing', query: { quizzId }, params: {campaingName: this.campaingName, quizzName, status: status.toUpperCase() !== "ACTIVA"} });
+      this.$router.push({
+        name: "editCampaing",
+        query: { quizzId },
+        params: {
+          campaingName: this.campaingName,
+          quizzName,
+          status: status.toUpperCase() !== "ACTIVA"
+        }
+      });
     },
-    removeQuizz() {
-
+    removeQuizz(status) {
+      let type = "";
+      let title = "";
+      let content = "";
+      switch (status) {
+        case -1:
+          type = "error";
+          title = "Error al eliminar trivia";
+          content = "Ha ocurrido un error al eliminar esta trivia.";
+          break;
+        case 0:
+          type = "success";
+          title = "Trivia eliminada";
+          content = "Se ha eliminado la trivia exitosamente.";
+          break;
+        case 1:
+          type = "warning";
+          title = "Usuario no encontrado";
+          content = "No se ha encontrado un usuario asociado a este correo.";
+          break;
+        case 2:
+          type = "warning";
+          title = "Contraseña incorrecta";
+          content = "La contraseña no coincide para este usuario.";
+          break;
+        default:
+          break;
+      }
+      if (status != null) {
+        this.onCloseRemoveConfirmationModal();
+        this.getCampaingDetails();
+        this.$notification[type]({
+          message: title,
+          description: content
+        });
+      }
     },
     onCloseRemoveConfirmationModal() {
       this.removeConfirmationModal = false;
-    },
+    }
   }
 };
 </script>

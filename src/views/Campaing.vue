@@ -14,9 +14,18 @@
 
           <a-skeleton :loading="loadingCampaings" active>
             <section :style="{ overflow: 'auto', height: '88vh'}">
-              <a-row :gutter="16" :style="{ 'margin-top': '16px' }" v-for="(row, i) in groupedCampaings" :key="i">
+              <a-row
+                :gutter="16"
+                :style="{ 'margin-top': '16px' }"
+                v-for="(row, i) in groupedCampaings"
+                :key="i"
+              >
                 <a-col span="6" v-for="(item, j) in row" :key="j">
-                  <a-tooltip placement="topLeft" title="Da click en la imágen para ver las trivias de esta campaña" class="list__campaing">
+                  <a-tooltip
+                    placement="topLeft"
+                    title="Da click en la imágen para ver las trivias de esta campaña"
+                    class="list__campaing"
+                  >
                     <a-card>
                       <div class="campaing__header">
                         <a-row :gutter="12">
@@ -26,11 +35,15 @@
                           <a-col span="8">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="edit"/>
+                                <a-icon class="campaing__action" type="edit" />
                               </a-col>
 
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="delete" @click="removeCampaing(item.id)"/>
+                                <a-icon
+                                  class="campaing__action"
+                                  type="delete"
+                                  @click="onOpenModalRemove(item.id)"
+                                />
                               </a-col>
                             </a-row>
                           </a-col>
@@ -38,22 +51,27 @@
                       </div>
 
                       <a-divider />
-                      
+
                       <div class="campaing__container-img">
-                        <img alt="example" :src="item.portrait" class="campaing__img" @click="() => editCampaing(item.id, item.name)"/>
+                        <img
+                          alt="example"
+                          :src="item.portrait"
+                          class="campaing__img"
+                          @click="() => editCampaing(item.id, item.name)"
+                        />
                       </div>
-                      
+
                       <span style="font-weight: 700; margin-top: 1rem; display:block;">FILTROS</span>
                       <div class="campaing__filters">
-                          <div class="campaing__filter" v-if="item.target.length > 0">
-                            <p v-for="filter in item.target" :key="filter.id">
-                              {{ FilterHelper.toString(filter) }}
-                            </p>
-                          </div>
+                        <div class="campaing__filter" v-if="item.target.length > 0">
+                          <p
+                            v-for="filter in item.target"
+                            :key="filter.id"
+                          >{{ FilterHelper.toString(filter) }}</p>
+                        </div>
                       </div>
-                      
-                      
-                      <a-divider/>
+
+                      <a-divider />
                       <span style="font-weight: 700;">ESTATUS</span>
                       <br />
                       <span>{{ item.isActive ? "ACTIVA" : "CONCLUIDA" }}</span>
@@ -64,8 +82,7 @@
               </a-row>
             </section>
           </a-skeleton>
-          <a-skeleton :loading="loadingCampaings" active>
-          </a-skeleton>
+          <a-skeleton :loading="loadingCampaings" active></a-skeleton>
         </div>
       </a-col>
       <a-col class="column-right-cam" :xs="{ span: 2 }" style="text-align:center;">
@@ -78,7 +95,13 @@
       </a-col>
     </a-row>
 
-    <ModalRemoveConfirmation :isVisible="removeConfirmationModal" targetName="campaña" @confirm="removeCampaing" @close="onCloseRemoveConfirmationModal" />
+    <ModalRemoveConfirmation
+      :isVisible="removeConfirmationModal"
+      targetName="campaña"
+      @confirm="removeCampaing"
+      @close="onCloseRemoveConfirmationModal"
+      :quizzId="campaingRemoveId"
+    />
 
     <a-modal
       :title="`NUEVA CAMPAÑA ${bioGamesTab?'BIODERMA GAMES':''}`"
@@ -126,7 +149,7 @@ export default {
     };
   },
   mounted: function() {
-    this.getFiles(1);
+    // this.getFiles(1);
     this.getCamapings();
   },
   methods: {
@@ -137,7 +160,7 @@ export default {
       try {
         const response = await this.$axios(urlCamapaings);
         this.campaings = response.data;
-        this.groupedCampaings = this.groupCampaings(); 
+        this.groupedCampaings = this.groupCampaings();
       } catch (err) {
         console.log("Error: ", err);
       }
@@ -152,7 +175,7 @@ export default {
     },
     updateCampaings() {
       this.getCamapings();
-      this.getFiles(this.activeTab);
+      // this.getFiles(this.activeTab);
     },
     onChangeTab(activeTabKey) {
       this.activeTab = activeTabKey;
@@ -162,18 +185,18 @@ export default {
         this.bioGamesTab = true;
       }
       this.getCamapings();
-      this.getFiles(this.activeTab);
+      // this.getFiles(this.activeTab);
     },
     async getFiles(menuId) {
       try {
         this.loadingMore = true;
         const response = await this.$axios(`submenu/${menuId}`);
-        console.log("Response: ",response);
+        // console.log("Response: ", response);
         this.files = response.data;
       } catch (error) {
         console.log("Hubo un error al obtener los archivos: ", error.message);
       }
-      
+
       this.loadingMore = false;
     },
     handleChangeMenu(value) {
@@ -199,16 +222,64 @@ export default {
         groupsCampaings.push(currGroup);
       }
 
-      console.log("Grouped:", groupsCampaings);
+      //  console.log("Grouped:", groupsCampaings);
 
       return groupsCampaings;
     },
     editCampaing(campaingId, campaingName) {
-      this.$router.push({ name: 'campaingDetail', query: { id: campaingId }, params: {name: campaingName} });
+      this.$router.push({
+        name: "campaingDetail",
+        query: { id: campaingId },
+        params: { name: campaingName }
+      });
     },
-    removeCampaing(campaingId) {
+    onOpenModalRemove(campaingId) {
+      // console.log("campaingId: ", campaingId);
       this.campaingRemoveId = campaingId;
       this.removeConfirmationModal = true;
+    },
+    removeCampaing(status) {
+      let type = "";
+      let title = "";
+      let content = "";
+      switch (status) {
+        case -1:
+          type = "error";
+          title = "Error al eliminar campaña";
+          content = "Ha ocurrido un error al eliminar esta campaña.";
+          break;
+        case 0:
+          type = "success";
+          title = "Campaña eliminada";
+          content = "Se ha eliminado la campaña exitosamente.";
+          break;
+        case 1:
+          type = "warning";
+          title = "Usuario no encontrado";
+          content = "No se ha encontrado un usuario asociado a este correo.";
+          break;
+        case 2:
+          type = "warning";
+          title = "Contraseña incorrecta";
+          content = "La contraseña no coincide para este usuario.";
+          break;
+        case 11:
+          type = "info";
+          title = "Esta campaña esta asociada con una o más trivias";
+          content =
+            "Para eliminar la campaña se deben eliminar las trivias a las que esta asociada.";
+          break;
+        default:
+          break;
+      }
+      if (status != null) {
+        this.onCloseRemoveConfirmationModal();
+        this.getCamapings();
+        this.$notification[type]({
+          message: title,
+          description: content
+        });
+      }
     }
   }
 };
