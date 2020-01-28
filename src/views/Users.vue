@@ -498,7 +498,7 @@ export default {
           this.inviteUserLoading = true;
           try {
             const response = await this.$axios.post("user/invite", {
-              email: values.email.trim(),
+              email: values.email.trim().toLowerCase(),
               type: values.type
             });
             this.inviteUserLoading = false;

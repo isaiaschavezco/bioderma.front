@@ -79,7 +79,7 @@ export default {
         if (!err) {
           try {
             const response = await this.$axios.put("user/recovery", {
-              email: this.email,
+              email: this.email.toLowerCase(),
               password: values.password,
               token: this.token
             });
