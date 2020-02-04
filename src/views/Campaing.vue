@@ -203,8 +203,12 @@ export default {
       this.getSubMenuItems(value);
     },
     async getSubMenuItems(menuId) {
-      const response = await this.$axios(`submenu/items/${menuId}`);
-      this.submenuItems = response.data;
+      try {
+        const response = await this.$axios(`submenu/items/${menuId}`);
+        this.submenuItems = response.data;
+      } catch (error) {
+        console.log("Hubo un error al obtener los sub menus.", error.message);
+      }
     },
     onCloseRemoveConfirmationModal() {
       this.removeConfirmationModal = false;

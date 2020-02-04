@@ -164,6 +164,7 @@ export default {
 		resetFilters: function () {
 			if (this.resetFilters) {
 				this.filters = [];
+				this.allUsers = false;
 				this.$emit('updateFilters', this.filters.slice(), false);
 			}
 		}
@@ -227,6 +228,7 @@ export default {
 			try {
 				const response = await this.$axios("chain");
 				return response.data.chains;
+
 			} catch (error) {
 				console.log("Hubo un error.")
 			}
@@ -238,6 +240,8 @@ export default {
 		},
 		toggleUserType() {
 			this.disabledUserType = !this.disabledUserType;
+			this.filterToSend.allUsers = this.disabledUserType;
+			this.disabledFilters = this.disabledUserType;
     },		
 		togglePosition() {
       this.disabledPosition = !this.disabledPosition;
