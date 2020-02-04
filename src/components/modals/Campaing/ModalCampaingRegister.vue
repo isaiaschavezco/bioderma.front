@@ -31,6 +31,7 @@
             action="https://bioderma-api-inmersys.herokuapp.com/upload/3"
             accept=".png, .jpg, jpeg"
             @change="handleChangeFileUpload"
+            listType="picture"
             :beforeUpload="beforeUpload"
             :fileList="fileList"
           >
@@ -85,6 +86,16 @@ export default {
   methods: {
     closeModal() {
       this.$emit("closeModal");
+      this.resetData();
+    },
+    resetData() {
+      // Clear array of filter ids.
+      this.filters = [];
+      this.loadFileModal = false;
+      this.fileForm.resetFields();
+      this.fileList = [];
+      this.deleteFilters = true;
+      this.campaingImage = null;
     },
     showNotification(type, title, message) {
       this.$notification[type]({
@@ -135,13 +146,6 @@ export default {
                 "campaing",
                 campaingData
               );
-
-              // Clear array of filter ids.
-              this.filters = [];
-              this.loadFileModal = false;
-              this.fileForm.resetFields();
-              this.fileList = [];
-              this.deleteFilters = true;
 
               this.closeModal();
 

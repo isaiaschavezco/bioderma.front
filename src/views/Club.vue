@@ -307,7 +307,7 @@ export default {
           console.log("Datos recibidos: ", values);
           try {
             const response = await this.$axios.put(
-              "https://bioderma-api-inmersys.herokuapp.com/product",
+              "product",
               {
                 productId: this.newId,
                 title: values.title,
@@ -378,7 +378,7 @@ export default {
           console.log("Datos recibidos: ", values);
           try {
             const response = await this.$axios.post(
-              "https://bioderma-api-inmersys.herokuapp.com/product",
+              "product",
               {
                 title: values.title,
                 image: values.upload.fileList[0].response,

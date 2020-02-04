@@ -29,10 +29,10 @@
                     <a-card>
                       <div class="campaing__header">
                         <a-row :gutter="12">
-                          <a-col span="16">
+                          <a-col :lg="{span:'24'}" :xl="{span:'15'}">
                             <h2>{{ item.name }}</h2>
                           </a-col>
-                          <a-col span="8">
+                          <a-col :lg="{span:'24'}" :xl="{span:'9'}">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
                                 <a-icon class="campaing__action" type="edit" />
