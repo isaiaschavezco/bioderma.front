@@ -118,14 +118,14 @@ export default new Router({
           component: () =>
             import(/* webpackChunkName: "Plataforma" */ "./views/NewBlog.vue")
         }
-      ]
-      // beforeEnter(to, from, next) {
-      //   if (localStorage.getItem("token") && localStorage.getItem("role")) {
-      //     next();
-      //   } else {
-      //     next({ name: "login" });
-      //   }
-      // }
+      ],
+      beforeEnter(to, from, next) {
+        if (localStorage.getItem("token")) {
+          next();
+        } else {
+          next({ name: "login" });
+        }
+      }
     }
   ]
 });

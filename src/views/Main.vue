@@ -1,14 +1,23 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
     <div class="side">
-      <a-layout-sider>
+      <a-layout-sider collapsible v-model="collapsed">
         <div style="text-align:center; padding: 2rem 0rem;" class="side">
+          <img
+            alt="logo"
+            src="../assets/Logo_NAOS_l_blanca_sintext.svg"
+            class="naos-logo"
+            slot="cover"
+            width="50"
+            v-if="collapsed"
+          />
           <img
             alt="logo"
             src="../assets/Logo_NAOS_l_blanca.svg"
             class="naos-logo"
             slot="cover"
             width="184"
+            v-else
           />
           <img alt="logo" src="../assets/Bioderma_Logo_blanco.svg" slot="cover" width="75" />
         </div>
@@ -18,40 +27,44 @@
             style="background: #526987; "
             theme="dark"
             mode="inline"
-            :defaultSelectedKeys="['1']"
+            :selectedKeys="defaultKey"
             @click="onMenuSelect"
           >
             <a-menu-item class="menu-item" key="1">
               <img src="../assets/icons/Usuarios_Inactivo.png" class="icon" alt />
-              <span>Usuarios</span>
+              <span v-if="!collapsed">Usuarios</span>
             </a-menu-item>
             <a-menu-item class="menu-item" key="2">
               <img src="../assets/icons/Capacitacion_Inactivo.png" class="icon" alt />
-              <span>Capacitación</span>
+              <span v-if="!collapsed">Capacitación</span>
             </a-menu-item>
             <a-menu-item class="menu-item" key="3">
               <img src="../assets/icons/Blog_Inactivo.png" class="icon" alt />
-              <span>Blog</span>
+              <span v-if="!collapsed">Blog</span>
             </a-menu-item>
             <a-menu-item class="item" key="4">
               <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
-              <span>Campañas</span>
+              <span v-if="!collapsed">Campañas</span>
             </a-menu-item>
             <a-menu-item class="item" key="5">
               <img src="../assets/icons/Club_Bioderma_Inactivo.png" class="icon" alt />
-              <span>Club Bioderma</span>
+              <span v-if="!collapsed">Club Bioderma</span>
             </a-menu-item>
             <a-menu-item class="item" key="6">
               <img src="../assets/icons/Notificacion_Inactivo.png" class="icon" alt />
-              <span>Notificaciones</span>
+              <span v-if="!collapsed">Notificaciones</span>
             </a-menu-item>
             <a-menu-item class="item" key="7">
               <img src="../assets/icons/Mensajeria_Inactivo.png" class="icon" alt />
-              <span>Mensajeria</span>
+              <span v-if="!collapsed">Mensajeria</span>
             </a-menu-item>
             <a-menu-item class="item" key="8">
               <img src="../assets/icons/Temas_Inactivo.png" class="icon" alt />
-              <span>Configuración</span>
+              <span v-if="!collapsed">Configuración</span>
+            </a-menu-item>
+            <a-menu-item class="item" key="9">
+              <a-icon type="poweroff" class="icon" />
+              <span v-if="!collapsed">Cerrar sesión</span>
             </a-menu-item>
           </a-menu>
         </div>
@@ -68,7 +81,8 @@
 export default {
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      defaultKey: ["1"]
     };
   },
   methods: {
@@ -76,31 +90,73 @@ export default {
       switch (e.key) {
         case "1":
           this.$router.push({ name: "users" });
+          this.defaultKey = ["1"];
           break;
         case "2":
           this.$router.push({ name: "training" });
+          this.defaultKey = ["2"];
           break;
         case "3":
           this.$router.push({ name: "blog" });
+          this.defaultKey = ["3"];
           break;
         case "4":
           this.$router.push({ name: "campaing" });
+          this.defaultKey = ["4"];
           break;
         case "5":
           this.$router.push({ name: "club" });
+          this.defaultKey = ["5"];
           break;
         case "6":
           this.$router.push({ name: "notification" });
+          this.defaultKey = ["6"];
           break;
         case "7":
           this.$router.push({ name: "messaging" });
+          this.defaultKey = ["7"];
           break;
         case "8":
           this.$router.push({ name: "themes" });
+          this.defaultKey = ["8"];
+          break;
+        case "9":
+          this.defaultKey = ["9"];
+          this.$router.push({ name: "login" });
           break;
         default:
           break;
       }
+    }
+  },
+  mounted() {
+    switch (this.$router.currentRoute.name.toString()) {
+      case "users":
+        this.defaultKey = ["1"];
+        break;
+      case "training":
+        this.defaultKey = ["2"];
+        break;
+      case "blog":
+        this.defaultKey = ["3"];
+        break;
+      case "campaing":
+        this.defaultKey = ["4"];
+        break;
+      case "club":
+        this.defaultKey = ["5"];
+        break;
+      case "notification":
+        this.defaultKey = ["6"];
+        break;
+      case "messaging":
+        this.defaultKey = ["7"];
+        break;
+      case "themes":
+        this.defaultKey = ["8"];
+        break;
+      default:
+        break;
     }
   }
 };
@@ -119,8 +175,8 @@ export default {
 .side {
   max-width: 100%;
   background: #526987;
-  padding-right: 12px;
-  padding-left: 8px;
+  /* padding-right: 12px;
+  padding-left: 8px; */
 }
 
 .main-content {
@@ -134,5 +190,10 @@ export default {
 
 .title-span-tag {
   color: #526987;
+}
+
+.ant-layout-sider,
+.ant-layout-sider-trigger {
+  background: #526987 !important;
 }
 </style>

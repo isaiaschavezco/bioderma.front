@@ -3,11 +3,7 @@
     <a-layout-content>
       <a-row type="flex" justify="center" style="height: 100%;">
         <a-col :xs="{ span: 11 }" style="height: 100%;">
-          <a-card
-            class="container-logos"
-            style="padding: 2rem; height: 100%;"
-            align="middle"
-          >
+          <a-card class="container-logos" style="padding: 2rem; height: 100%;" align="middle">
             <img class="logo-naos" alt="logo-naos" src="../assets/Logo_NAOS.png" width="300" />
             <img class="logo-bioderma" alt="example" src="../assets/logo.png" width="130" />
             <div class="form-login">
@@ -69,7 +65,7 @@ export default {
   data() {
     return {
       collapsed: false,
-      form: null,
+      form: this.$form.createForm(this),
       loadingSignIn: false
     };
   },
@@ -91,26 +87,25 @@ export default {
 
             if (responseLogin.status === 1 || responseLogin.status == 2) {
               let messageLogin = "Usuario incorrecto";
-              
+
               if (responseLogin.status == 2)
                 messageLogin = "Contraseña incorrecta";
-              
+
               this.$message.error(messageLogin);
-            }
-            else {
+            } else {
               localStorage.clear();
 
-              const {token, name, image, email} = responseLogin.profile;
-              
-              localStorage.setItem('token', token);
-              localStorage.setItem('name', name);
-              localStorage.setItem('image', image);
-              localStorage.setItem('email', email);
-              
+              const { token, name, image, email } = responseLogin.profile;
+
+              localStorage.setItem("token", token);
+              localStorage.setItem("name", name);
+              localStorage.setItem("image", image);
+              localStorage.setItem("email", email);
+
               this.$router.push({ name: "users" });
-            } 
-          } catch(err) {
-            console.log("%cHubo un error.", "color:red;font-size:1rem");
+            }
+          } catch (err) {
+            // console.log("%cHubo un error.", "color:red;font-size:1rem");
             this.$message.error("Hubo un error");
           }
           this.loadingSignIn = false;
@@ -119,7 +114,7 @@ export default {
     }
   },
   mounted() {
-    this.form = this.$form.createForm(this);
+    localStorage.clear();
   }
 };
 </script>
