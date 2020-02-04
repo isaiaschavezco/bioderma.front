@@ -51,10 +51,10 @@
         </div>
       </a-col>
       <a-col :xs="{ span: 7 }" style="margin-top: 30px">
-        <div class="container-notification" style>
+        <div class="container-notification" style="height: 52rem !important; overflow-y: auto;">
           <a-card title="HISTORIAL DE NOTIFICACIONES" style="text-align:left;">
             <a-list :dataSource="notificationList">
-              <div slot="renderItem" slot-scope="item, index" style="padding: 15px">
+              <div slot="renderItem" slot-scope="item, index" style="padding: 15px ">
                 <span style="font-weight: bold;">{{ item.header }}</span>
                 <span style="font-weight: bold; margin-left:30%;">{{ item.createdAt }}</span>
                 <p style="margin-bottom:0.5rem; margin-top:0.5rem;">{{ item.content }}</p>
