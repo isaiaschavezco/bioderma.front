@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://192.168.15.20:3000/"
+  baseURL: 'https://bioderma-api-inmersys.herokuapp.com/',
   // headers: {
   //     Authorization: {
   //         toString() {
