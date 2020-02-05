@@ -36,13 +36,23 @@
       <a-col :xs="{ span: 6 }" style="margin-left: 30px;">
         <div class="container-notification">
           <a-card title="RECORD" style="text-align:center;">
-            <!-- <a-list :dataSource="quizz">
-              <div slot="renderItem" slot-scope="item, index" style="padding: 0px">
-                <span style="font-weight: bold;">{{ item.date }}</span>
-                <p style="margin-bottom:30px">{{ item.description }}</p>
-                <a-divider class="divider" />
-              </div>
-            </a-list>-->
+            <a-list
+              itemLayout="horizontal"
+              size="small"
+              :pagination="pagination"
+              :dataSource="usersTop"
+            >
+              <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
+                <a-list-item-meta>
+                  <a slot="title">{{item.name.toUpperCase() + " " + item.lastName.toUpperCase()}}</a>
+                  <a-avatar
+                    style="color: #f56a00; backgroundColor: #fde3cf"
+                    slot="avatar"
+                  >{{ actualUsersTopPage == 1 ? index + 1 : (actualUsersTopPage-1) * 10 + index + 1 }}</a-avatar>
+                </a-list-item-meta>
+                <div>{{item.totalPoints}}</div>
+              </a-list-item>
+            </a-list>
           </a-card>
         </div>
       </a-col>
@@ -213,11 +223,20 @@ export default {
       campaingName: this.$route.params.name,
       removeConfirmationModal: false,
       quizz: [],
-      quizzIdToRemove: 0
+      quizzIdToRemove: 0,
+      actualUsersTopPage: 1,
+      pagination: {
+        onChange: page => {
+          this.actualUsersTopPage = page;
+        },
+        pageSize: 10
+      },
+      usersTop: []
     };
   },
   mounted() {
     this.getCampaingDetails();
+    this.getTopUsers();
   },
   watch: {
     startValidityDate: function() {
@@ -315,7 +334,7 @@ export default {
               name: values.quizzTitle
             };
 
-            console.log(quizzInfo);
+            // console.log(quizzInfo);
 
             const response = await this.$axios.post("quizz", quizzInfo);
 
@@ -323,7 +342,7 @@ export default {
             this.quizzForm.resetFields();
             this.getCampaingDetails();
 
-            console.log(response.data);
+            // console.log(response.data);
 
             if (response.data == 0) {
               this.showNotification(
@@ -472,6 +491,13 @@ export default {
     },
     onCloseRemoveConfirmationModal() {
       this.removeConfirmationModal = false;
+    },
+    async getTopUsers() {
+      const response = await this.$axios(
+        `pointsbyuser/campaing/${this.campaingId}`
+      );
+      this.usersTop = response.data.points;
+      // console.log("usersTop: ", this.usersTop);
     }
   }
 };

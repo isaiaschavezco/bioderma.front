@@ -505,7 +505,7 @@ export default {
             this.inviteUserForm.resetFields();
             this.inviteUserModal = false;
 
-            console.log(response.data);
+            // console.log(response.data);
 
             if (response.data == 0) {
               this.showNotification(
