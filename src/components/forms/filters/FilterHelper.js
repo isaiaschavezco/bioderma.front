@@ -23,8 +23,12 @@ export default class Filter {
 					arrFormatedFilter.push("Hombre");
 			}
 
-			if (filter.initAge !== null) 
+			if (filter.initAge !== null)
 				arrFormatedFilter.push(`${filter.initAge} - ${filter.finalAge} años`)
+
+			// if (filter.role !== null) {
+			// 	arrFormatedFilter.push(filter.role.name);
+			// }
 
 			formatedFilter = arrFormatedFilter.join(", ");
 		}
