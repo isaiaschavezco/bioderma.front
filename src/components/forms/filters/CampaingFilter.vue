@@ -131,7 +131,7 @@
 					</div>
 					<div class="filter-list">
 						<div class="filter__data" v-for="filter in filters" :key="filter.id">
-							<p class="filter__title">FILTRO {{ filter.id }}</p>
+							<p class="filter__title">FILTRO</p>
 							<a-row>
 									<a-col span="19">
 										<p class="filter__content">
@@ -370,7 +370,6 @@ export default {
 			this.isAddingFilter = false;
 		},
 		async onRemoveFilter(idFilter) {
-			console.log("Remove filter:", idFilter);
 
 			try {
 				const response = await this.$axios.delete("target", {
@@ -394,8 +393,6 @@ export default {
 			for (const filter of this.filters) {
 				this.allUsers = this.allUsers || filter.allUsers;
 			}
-
-			console.log("All filters:", this.allUsers, this.filters);
 
 			this.$emit('updateFilters', this.filters.slice());
 		}
