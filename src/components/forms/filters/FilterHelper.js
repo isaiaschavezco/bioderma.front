@@ -1,11 +1,18 @@
 export default class Filter {
 	static toString(filter) {
+
 		let formatedFilter = "";
 
 		if (filter.allUsers)
 			formatedFilter = "Todos los usuarios.";
 		else {
-			const arrFormatedFilter = [filter.type.name];
+			const arrFormatedFilter = [];
+
+			if (filter.type !== null) {
+				arrFormatedFilter.push(filter.type.name);
+			} else {
+				arrFormatedFilter.push(filter.role.name);
+			}
 
 			if (filter.position !== null)
 				arrFormatedFilter.push(filter.position.name);
@@ -25,10 +32,6 @@ export default class Filter {
 
 			if (filter.initAge !== null)
 				arrFormatedFilter.push(`${filter.initAge} - ${filter.finalAge} años`)
-
-			// if (filter.role !== null) {
-			// 	arrFormatedFilter.push(filter.role.name);
-			// }
 
 			formatedFilter = arrFormatedFilter.join(", ");
 		}

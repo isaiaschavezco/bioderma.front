@@ -323,7 +323,13 @@ export default {
 
       if (filter.allUsers) formatedFilter = "Todos los usuarios.";
       else {
-        const arrFormatedFilter = [filter.type];
+        const arrFormatedFilter = [];
+
+        if (filter.type !== null) {
+          arrFormatedFilter.push(filter.type);
+        } else {
+          arrFormatedFilter.push(filter.role);
+        }
 
         if (filter.position !== null) arrFormatedFilter.push(filter.position);
 
