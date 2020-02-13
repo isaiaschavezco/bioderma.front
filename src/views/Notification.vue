@@ -154,25 +154,25 @@ export default {
     },
     async sendNotification() {
       try {
-        const notificationData = {
-          title: this.notificationTitle,
-          content: this.notificationContent,
-          targets: [...this.filters]
-        };
-        const response = await this.$axios.post(
-          "notification/send",
-          notificationData
-        );
-        if (response.data.status == 0) {
-          this.getLastNotifications();
-          this.fileForm.resetFields();
-          this.deleteFilters = true;
-          this.showNotification(
-            "success",
-            "Notificación enviada",
-            "Se ha enviado la notificación exitosamente."
-          );
-        }
+        // const notificationData = {
+        //   title: this.notificationTitle,
+        //   content: this.notificationContent,
+        //   targets: [...this.filters]
+        // };
+        // const response = await this.$axios.post(
+        //   "notification/send",
+        //   notificationData
+        // );
+        // if (response.data.status == 0) {
+        //   this.getLastNotifications();
+        //   this.fileForm.resetFields();
+        //   this.deleteFilters = true;
+        //   this.showNotification(
+        //     "success",
+        //     "Notificación enviada",
+        //     "Se ha enviado la notificación exitosamente."
+        //   );
+        // }
       } catch (err) {
         console.log("err: ", err);
       }

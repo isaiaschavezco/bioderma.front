@@ -25,6 +25,7 @@
                   shape="circle"
                   icon="caret-right"
                   size="large"
+                  :disabled="!isSend[record.key]"
                   @click="() => {validityModalForm = true; currentModalId = record.quizzId;}"
                 />
               </span>
@@ -223,6 +224,7 @@ export default {
       campaingName: this.$route.params.name,
       removeConfirmationModal: false,
       quizz: [],
+      isSend: [],
       quizzIdToRemove: 0,
       actualUsersTopPage: 1,
       pagination: {
@@ -293,11 +295,13 @@ export default {
       try {
         const response = await this.$axios(urlCampaingDetails);
 
+        this.isSend = [];
         this.quizz = response.data;
 
         this.quizz.map((trivia, index) => {
           const newTrivia = trivia;
           newTrivia.key = index;
+          this.isSend.push(false);
 
           if (newTrivia.isDeleted) newTrivia.status = "Eliminada";
           else if (newTrivia.isActive) newTrivia.status = "Activa";
@@ -311,6 +315,13 @@ export default {
 
           return newTrivia;
         });
+
+        for (let i = 0; i < this.quizz.length; ++i) {
+          const currQuizz = this.quizz[i];
+          const ans = await this.$axios(`question/${currQuizz.quizzId}`);
+          this.isSend[i] = ans.data.questions.length > 0;
+        }
+
       } catch (err) {}
       this.loadingQuizz = false;
     },
