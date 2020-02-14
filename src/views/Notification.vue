@@ -65,6 +65,36 @@
         </div>
       </a-col>
     </a-row>
+    <a-modal
+      :title="`¿Estas seguro que deseas enviar la notifiación?`"
+      v-model="visibleRemove"
+      :footer="null"
+      @cancel="onCloseRemoveConfirmation"
+    >
+      <div class="info-confirmation">
+        <p>Escribe tu contraseña para confirmar que quieres enviar la notifcación</p>
+        <a-form :form="passwordForm">
+          <a-form-item>
+            <a-input
+              placeholder="Contraseña"
+              type="password"
+              v-decorator="[
+                'password',
+                {
+                  rules: [{ required: true, message: 'Favor de llenar el campo' }]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-form>
+      </div>
+      <template>
+        <div class="footer-confirmation">
+          <a-button @click="onCloseRemoveConfirmation">Cancelar</a-button>
+          <a-button @click="checkConfirmationDelete" type="danger">Eliminar</a-button>
+        </div>
+      </template>
+   </a-modal>
   </div>
 </template>
 <script>
@@ -101,8 +131,10 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
         }
       ],
+      visibleRemove: false,
       notificationList: [],
       fileForm: this.$form.createForm(this),
+      passwordForm: this.$form.createForm(this),
       deleteFilters: false,
       filters: [],
       notificationTitle: "",
@@ -112,7 +144,6 @@ export default {
   computed: {},
   methods: {
     onSubmitNotificationForm() {
-      //alert("Subir");
       this.fileForm.validateFields((err, values) => {
         if (!err) {
           if (this.filters.length > 0) {
@@ -129,18 +160,19 @@ export default {
         }
       });
     },
+    onCloseRemoveConfirmation() {
+      this.visibleRemove = false;
+    },
     showConfirm(sendData) {
-      this.$confirm({
-        title: "¿Estás seguro que deseas enviar esta notificación?",
-        content: h => <div style="color:#000;"></div>,
-        okText: "ENVIAR",
-        cancelText: "CANCELAR",
-        onOk() {
-          sendData();
-        },
-        onCancel() {},
-        class: "test"
-      });
+      this.visibleRemove = true;
+    },
+    checkConfirmationDelete() {
+      if (true) {
+        this.sendNotification();
+      }
+      else {
+        
+      }
     },
     updateFilters(filters, resetFilters) {
       this.filters = filters.slice();
@@ -216,5 +248,12 @@ export default {
 }
 .divider {
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.footer-confirmation {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10rem;
+  margin-top: 1rem;
 }
 </style>
