@@ -159,6 +159,7 @@ export default {
           content: this.notificationContent,
           targets: [...this.filters]
         };
+        //console.log("JSON: ",notificationData);
         const response = await this.$axios.post(
           "notification/send",
           notificationData
@@ -174,16 +175,16 @@ export default {
           );
         }
       } catch (err) {
-        console.log("err: ", err);
+        //console.log("err: ", err);
       }
     },
     async getLastNotifications() {
       try {
         const response = await this.$axios("notification/list");
-        console.log("response: ", response.data);
+        //console.log("response: ", response.data);
         this.notificationList = response.data.notificacions;
       } catch (err) {
-        console.log("err: ", err);
+        //console.log("err: ", err);
       }
     }
   },

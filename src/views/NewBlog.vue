@@ -20,7 +20,7 @@
                 />
               </a-form-item>
               <a-divider class="divider" />
-              <a-form-item>
+              <a-form-item >
                 <!-- <a-textarea placeholder="Articulo" :rows="20" /> -->
                 <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </a-form-item>
@@ -261,10 +261,10 @@ export default {
       return status;
     },
     handleChangeFileUpload(info) {
-      console.log("info: ", info);
+      //console.log("info: ", info);
       if (this.uploadFileStatus) {
         let fileList = [...info.fileList];
-        console.log("fileList: ", fileList);
+        //console.log("fileList: ", fileList);
         if (fileList.length > 3) {
           fileList = fileList.slice(1, 4);
         }
@@ -285,7 +285,7 @@ export default {
 
       this.assetsForm.validateFields(async (err, values) => {
         if (!err) {
-          console.log("assetsForm: ", values);
+          //console.log("assetsForm: ", values);
 
           for (let index = 0; index < values.upload.fileList.length; index++) {
             let assetUrl = values.upload.fileList[index].response;
@@ -297,7 +297,7 @@ export default {
                 assetUrl.substring(indexUrl, assetUrl.length);
             }
 
-            console.log("assetUrl: ", assetUrl);
+            //console.log("assetUrl: ", assetUrl);
 
             imagesArray.push({
               id: index,
@@ -318,7 +318,7 @@ export default {
 
       if (isAllValidate) {
         try {
-          console.log("imagesArray: ", imagesArray);
+          //console.log("imagesArray: ", imagesArray);
           let response = null;
           if (this.isEditing) {
             response = await this.$axios.put("article", {
@@ -340,12 +340,12 @@ export default {
               isBlogNaos: this.isBlogNaos
             });
           }
-          console.log("response", response);
+          //console.log("response", response);
           this.$router.push({
             name: "blog"
           });
         } catch (error) {
-          console.log(error);
+          //console.log(error);
           this.$notification["error"]({
             message: "Error al subir entrada",
             description: "Ha ocurrido un error al subir la entrada."
@@ -382,7 +382,7 @@ export default {
             this.isTagFormLoading = false;
           } catch (error) {
             this.isTagFormLoading = false;
-            console.log("error: ", values);
+            //console.log("error: ", values);
           }
         }
       });
@@ -408,7 +408,7 @@ export default {
       this.articleId = this.$route.query.blogId;
       this.blogData = response.data.blogs;
 
-      console.log("blogData: ", this.blogData);
+      //console.log("blogData: ", this.blogData);
 
       this.articleTitle = this.blogData.title;
       this.editorData = this.blogData.description;
@@ -472,6 +472,6 @@ export default {
 }
 
 .ck-editor__editable {
-  min-height: 30rem;
+  height: 25rem;
 }
 </style>
