@@ -6,7 +6,7 @@
           <a-card :title="quizzName">
             <a-table :columns="columnsQuestionsTable" :dataSource="questionsData" style="margin-top: 1rem;">
               <span slot="action" slot-scope="text, record">
-                <a-button shape="circle" icon="edit" size="large" @click="editQuestion(text.key, text.type)" :disabled="!availableButtons" />
+                <a-button shape="circle" icon="edit" size="large" @click="editQuestion(text.key, text.type)" />
                 <a-divider type="vertical" />
                 <a-button shape="circle" icon="delete" size="large" @click="removeQuestion(text.key)" :disabled="!availableButtons" />
               </span>
@@ -86,19 +86,19 @@
     <!-- MODALES -->
 
     <!-- OPCION MULTIPLE -->
-    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="action" :textButton="nameAction" @close="onCloseModal" />
+    <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
 
     <!-- RELACION DE COLUMNAS -->
-    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="action" :textButton="nameAction" @close="onCloseModal" />
+    <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
 
     <!-- COMPLETA LA FRASE -->
-    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="action" :textButton="nameAction" @close="onCloseModal" />
+    <ModalCompleteSentence :isVisible="completeSentenceModal" :quizz="quizzId" :questionJSON="questionDataCompleteSentence" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
 
     <!-- ORDENA LA FRASE -->
-    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" :questionJSON="questionDataSortWords" @register="action" :textButton="nameAction" @close="onCloseModal" />
+    <ModalSortWords :isVisible="sortWordsModal" :quizz="quizzId" :questionJSON="questionDataSortWords" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
     
     <!-- OPCION MULTIPLE IMAGEN -->
-    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleImage" @register="action" :textButton="nameAction" @close="onCloseModal" />
+    <ModalMultipleImageOption :isVisible="multipleImageOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleImage" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
   </div>
 </template>
 <script>

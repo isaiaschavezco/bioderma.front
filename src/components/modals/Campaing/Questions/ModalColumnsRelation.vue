@@ -110,7 +110,7 @@
     
 			<a-divider />
 			
-			<a-row class="form-question__actions" type="flex" justify="center" :gutter="24">
+			<a-row v-if="registerButton" class="form-question__actions" type="flex" justify="center" :gutter="24">
 				<a-col span="7">
 					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>
@@ -138,6 +138,10 @@ export default {
 		},
 		textButton: {
 			type: String
+		},
+		onlyView: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -174,7 +178,8 @@ export default {
 			questionForm: this.$form.createForm(this),
 			reactivesValues: ["", "", "", "", ""],
 			responsesValues: ["", "", "", "", ""],
-			action: this.textButton
+			action: this.textButton,
+			registerButton: true
 		};
 	},
 	watch: {
@@ -183,6 +188,9 @@ export default {
 		},
 		textButton: function() {
 			this.action = this.textButton;
+		},
+		onlyView: function() {
+			this.registerButton = !this.onlyView;
 		},
 		questionJSON: function() {
 			this.questionData = this.questionJSON;	
@@ -200,6 +208,7 @@ export default {
 					this.onChangeReactiveValue(idx, val);
 				});
 
+				this.registerButton = !this.onlyView;
 				let responses = this.questionData.answer.responses;
 
 				responses = responses.map(val => val.data);
