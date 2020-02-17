@@ -66,13 +66,13 @@
       </a-col>
     </a-row>
     <a-modal
-      :title="`¿Estas seguro que deseas enviar la notifiación?`"
+      :title="`¿Seguro que deseas enviar la notifiación?`"
       v-model="visibleRemove"
       :footer="null"
       @cancel="onCloseRemoveConfirmation"
     >
       <div class="info-confirmation">
-        <p>Escribe tu contraseña para confirmar que quieres enviar la notifcación</p>
+        <p>Escribe tu contraseña para confirmar el envío de la notificación</p>
         <a-form :form="passwordForm">
           <a-form-item>
             <a-input
@@ -91,7 +91,7 @@
       <template>
         <div class="footer-confirmation">
           <a-button @click="onCloseRemoveConfirmation">Cancelar</a-button>
-          <a-button @click="checkConfirmationDelete" type="danger">Eliminar</a-button>
+          <a-button @click="onSubmitSendNotification" type="primary">Enviar</a-button>
         </div>
       </template>
     </a-modal>
@@ -166,10 +166,56 @@ export default {
     showConfirm(sendData) {
       this.visibleRemove = true;
     },
-    checkConfirmationDelete() {
-      if (true) {
-        this.sendNotification();
-      } else {
+    onSubmitSendNotification() {
+      try {
+        this.passwordForm.validateFields(async (err, values) => {
+          if (!err) {
+            const notificationData = {
+              email: localStorage.getItem("email"),
+              password: values.password.trim(),
+              title: this.notificationTitle,
+              content: this.notificationContent,
+              targets: [...this.filters]
+            };
+            //console.log("JSON: ",notificationData);
+            const response = await this.$axios.post(
+              "notification/send",
+              notificationData
+            );
+
+            if (response.data.status == 0) {
+              this.getLastNotifications();
+              this.fileForm.resetFields();
+              this.deleteFilters = true;
+              this.onCloseRemoveConfirmation();
+              this.showNotification(
+                "success",
+                "Notificación enviada",
+                "Se ha enviado la notificación exitosamente."
+              );
+            } else if (response.data.status == 1) {
+              this.showNotification(
+                "warning",
+                "Usuario no encontrado",
+                "No se ha encontrado un usuario asociado a este correo."
+              );
+            } else if (response.data.status == 2) {
+              this.showNotification(
+                "warning",
+                "Contraseña incorrecta",
+                "La contraseña no coincide para este usuario."
+              );
+            }
+            this.passwordForm.resetFields();
+          }
+        });
+      } catch (err) {
+        this.passwordForm.resetFields();
+        this.showNotification(
+          "error",
+          "Error al enviar la notificación",
+          "Ha ocurrido un error en el envío de la notificación."
+        );
       }
     },
     updateFilters(filters, resetFilters) {
