@@ -55,6 +55,7 @@
               <span v-if="!collapsed">Notificaciones</span>
             </a-menu-item>
             <a-menu-item class="item" key="7">
+              <a-badge status="success" v-if="isMessageWaiting" />
               <img src="../assets/icons/Mensajeria_Inactivo.png" class="icon" alt />
               <span v-if="!collapsed">Mensajeria</span>
             </a-menu-item>
@@ -78,11 +79,16 @@
   </a-layout>
 </template>
 <script>
+// import io from "socket.io";
+import * as io from "socket.io-client";
+
 export default {
   data() {
     return {
       collapsed: false,
-      defaultKey: ["1"]
+      defaultKey: ["1"],
+      alertSocket: null,
+      isMessageWaiting: false
     };
   },
   methods: {
@@ -113,6 +119,7 @@ export default {
           this.defaultKey = ["6"];
           break;
         case "7":
+          this.isMessageWaiting = false;
           this.$router.push({ name: "messaging" });
           this.defaultKey = ["7"];
           break;
@@ -150,6 +157,7 @@ export default {
         this.defaultKey = ["6"];
         break;
       case "messaging":
+        this.isMessageWaiting = false;
         this.defaultKey = ["7"];
         break;
       case "themes":
@@ -158,6 +166,31 @@ export default {
       default:
         break;
     }
+  },
+  created() {
+    console.log("alertSocket:    ", this.alertSocket);
+    this.alertSocket = io("http://localhost:3000/chatAdmin");
+    console.log("Socket status: ", this.alertSocket.connected);
+    this.alertSocket.on("alertToClient", msg => {
+      console.log("Socket msn: ", msg);
+      if (this.$router.currentRoute.name.toString() != "messaging") {
+        this.isMessageWaiting = true;
+        this.$notification.open({
+          message: "Tienes un nuevo mensaje",
+          description: "Puedes ver tu mensaje en la sección de mensajeria",
+          icon: <a-icon type="mail" style="color: #108ee9" />
+        });
+      }
+    });
+    this.alertSocket.on("connect_error", error => {
+      console.log("Server abajo");
+    });
+  },
+  destroyed() {
+    if (this.alertSocket != null) {
+      this.alertSocket.close();
+    }
+    // console.log("Destrido");
   }
 };
 </script>
