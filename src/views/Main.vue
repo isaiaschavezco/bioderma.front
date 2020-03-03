@@ -169,7 +169,9 @@ export default {
   },
   created() {
     console.log("alertSocket:    ", this.alertSocket);
-    this.alertSocket = io("http://localhost:3000/chatAdmin");
+    this.alertSocket = io(
+      "https://bioderma-api-inmersys.herokuapp.com/chatAdmin"
+    );
     console.log("Socket status: ", this.alertSocket.connected);
     this.alertSocket.on("alertToClient", msg => {
       console.log("Socket msn: ", msg);

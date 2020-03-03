@@ -1,3 +1,3 @@
 import * as io from 'socket.io-client';
 
-export const socketInstance = io('http://localhost:3000');
+export const socketInstance = io('https://bioderma-api-inmersys.herokuapp.com');
