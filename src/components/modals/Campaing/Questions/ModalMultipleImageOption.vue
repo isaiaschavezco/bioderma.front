@@ -145,7 +145,13 @@
 
       <a-divider />
 
-      <a-row v-if="registerButton" class="form-question__actions" type="flex" justify="center" :gutter="24">
+      <a-row
+        v-if="registerButton"
+        class="form-question__actions"
+        type="flex"
+        justify="center"
+        :gutter="24"
+      >
         <a-col span="7">
           <a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
         </a-col>
@@ -174,10 +180,10 @@ export default {
     textButton: {
       type: String
     },
-		onlyView: {
-			type: Boolean,
-			default: false
-		}
+    onlyView: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -215,7 +221,7 @@ export default {
       ],
       isVisibleModal: this.isVisible,
       questionForm: this.$form.createForm(this),
-			registerButton: true
+      registerButton: true
     };
   },
   watch: {
@@ -225,9 +231,9 @@ export default {
     textButton: function() {
       this.action = this.textButton;
     },
-		onlyView: function() {
-			this.registerButton = !this.onlyView;
-		},
+    onlyView: function() {
+      this.registerButton = !this.onlyView;
+    },
     questionJSON: function() {
       this.questionData = this.questionJSON;
       if (this.questionJSON.content && this.questionJSON.answer) {
@@ -241,7 +247,7 @@ export default {
         for (let i = 0; i < options.length; ++i)
           this.optionsImages[i] = options[i];
 
-				this.registerButton = !this.onlyView;
+        this.registerButton = !this.onlyView;
         this.time = this.questionData.time;
         this.points = this.questionData.points;
 
@@ -308,7 +314,7 @@ export default {
     setAvailableOptions() {
       let newAvailableValues = new Array(5);
       newAvailableValues.fill(true);
-      console.log("Hola");
+      // console.log("Hola");
       for (let i = 0; i < 5; ++i) {
         if (i < 2) newAvailableValues[i] = true;
         else {

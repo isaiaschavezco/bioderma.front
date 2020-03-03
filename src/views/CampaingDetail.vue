@@ -321,7 +321,6 @@ export default {
           const ans = await this.$axios(`question/${currQuizz.quizzId}`);
           this.isSend[i] = ans.data.questions.length > 0;
         }
-
       } catch (err) {}
       this.loadingQuizz = false;
     },
@@ -428,12 +427,12 @@ export default {
       const quizzId = this.currentModalId;
       const urlValidityDate = "quizz/send";
 
-      console.log("Submited Dates: ");
-      console.log(
-        quizzId,
-        this.startValidityDate.format("YYYY-MM-DD"),
-        this.endValidityDate.format("YYYY-MM-DD")
-      );
+      // console.log("Submited Dates: ");
+      // console.log(
+      //   quizzId,
+      //   this.startValidityDate.format("YYYY-MM-DD"),
+      //   this.endValidityDate.format("YYYY-MM-DD")
+      // );
 
       try {
         const validityDate = {
@@ -447,7 +446,7 @@ export default {
         this.validityModalForm = false;
         this.startValidityDate = null;
         this.endValidityDate = null;
-        console.log("Response validity:", response.data);
+        // console.log("Response validity:", response.data);
       } catch (err) {
         console.log("Submit dates: ", err);
       }
