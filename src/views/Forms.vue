@@ -850,6 +850,7 @@ export default {
       confirmDirty: false,
       autoCompleteResult: [],
       userEmail: this.$route.query.email,
+      userToken: this.$route.query.token,
       fileList: []
     };
   },
@@ -860,6 +861,7 @@ export default {
     this.getStates();
     this.getPosition();
     this.getChains();
+    // console.log("userToken: ", this.userToken);
     // this.success();
     // this.successRegisterModal = true;
   },
@@ -926,6 +928,16 @@ export default {
         )
       });
     },
+    failToken() {
+      this.$info({
+        centered: true,
+        content: (
+          <p style="text-align:center">
+            Error con token de autenticación, favor de comunicarse con el equipo de soporte de NAOS.
+          </p>
+        )
+      });
+    },
     failIncorrect() {
       this.$info({
         content: (
@@ -980,32 +992,35 @@ export default {
       this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
           // console.log("Datos recibidos: ", values);
-          // console.log("fileList: ", this.fileList);
           try {
-            const response = await this.$axios.post(
-              "https://bioderma-api-inmersys.herokuapp.com/user/naos",
+  
+              const response = await this.$axios.post(
+              "user/naos",
               {
                 name: values.name.toUpperCase(),
                 lastName: values.lastName.toUpperCase(),
                 nickName: values.nickName,
                 photo: this.fileList.length > 0 ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
-                gender: values.gender,
+                gender: values.gender == 1 ? false : true,
                 phone: values.phone,
                 email: values.email.toLowerCase(),
                 password: values.password,
                 state: values.state,
                 city: values.city,
-                naosPosition: values.naosPosition
+                naosPosition: values.naosPosition,
+                userToken: this.userToken
               }
             );
-            // console.log(response.data.status);
+
             if (response.data.status == 0) {
               this.success();
             } else if (response.data.status == 5) {
               this.failEmail();
             } else if (response.data.status == 3) {
               this.failIncorrect();
+            } else if (response.data.status == 13) {
+              this.failToken();
             }
           } catch (error) {
             console.log("error: ", error);
@@ -1023,14 +1038,14 @@ export default {
           // console.log("Datos recibidos: ", values);
           try {
             const response = await this.$axios.post(
-              "https://bioderma-api-inmersys.herokuapp.com/user/drugstore",
+              "user/drugstore",
               {
                 name: values.name.toUpperCase(),
                 lastName: values.lastName.toUpperCase(),
                 nickName: values.nickName,
                 photo: this.fileList.length > 0  ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
                 birthDate: values.birthDate,
-                gender: values.gender,
+                gender: values.gender == 1 ? false : true,
                 phone: values.phone,
                 email: values.email.toLowerCase(),
                 password: values.password,
@@ -1041,7 +1056,8 @@ export default {
                 drugStore: values.drugStore,
                 town: values.town,
                 mayoralty: values.mayoralty,
-                charge: values.charge
+                charge: values.charge,
+                userToken: this.userToken
               }
             );
             if (response.data.status == 0) {
@@ -1050,6 +1066,8 @@ export default {
               this.failEmail();
             } else if (response.data.status == 3) {
               this.failIncorrect();
+            } else if (response.data.status == 13) {
+              this.failToken();
             }
           } catch (error) {
             this.fail();
