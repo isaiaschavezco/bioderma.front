@@ -2,10 +2,14 @@
   <div>
     <a-row>
       <a-col :xs="{ span: 19 } ">
-        <Chat :dataUser="user" @deleteConversation="deleteConversation"/>
+        <Chat :dataUser="user" @deleteConversation="deleteConversation" />
       </a-col>
       <a-col :xs="{ span: 5 }">
-        <ChatsList @openConversation="openConversation" @deleteConversation="deleteConversation"/>
+        <ChatsList
+          :emailsList="emailsList"
+          @openConversation="openConversation"
+          @deleteConversation="deleteConversation"
+        />
       </a-col>
     </a-row>
   </div>
@@ -22,7 +26,8 @@ export default {
   data() {
     return {
       emailConversation: "",
-      user: {}
+      user: {},
+      emailsList: this.$store.getters.emailsList
     };
   },
   methods: {
@@ -39,23 +44,21 @@ export default {
         title: "¿Estas seguro de eliminar la conversación?",
         async onOk() {
           try {
-            const response = await currThis.$axios.delete(`message/user/${email}`);
-            
+            const response = await currThis.$axios.delete(
+              `message/user/${email}`
+            );
+
             if (currThis.user.email && currThis.user.email === email)
               currThis.user = {};
-
           } catch (error) {
             currThis.$notification["error"]({
               message: "Error al eliminar conversación",
-              description:
-                "Hubo un error al eliminar la conversación.",
+              description: "Hubo un error al eliminar la conversación."
             });
-          }      
+          }
           currThis.user = {};
         }
       });
-
-
     }
   }
 };

@@ -168,13 +168,16 @@ export default {
     }
   },
   created() {
-    console.log("alertSocket:    ", this.alertSocket);
     this.alertSocket = io(
       "https://bioderma-api-inmersys.herokuapp.com/chatAdmin"
     );
-    console.log("Socket status: ", this.alertSocket.connected);
+    // this.alertSocket = io("http://localhost:3000/chatAdmin");
+
     this.alertSocket.on("alertToClient", msg => {
-      console.log("Socket msn: ", msg);
+      // console.log("Socket msn: ", msg.message);
+      if (msg) {
+        this.$store.commit("setNewEmailToList", msg.message);
+      }
       if (this.$router.currentRoute.name.toString() != "messaging") {
         this.isMessageWaiting = true;
         this.$notification.open({
@@ -185,7 +188,7 @@ export default {
       }
     });
     this.alertSocket.on("connect_error", error => {
-      console.log("Server abajo");
+      console.log("Server");
     });
   },
   destroyed() {

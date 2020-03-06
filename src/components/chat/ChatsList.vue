@@ -11,15 +11,17 @@
       :dataSource="chats"
     >
       <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
-        <a-row>
+        <a-row style="margin-top:0.5rem;">
           <a-col :span="6">
-            <a-avatar
-              :style="{
+            <a-badge :dot="item.user.isNewMessage">
+              <a-avatar
+                :style="{
                 color: 'white',
                 backgroundColor: colours[index % colours.length],
                 'margin-left': '1rem'
               }"
-            >{{item.user.name[0] + item.user.lastName[0]}}</a-avatar>
+              >{{item.user.name[0] + item.user.lastName[0]}}</a-avatar>
+            </a-badge>
           </a-col>
 
           <a-col :span="18">
@@ -46,201 +48,31 @@
 </template>
 
 <script>
-const data = [
-  {
-    id: "1",
-    user: {
-      name: "John Brown",
-      email: "prueba@inmersys.com",
-      profile: "NAOS",
-      position: "Gerente",
-      points: 500
-    }
-  },
-  {
-    id: "2",
-    user: {
-      name: "Jim Green",
-      email: "prueba@inmersys.com",
-      profile: "NAOS",
-      position: "Gerente",
-      points: 500
-    }
-  },
-  {
-    id: "3",
-    user: {
-      name: "Joe Black",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "4",
-    user: {
-      name: "Sam Fisher",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "5",
-    user: {
-      name: "Master Chief",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "6",
-    user: {
-      name: "Ella no te ama",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "7",
-    user: {
-      name: "Josh Nicols",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "8",
-    user: {
-      name: "Pantera Rosa",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "9",
-    user: {
-      name: "Jefferson Gutierritos",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "10",
-    user: {
-      name: "Alvin Yakitori",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "1",
-    user: {
-      name: "John Brown",
-      email: "prueba@inmersys.com",
-      profile: "NAOS",
-      position: "Gerente",
-      points: 500
-    }
-  },
-  {
-    id: "2",
-    user: {
-      name: "Jim Green",
-      email: "prueba@inmersys.com",
-      profile: "NAOS",
-      position: "Gerente",
-      points: 500
-    }
-  },
-  {
-    id: "3",
-    user: {
-      name: "Joe Black",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "4",
-    user: {
-      name: "Sam Fisher",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "5",
-    user: {
-      name: "Master Chief",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "6",
-    user: {
-      name: "Ella no te ama",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "7",
-    user: {
-      name: "Josh Nicols",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  },
-  {
-    id: "8",
-    user: {
-      name: "Pantera Rosa",
-      email: "prueba@inmersys.com",
-      profile: "Farmacia",
-      position: "-",
-      points: 500
-    }
-  }
-];
 export default {
   name: "ChatsList",
+  props: {
+    emailsList: Map
+  },
   data() {
     return {
       chats: [],
       colours: ["#66bb6a", "#7e57c2", "#EF5350", "#5C6BC0", "#8d6e63"],
-      requestList: null
+      unsubscribeMutation: null,
+      activeChat: ""
     };
   },
   mounted() {
     try {
+      // console.log("EMAIL LIST COMPONENT: ", this.emailsList);
       this.getChats();
-      this.requestList = setInterval(this.getChats, 3500);
+      this.unsubscribeMutation = this.$store.subscribe((mutation, state) => {
+        // console.log("PASE");
+        if (mutation.type === "setNewEmailToList") {
+          // console.log("CAMBIO LISTA");
+          this.getChats();
+        }
+      });
+      // console.log("UNSSUBSCRIBE MOUNTED: ", this.unsubscribeMutation);
     } catch (error) {
       console.log("Hubo un error: ", error.message);
     }
@@ -250,12 +82,41 @@ export default {
       try {
         const response = await this.$axios("message/list");
         const newChats = response.data.conversations;
-        this.chats = newChats;
+        let newChatList = [];
+        newChats.forEach(chatElement => {
+          //Se evalua si se activa o no el badge de la conversación
+          let isBadgeActive =
+            this.activeChat != chatElement.user.email
+              ? this.emailsList.get(chatElement.user.email)
+                ? true
+                : false
+              : false;
+
+          newChatList.push({
+            id: chatElement.id,
+            user: {
+              name: chatElement.user.name,
+              lastName: chatElement.user.lastName,
+              email: chatElement.user.email,
+              isNewMessage: isBadgeActive
+            }
+          });
+          // console.log(
+          //   "STATUS: ",
+          //   chatElement.user.email,
+          //   this.emailsList.get(chatElement.user.email) ? true : false
+          // );
+        });
+        this.chats = newChatList;
+        // console.log("this.chats: ", this.chats);
       } catch (error) {
         console.log("Hubo un error al onbtener la lista: ", error.message);
       }
     },
     onOpenConversation(user, colour) {
+      user.isNewMessage = false;
+      this.activeChat = user.email;
+      this.$store.commit("deleteEmailFromList", user.email);
       this.$emit("openConversation", user, colour);
     },
     deleteConversation(user) {
@@ -263,7 +124,7 @@ export default {
     }
   },
   destroyed() {
-    clearInterval(this.requestList);
+    this.unsubscribeMutation();
   }
 };
 </script>
@@ -284,4 +145,7 @@ export default {
 .user-name:active {
   transform: scale(0.9);
 }
+/* .ant-scroll-number .ant-badge-dot {
+  background: #52c41a !important;
+} */
 </style>

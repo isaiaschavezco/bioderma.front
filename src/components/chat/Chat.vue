@@ -47,20 +47,33 @@ export default {
       user: this.dataUser,
       requestChat: null,
       message: "",
-      enable: true
+      enable: true,
+      unsubscribeMutation: null
     };
   },
   watch: {
     dataUser: function() {
       this.user = this.dataUser;
       this.getConversation();
-
-      if (this.user.email) {
-        this.requestChat = setInterval(this.updateConversation, 5000);
-      }
+      // if (this.user.email) {
+      //   this.requestChat = setInterval(this.updateConversation, 5000);
+      // }
     }
   },
-  mounted() {},
+  mounted() {
+    // console.log("INICIO CHATS");
+    this.unsubscribeMutation = this.$store.subscribe((mutation, state) => {
+      // console.log("PASE CHAT");
+      if (mutation.type === "setNewEmailToList") {
+        // console.log("PAYLOAD ", mutation.payload);
+        if (mutation.payload == this.user.email) {
+          // console.log("CAMBIO CHAT");
+          setTimeout(this.updateConversation, 500);
+          // this.updateConversation();
+        }
+      }
+    });
+  },
   methods: {
     async sendMessage(e) {
       const message = this.message.trim();
@@ -110,12 +123,14 @@ export default {
       }
     },
     deleteConversation() {
-      clearInterval(this.requestChat);
+      // clearInterval(this.requestChat);
+      this.user.email = "";
       this.$emit("deleteConversation", this.user);
     }
   },
   destroyed() {
-    clearInterval(this.requestChat);
+    // clearInterval(this.requestChat);
+    this.unsubscribeMutation();
   }
 };
 </script>
