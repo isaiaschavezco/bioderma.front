@@ -20,7 +20,7 @@
                 />
               </a-form-item>
               <a-divider class="divider" />
-              <a-form-item >
+              <a-form-item>
                 <!-- <a-textarea placeholder="Articulo" :rows="20" /> -->
                 <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
               </a-form-item>
@@ -284,6 +284,8 @@ export default {
       });
 
       this.assetsForm.validateFields(async (err, values) => {
+        console.log("values.upload: ", values.upload);
+
         if (!err) {
           //console.log("assetsForm: ", values);
 

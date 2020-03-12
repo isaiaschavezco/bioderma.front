@@ -3,38 +3,62 @@
     <a-row>
       <a-col :xs="{ span: 22 }">
         <div class="card-container" style="height: 50rem; margin-top: 54px;">
-          <a-list
-            :grid="{ gutter: 16, column: 4 }"
-            :dataSource="proudcts"
-            :style="{ overflow: 'scroll' }"
-            style="height: 100%;"
-          >
-            <a-list-item slot="renderItem" slot-scope="item">
-              <a-card
-                hoverable
-                style="height: 25rem; width: 22rem;"
-                class="Cards"
-                :title="item.title"
-              >
-                <p class="center">
-                  <strong>{{ item.points }} puntos</strong>
-                </p>
-                <div style="height:9rem; text-align:center;">
-                  <img style="max-width:13rem; max-height:8rem;" alt="example" :src="item.image" />
-                </div>
-                <div style="height:4rem;" class="productDescription">
-                  <span style="font-weight: 700;">{{ item.description }}</span>
-                </div>
-                <template class="ant-card-actions" slot="actions">
+          <a-skeleton :loading="isLoagindProducts" active>
+            <a-list
+              :grid="{ gutter: 16, column: 4 }"
+              :dataSource="proudcts"
+              :style="{ overflow: 'scroll' }"
+              style="height: 100%;"
+            >
+              <a-list-item slot="renderItem" slot-scope="item">
+                <a-card style="min-height: 30rem;">
+                  <div class="campaing__header">
+                    <a-row :gutter="12">
+                      <a-col :lg="{span:'24'}" :xl="{span:'15'}">
+                        <h2>{{ item.title.length > 19 ? item.title.substring(0, 18) + '...': item.title }}</h2>
+                      </a-col>
+                      <a-col :lg="{span:'24'}" :xl="{span:'9'}">
+                        <a-row class="camapaing__actions" type="flex" justify="space-between">
+                          <a-col span="8">
+                            <a-icon
+                              class="campaing__action"
+                              type="edit"
+                              @click="gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
+                            />
+                          </a-col>
+
+                          <a-col span="8">
+                            <a-icon
+                              class="campaing__action"
+                              type="delete"
+                              @click="(deleteProductModal=true), gettingId(item.id)"
+                            />
+                          </a-col>
+                        </a-row>
+                      </a-col>
+                    </a-row>
+                  </div>
+                  <a-divider />
+                  <p class="center">
+                    <strong>{{ item.points }} puntos</strong>
+                  </p>
+                  <div style="height:9rem; text-align:center;">
+                    <img class="campaing__img" alt="example" :src="item.image" />
+                  </div>
+                  <div style="height: 5rem;" class="productDescription">
+                    <span style="font-weight: 700;">{{ item.description }}</span>
+                  </div>
+                  <!-- <template class="ant-card-actions" slot="actions">
                   <a-icon
                     type="edit"
-                    @click="(editProductModal = true), gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
+                    @click="gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
                   />
                   <a-icon type="delete" @click="(deleteProductModal=true), gettingId(item.id)" />
-                </template>
-              </a-card>
-            </a-list-item>
-          </a-list>
+                  </template>-->
+                </a-card>
+              </a-list-item>
+            </a-list>
+          </a-skeleton>
         </div>
       </a-col>
       <a-col
@@ -44,7 +68,7 @@
       >
         <a-row>
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="addProductModal = true" />
+            <a-button shape="circle" icon="plus" size="large" @click="onOpenNewProductModal" />
           </a-col>
           <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
@@ -55,8 +79,9 @@
       title="ELIMINAR PRODUCTO"
       v-model="deleteProductModal"
       @ok="deletingModal"
-      okText="si"
-      cancelText="No"
+      okText="ELIMINAR"
+      cancelText="CANCELAR"
+      okType="danger"
     >
       <p>¿Estás seguro de querer eliminar este producto?</p>
     </a-modal>
@@ -95,7 +120,7 @@
                 {
                   rules: [
                     {
-                      required: true,
+                      required: false,
                       message: 'Favor de cargar un archivo JPG, PNG o JPGE'
                     }
                   ]
@@ -132,7 +157,7 @@
                 rules: [{ required: true, message: 'Favor de llenar el campo'}]
               }
             ]"
-          />Pts
+          />&nbsp;Pts
         </a-form-item>
       </a-form>
       <template slot="footer">
@@ -141,7 +166,7 @@
             type="primary"
             style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
             @click="onSubmitEditProduct"
-          >Aceptar</a-button>
+          >EDITAR</a-button>
         </div>
       </template>
     </a-modal>
@@ -217,7 +242,7 @@
                 rules: [{ required: true,  message: 'Favor de llenar el campo' }],
               }
             ]"
-          />Pts
+          />&nbsp;Pts
         </a-form-item>
       </a-form>
       <template slot="footer">
@@ -226,7 +251,7 @@
             type="primary"
             style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
             @click="onSubmitPictureForm"
-          >Publicar</a-button>
+          >PUBLICAR</a-button>
         </div>
       </template>
     </a-modal>
@@ -268,7 +293,8 @@ export default {
       editProductModal: false,
       deleteProductModal: false,
       fileList: [],
-      uploadFileStatus: true
+      uploadFileStatus: true,
+      isLoagindProducts: false
     };
   },
   mounted() {
@@ -276,19 +302,37 @@ export default {
   },
   methods: {
     async getListProducts() {
-      const responseList = await this.$axios.get("product");
-      //console.log(responseList.data.products);
-      this.proudcts = responseList.data.products;
+      try {
+        this.isLoagindProducts = true;
+        const responseList = await this.$axios.get("product");
+        //console.log(responseList.data.products);
+        this.proudcts = responseList.data.products;
+        this.isLoagindProducts = false;
+      } catch (err) {
+        this.isLoagindProducts = false;
+        this.$notification["error"]({
+          message: "Error al cargar productos",
+          description: "Ha ocurrido un error al cargar los productos."
+        });
+      }
+    },
+    onOpenNewProductModal() {
+      this.fileForm.resetFields();
+      this.fileList = [];
+      this.addProductModal = true;
     },
     deletingModal() {
       this.deleteProduct(this.newId);
       this.deleteProductModal = false;
     },
     gettingData(title, description, points, image) {
+      this.fileList = [];
       this.newTitle = title;
       this.newDescription = description;
       this.newPoints = points;
       this.newImage = image;
+      this.fileFormEdit.resetFields();
+      this.editProductModal = true;
     },
     gettingId(id) {
       this.newId = id;
@@ -304,23 +348,24 @@ export default {
     onSubmitEditProduct(id) {
       this.fileFormEdit.validateFields(async (err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
+          // console.log("Datos recibidos: ", image);
           try {
-            const response = await this.$axios.put(
-              "product",
-              {
-                productId: this.newId,
-                title: values.title,
-                image: values.upload.fileList[0].response,
-                description: values.description,
-                points: values.points
-              }
-            );
-            //console.log(response.data);
+            // console.log("VALUES: ", values);
+            const response = await this.$axios.put("product", {
+              productId: this.newId,
+              title: values.title,
+              image:
+                typeof this.fileList === "undefined" ||
+                this.fileList.length == 0
+                  ? this.newImage
+                  : values.upload.fileList[0].response,
+              description: values.description,
+              points: values.points
+            });
             if (response.data.status == 0) {
-              this.success();
               this.fileFormEdit.resetFields();
               this.fileList = [];
+              this.getListProducts();
             } else {
               this.failEditingProduct();
             }
@@ -333,7 +378,6 @@ export default {
           }
         }
       });
-      this.getListProducts();
     },
     handleChange() {},
     confirmClose() {},
@@ -375,17 +419,14 @@ export default {
       //alert("Subir");
       this.fileForm.validateFields(async (err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
+          // console.log("Datos recibidos: ", values);
           try {
-            const response = await this.$axios.post(
-              "product",
-              {
-                title: values.title,
-                image: values.upload.fileList[0].response,
-                description: values.description,
-                points: values.points
-              }
-            );
+            const response = await this.$axios.post("product", {
+              title: values.title,
+              image: values.upload.fileList[0].response,
+              description: values.description,
+              points: values.points
+            });
             if (response.data.status == 0) {
               this.success();
               this.fileForm.resetFields();
@@ -428,7 +469,7 @@ export default {
         }
       }
 
-      console.log("STATUS: ", status);
+      // console.log("STATUS: ", status);
       this.uploadFileStatus = status;
       return status;
     }
@@ -453,5 +494,30 @@ export default {
 .productDescription {
   overflow-y: auto;
   margin: 1rem 0 2rem 0;
+}
+.campaing__header {
+  height: 2.5rem;
+}
+.campaing__header h2 {
+  margin: 0;
+}
+.campaing__action {
+  font-size: 1.2rem;
+  padding: 7px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px 1px rgba(119, 119, 119, 0.5);
+  transition-delay: 0;
+  transition-duration: 10ms;
+  transition-timing-function: ease-in-out;
+}
+.campaing__action:active {
+  transform: scale(0.9);
+}
+.campaing__img {
+  text-align: center;
+  max-height: 100%;
+  width: 100%;
+  object-fit: contain;
+  cursor: pointer;
 }
 </style>

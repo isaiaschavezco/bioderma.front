@@ -475,7 +475,9 @@ export default {
     onSearchUsers(value) {
       value = value.trim();
       this.usersListInfo = this.users.filter(
-        user => user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0
+        user =>
+          user.name.toUpperCase().indexOf(value.toUpperCase()) >= 0 ||
+          user.email.toUpperCase().indexOf(value.toUpperCase()) >= 0
       );
     },
     onSearchChains(value) {

@@ -24,8 +24,8 @@
     </div>
     <template>
       <div class="footer">
-        <a-button @click="onClose">Cancelar</a-button>
-        <a-button @click="removeCampaing" type="danger">Eliminar</a-button>
+        <a-button @click="onClose">CANCELAR</a-button>
+        <a-button @click="removeCampaing" type="danger">ELIMINAR</a-button>
       </div>
     </template>
   </a-modal>
@@ -84,14 +84,14 @@ export default {
                 campaingId: this.quizzId
               });
               status = response.data.status;
-			}
-			this.passwordForm.resetFields();
+            }
+            this.passwordForm.resetFields();
             this.$emit("confirm", status);
           }
         });
       } catch (err) {
-		status = -1;
-		this.passwordForm.resetFields();
+        status = -1;
+        this.passwordForm.resetFields();
         this.$emit("confirm", status);
       }
     }

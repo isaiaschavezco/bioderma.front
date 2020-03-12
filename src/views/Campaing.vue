@@ -35,7 +35,11 @@
                           <a-col :lg="{span:'24'}" :xl="{span:'9'}">
                             <a-row class="camapaing__actions" type="flex" justify="space-between">
                               <a-col span="8">
-                                <a-icon class="campaing__action" type="edit" />
+                                <a-icon
+                                  class="campaing__action"
+                                  type="edit"
+                                  @click="onOpenEditCampaingModal(item.id, item.name)"
+                                />
                               </a-col>
 
                               <a-col span="8">
@@ -118,6 +122,33 @@
         @closeModal="onCloseModal"
       />
     </a-modal>
+
+    <a-modal
+      title="EDITAR CAMPAÑA"
+      v-model="editCampaingModal"
+      okText="EDITAR"
+      cancelText="CANCELAR"
+      @ok="editCampaingName"
+      :confirmLoading="confirmEditCampaingLoading"
+    >
+      <div class="info-confirmation">
+        <p>Escribe el nuevo nombre de la campaña</p>
+        <a-form :form="editCampaingForm">
+          <a-form-item>
+            <a-input
+              placeholder="Nombre de la campaña"
+              v-decorator="[
+              'name',
+              {
+                initialValue: actualCampaingName,
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+            />
+          </a-form-item>
+        </a-form>
+      </div>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -143,9 +174,14 @@ export default {
       loadingMore: false,
       showLoadingMore: true,
       newCampaingModal: false,
+      editCampaingModal: false,
       submenuItems: [],
       bioGamesTab: false,
-      removeConfirmationModal: false
+      removeConfirmationModal: false,
+      editCampaingForm: this.$form.createForm(this),
+      actualCampaingName: "",
+      actualCampaingId: "",
+      confirmEditCampaingLoading: false
     };
   },
   mounted: function() {
@@ -155,10 +191,8 @@ export default {
   methods: {
     async getCamapings() {
       this.loadingCampaings = true;
-      const urlCamapaings = `campaing/${this.bioGamesTab}`;
-
       try {
-        const response = await this.$axios(urlCamapaings);
+        const response = await this.$axios(`campaing/${this.bioGamesTab}`);
         this.campaings = response.data;
         this.groupedCampaings = this.groupCampaings();
       } catch (err) {
@@ -241,6 +275,58 @@ export default {
       // console.log("campaingId: ", campaingId);
       this.campaingRemoveId = campaingId;
       this.removeConfirmationModal = true;
+    },
+    onOpenEditCampaingModal(campaingId, campaingName) {
+      // console.log("campaingId: ", campaingId);
+      // console.log("Edito campaña: ", campaingId, campaingName);
+      this.actualCampaingName = campaingName;
+      this.actualCampaingId = campaingId;
+      this.editCampaingForm.resetFields();
+      this.editCampaingModal = true;
+      // this.editCampaingForm.setFieldsValue({
+      //   ["name"]: this.actualCampaingName
+      // });
+    },
+    editCampaingName() {
+      // console.log(
+      //   "ACTUALIZO: ",
+      //   this.actualCampaingId,
+      //   this.actualCampaingName
+      // );
+      this.editCampaingForm.validateFields(async (err, values) => {
+        if (!err) {
+          this.confirmEditCampaingLoading = true;
+          try {
+            const updateData = {
+              campaingId: this.actualCampaingId,
+              name: values.name
+            };
+
+            const responseData = await this.$axios.put("campaing", updateData);
+
+            if (responseData.data.status == 0) {
+              this.editCampaingForm.resetFields();
+              this.confirmEditCampaingLoading = false;
+              this.editCampaingModal = false;
+              this.getCamapings();
+              this.$notification["success"]({
+                message: "Campaña actualizada",
+                description: "Se ha editado el nombre correctamente."
+              });
+            }
+
+            // console.log(JSON.stringify(questionInformation));
+          } catch (error) {
+            this.editCampaingForm.resetFields();
+            this.confirmEditCampaingLoading = false;
+            this.editCampaingModal = false;
+            this.$notification["error"]({
+              message: "Error al editar la campaña",
+              description: "Ha ocurrido un error al editar esta campaña."
+            });
+          }
+        }
+      });
     },
     removeCampaing(status) {
       let type = "";

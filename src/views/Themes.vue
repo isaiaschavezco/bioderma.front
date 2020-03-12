@@ -115,7 +115,7 @@
               type="primary"
               style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
               @click="onSubmitPictureForm"
-            >Aceptar</a-button>
+            >ACEPTAR</a-button>
           </template>
         </a-modal>
         <a-modal title="Añadir una imagen" v-model="addImageModalB" centered>
@@ -156,7 +156,7 @@
               type="primary"
               style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
               @click="onSubmitPictureFormB"
-            >Aceptar</a-button>
+            >ACEPTAR</a-button>
           </template>
         </a-modal>
         <a-modal title="Añadir una imagen" v-model="addImageModalC" centered>
@@ -197,7 +197,7 @@
               type="primary"
               style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
               @click="onSubmitPictureFormC"
-            >Aceptar</a-button>
+            >ACEPTAR</a-button>
           </template>
         </a-modal>
         <a-switch
@@ -542,9 +542,9 @@ export default {
       //console.log(num);
       const component = this;
       this.$confirm({
-        title: "¿QUE TAL ESTE TEMA PARA TU APLICACIÓN?",
+        title: "¿DESEAS APLICAR ESTE NUEVO TEMA A LA APLICACIÓN?",
         content: "",
-        okText: "ACTIVAR",
+        okText: "APLICAR",
         cancelText: "CANCELAR",
         onOk() {
           component.getThemes(num);

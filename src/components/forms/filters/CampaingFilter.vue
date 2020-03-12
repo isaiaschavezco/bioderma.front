@@ -73,6 +73,7 @@
                 :filterOption="filterOption"
                 :disabled="disabledState || disabledFilters"
                 v-model="filterToSend.state"
+                @change="getCities"
                 name="state"
               >
                 <a-select-option
@@ -80,6 +81,32 @@
                   :key="state.id"
                   :value="state.id"
                 >{{ state.name }}</a-select-option>
+              </a-select>
+            </a-row>
+
+            <!-- Row checkbox -->
+            <a-row class="select-item">
+              <a-checkbox
+                :checked="!disabledFilters && !disabledCity"
+                @click="toggleCity"
+                :disabled="disabledFilters"
+                style="margin-right:7px; "
+              ></a-checkbox>
+              <a-select
+                showSearch
+                placeholder="Ciudad"
+                optionFilterProp="children"
+                style="width: 170px"
+                :filterOption="filterOption"
+                :disabled="disabledCity || disabledFilters"
+                v-model="filterToSend.city"
+                name="city"
+              >
+                <a-select-option
+                  v-for="city in cities"
+                  :key="city.id"
+                  :value="city.id"
+                >{{ city.name }}</a-select-option>
               </a-select>
             </a-row>
 
@@ -223,6 +250,7 @@ export default {
         allUsers: true,
         userType: 1,
         state: 1,
+        city: 1,
         chain: 1,
         naosPosition: 1,
         initAge: 18,
@@ -232,12 +260,15 @@ export default {
       allUsers: false,
       isAddingFilter: false,
       states: [],
+      cities: [],
       positions: [],
       chains: [],
       disabledFilters: true,
       disabledUserType: false,
       disabledPosition: true,
       disabledState: true,
+      disabledCity: true,
+      disabled: true,
       disabledChain: true,
       disabledAge: true,
       disabledGender: true,
@@ -247,6 +278,7 @@ export default {
   async created() {
     try {
       this.states = await this.getStates();
+      await this.getCities();
       this.positions = await this.getWorkPositions();
       this.chains = await this.getChains();
     } catch (error) {
@@ -262,6 +294,15 @@ export default {
         console.log("Hubo un error.");
       }
       return [];
+    },
+    async getCities() {
+      try {
+        const response = await this.$axios(`city/${this.filterToSend.state}`);
+        this.cities = response.data.cities;
+        this.filterToSend.city = this.cities.length > 0 ? this.cities[0].id : 1;
+      } catch (error) {
+        console.log("Hubo un error.");
+      }
     },
     async getWorkPositions() {
       try {
@@ -295,6 +336,9 @@ export default {
     },
     toggleState() {
       this.disabledState = !this.disabledState;
+    },
+    toggleCity() {
+      this.disabledCity = !this.disabledCity;
     },
     toggleMunicipality() {
       this.disabledMunicipality = !this.disabledMunicipality;
@@ -337,6 +381,9 @@ export default {
 
         if (filter.city !== null) arrFormatedFilter.push(filter.city);
 
+        if (filter.delegation !== null)
+          arrFormatedFilter.push(filter.delegation);
+
         if (filter.gender !== null) {
           if (filter.gender) arrFormatedFilter.push("Mujer");
           else arrFormatedFilter.push("Hombre");
@@ -362,6 +409,7 @@ export default {
         allUsers: this.filterToSend.allUsers,
         userType: this.filterToSend.userType,
         state: this.filterToSend.state,
+        city: this.filterToSend.city,
         chain: this.filterToSend.chain,
         naosPosition: this.filterToSend.naosPosition,
         initAge: this.filterToSend.initAge,
@@ -377,6 +425,8 @@ export default {
         if (this.disabledUserType) filterData.userType = -1;
 
         if (this.disabledState) filterData.state = -1;
+
+        if (this.disabledCity) filterData.city = -1;
 
         if (this.disabledChain || this.userType === 1) filterData.chain = -1;
 

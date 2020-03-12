@@ -35,7 +35,7 @@
             :beforeUpload="beforeUpload"
             :fileList="fileList"
           >
-            <img :src="campaingImage" alt="" v-if="campaingImage" class="campaingImage" />
+            <img :src="campaingImage" alt v-if="campaingImage" class="campaingImage" />
             <p class="ant-upload-drag-icon" v-else>
               <a-icon type="picture" />
             </p>
@@ -50,13 +50,13 @@
     <CampaingFilter @updateFilters="updateFilters" :resetFilters="deleteFilters" />
 
     <a-row>
-			<a-col span="24" class="text-center">
-				<a-button
-					type="primary"
-					style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-					@click="onSubmitCampaingForm"
-				>SUBIR</a-button>
-			</a-col>
+      <a-col span="24" class="text-center">
+        <a-button
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          @click="onSubmitCampaingForm"
+        >SUBIR</a-button>
+      </a-col>
     </a-row>
   </div>
 </template>
@@ -142,10 +142,7 @@ export default {
               console.log("%cRegister new campaing:", "color:green;");
               console.log(campaingData);
 
-              const response = await this.$axios.post(
-                "campaing",
-                campaingData
-              );
+              const response = await this.$axios.post("campaing", campaingData);
 
               this.closeModal();
 

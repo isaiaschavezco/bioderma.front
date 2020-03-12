@@ -23,6 +23,9 @@ export default class Filter {
 			if (filter.city !== null)
 				arrFormatedFilter.push(filter.city.name);
 
+			if (filter.delegation !== null)
+				arrFormatedFilter.push(filter.delegation.name);
+
 			if (filter.gender !== null) {
 				if (filter.gender)
 					arrFormatedFilter.push("Mujer");
