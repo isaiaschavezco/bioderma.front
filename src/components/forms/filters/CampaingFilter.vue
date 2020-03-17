@@ -26,7 +26,7 @@
                 >
                   <a-radio :value="1">NAOS</a-radio>
                   <a-radio :value="2">Farmacia</a-radio>
-                  <a-radio :value="3">ADMIN</a-radio>
+                  <a-radio :value="3" v-if="!isNotificationView">ADMIN</a-radio>
                 </a-radio-group>
               </a-checkbox>
             </a-row>
@@ -272,7 +272,8 @@ export default {
       disabledChain: true,
       disabledAge: true,
       disabledGender: true,
-      filters: []
+      filters: [],
+      isNotificationView: false
     };
   },
   async created() {
@@ -281,6 +282,10 @@ export default {
       await this.getCities();
       this.positions = await this.getWorkPositions();
       this.chains = await this.getChains();
+      // console.log("ESTOY EN: ", this.$route.name);
+      if (this.$route.name == "notification") {
+        this.isNotificationView = true;
+      }
     } catch (error) {
       console.log("Error: ", error.message);
     }
