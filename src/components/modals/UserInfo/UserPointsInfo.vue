@@ -6,19 +6,19 @@
 					<span class="points-info-label">PUNTOS TOTALES</span>
 				</a-col>
 				<a-col span="12">
-					<span class="points-info-amount total-points-user points-info-user-amount">{{ total }}</span>
+					<span class="points-info-amount total-points-user points-info-user-amount">{{ dataPoints.total }}</span>
 				</a-col>
 			</a-row>
 		</div>
 		<div class="points-info points-info-total-points">
 			<a-row>
 				<a-col span="12">
-					<span class="points-info-label">PUNTOS {{ accumulatedPoints.name.toUpperCase() }}</span>
+					<span class="points-info-label">PUNTOS BIODERMA GAMES</span>
 				</a-col>
 				<a-col span="12">
 					<a-row>
 						<a-col span="6">
-							<span class="points-info-amount points-info-user-amount">{{ accumulatedPoints.points }}</span>
+							<span class="points-info-amount points-info-user-amount">{{ dataPoints.biodermaGame }}</span>
 						</a-col>
 						<a-col span="18" v-if="false">
 							<a-button type="primary" size="large" class="user-points-btn-modify" @click="onModifyPoints" >Modificar</a-button>
@@ -44,7 +44,7 @@ export default {
 	},
 	watch: {
 		dataPoints: function() {
-			console.log("Nuevo historial: ", this.dataPoints);
+			// console.log("Nuevo historial: ", this.dataPoints);
 			this.history = this.dataPoints.pointsHistory;
 		}
 	},
