@@ -21,13 +21,18 @@
                 />
 
                 <a-divider type="vertical" />
-                <a-button
-                  shape="circle"
-                  icon="caret-right"
-                  size="large"
-                  :disabled="!isSend[record.key]"
-                  @click="() => {validityModalForm = true; currentModalId = record.quizzId;}"
-                />
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>{{record.isSend ? 'Esta trivia ha sido enviada' : (record.questions <= 0 ? 'Esta trivia no tiene preguntas asignadas' : 'Enviar') }}</span>
+                  </template>
+                  <a-button
+                    shape="circle"
+                    icon="caret-right"
+                    size="large"
+                    :disabled="record.isSend ? true : record.questions <= 0"
+                    @click="() => {validityModalForm = true; currentModalId = record.quizzId;}"
+                  />
+                </a-tooltip>
               </span>
             </a-table>
           </a-skeleton>
@@ -109,7 +114,7 @@
       class="modal-validity"
       v-model="validityModalForm"
       :closable="false"
-      width="40%"
+      width="60%"
       centered
       :bodyStyle="{
         height: '300px'
@@ -122,7 +127,7 @@
         <a-date-picker
           :disabledDate="disabledStartValidityDate"
           showTime
-          format="DD-MM-YYYY"
+          format="DD-MM-YYYY HH:mm:ss"
           v-model="startValidityDate"
           placeholder="Inicio de trivia"
           @openChange="handleStartOpenChange"
@@ -131,7 +136,7 @@
         <a-date-picker
           :disabledDate="disabledEndValidityDate"
           showTime
-          format="DD-MM-YYYY"
+          format="DD-MM-YYYY HH:mm:ss"
           placeholder="Fin trivia"
           v-model="endValidityDate"
           :open="endOpenDate"
@@ -224,7 +229,6 @@ export default {
       campaingName: this.$route.params.name,
       removeConfirmationModal: false,
       quizz: [],
-      isSend: [],
       quizzIdToRemove: 0,
       actualUsersTopPage: 1,
       pagination: {
@@ -290,18 +294,17 @@ export default {
     },
     async getCampaingDetails() {
       this.loadingQuizz = true;
-      const urlCampaingDetails = `quizz/${this.campaingId}`;
 
       try {
-        const response = await this.$axios(urlCampaingDetails);
+        const response = await this.$axios(`quizz/${this.campaingId}`);
 
-        this.isSend = [];
         this.quizz = response.data;
+
+        console.log("this.quizz: ", this.quizz);
 
         this.quizz.map((trivia, index) => {
           const newTrivia = trivia;
           newTrivia.key = index;
-          this.isSend.push(false);
 
           if (newTrivia.isDeleted) newTrivia.status = "Eliminada";
           else if (newTrivia.isActive) newTrivia.status = "Activa";
@@ -316,11 +319,11 @@ export default {
           return newTrivia;
         });
 
-        for (let i = 0; i < this.quizz.length; ++i) {
-          const currQuizz = this.quizz[i];
-          const ans = await this.$axios(`question/${currQuizz.quizzId}`);
-          this.isSend[i] = ans.data.questions.length > 0;
-        }
+        // for (let i = 0; i < this.quizz.length; ++i) {
+        //   const currQuizz = this.quizz[i];
+        //   const ans = await this.$axios(`question/${currQuizz.quizzId}`);
+        //   this.isSend[i] = ans.data.questions.length > 0;
+        // }
       } catch (err) {}
       this.loadingQuizz = false;
     },
@@ -437,8 +440,8 @@ export default {
       try {
         const validityDate = {
           quizzId,
-          startDate: this.startValidityDate.format("YYYY-MM-DD"),
-          finishDate: this.endValidityDate.format("YYYY-MM-DD")
+          startDate: this.startValidityDate.format("YYYY-MM-DD HH:mm:ss"),
+          finishDate: this.endValidityDate.format("YYYY-MM-DD HH:mm:ss")
         };
         const response = await this.$axios.post(urlValidityDate, validityDate);
 

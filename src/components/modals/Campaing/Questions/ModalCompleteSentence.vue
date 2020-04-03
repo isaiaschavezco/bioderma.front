@@ -1,5 +1,5 @@
 <template>
-  <a-modal class="form-question" width="35%" centered v-model="isVisibleModal" @cancel="onCloseModal" :footer="null">
+  <a-modal class="form-question" width="80%" centered v-model="isVisibleModal" @cancel="onCloseModal" :footer="null">
 		<h3 class="form-question__title">NUEVA PREGUNTA COMPLETA LA FRASE</h3>
     
 		<a-divider/>

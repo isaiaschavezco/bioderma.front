@@ -113,7 +113,7 @@
       :confirmLoading="loadingFileForm"
       :afterClose="onCloseModal"
       centered
-      width="50%"
+      width="60%"
       :footer="null"
     >
       <ModalCampaingRegister

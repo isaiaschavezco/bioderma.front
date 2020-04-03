@@ -1,7 +1,7 @@
 <template>
   <a-modal
     class="form-question"
-    width="45%"
+    width="80%"
     centered
     v-model="isVisibleModal"
     @cancel="onCloseModal"

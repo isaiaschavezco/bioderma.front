@@ -99,7 +99,6 @@ export default {
 
               localStorage.setItem("token", token);
               localStorage.setItem("name", name);
-              localStorage.setItem("image", image);
               localStorage.setItem("email", email);
 
               this.$router.push({ name: "users" });

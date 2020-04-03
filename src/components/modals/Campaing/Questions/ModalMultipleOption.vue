@@ -1,7 +1,7 @@
 <template>
   <a-modal
     class="form-question"
-    width="35%"
+    width="80%"
     centered
     v-model="isVisibleModal"
     @cancel="onCloseModal"
@@ -101,7 +101,7 @@
       >ASIGNA UN TIEMPO PARA RESPONDER ESTA PREGUNTA</div>
 
       <a-form-item class="margin-horizontal">
-        <span class="form-question__bold-text">TIEMPO:</span>
+        <span class="form-question__bold-text">TIEMPO: </span>
 
         <a-input
           :maxLength="19"
