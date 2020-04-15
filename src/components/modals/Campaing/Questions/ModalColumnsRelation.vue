@@ -1,11 +1,11 @@
 <template>
   <a-modal
+    v-model="isVisibleModal"
     class="form-question"
     width="80%"
     centered
-    v-model="isVisibleModal"
-    @cancel="onCloseModal"
     :footer="null"
+    @cancel="onCloseModal"
   >
     <h3 class="form-question__title">NUEVA PREGUNTA RELACIÓN DE COLUMNAS</h3>
 
@@ -13,9 +13,9 @@
 
     <a-form class="form-question__form" :form="questionForm" @submit="onSubmitQuestion">
       <div class="form-question__headerLabel" style="margin-left: 2.25rem; margin-right: 2.25rem;">
-        ESCRIBE EN LA COLUMNA 1 EL REACTIVO Y EN LA COLUMNA 2 LA RESPUESTA CORRECTA DE
-        FORMA LINEAL, EL SISTEMA POR SI MISMO SE ENCARGARÁ DE ALEATORIZAR AMBAS
-        COLUMNAS
+        ESCRIBE EN LA COLUMNA 1 EL REACTIVO Y EN LA COLUMNA 2 LA RESPUESTA
+        CORRECTA DE FORMA LINEAL, EL SISTEMA POR SI MISMO SE ENCARGARÁ DE
+        ALEATORIZAR AMBAS COLUMNAS
       </div>
 
       <a-row style="margin-left: 4rem; margin-right: 4rem; margin-top:1rem;">
@@ -24,10 +24,10 @@
       </a-row>
 
       <a-row
-        style="margin-left: 4rem; margin-right: 4rem;"
-        :gutter="12"
         v-for="(option, index) in textOptions"
         :key="index"
+        style="margin-left: 4rem; margin-right: 4rem;"
+        :gutter="12"
       >
         <a-col span="2" class="option__labelOption">{{ `${option.indicator})` }}</a-col>
 
@@ -35,17 +35,26 @@
           <a-col span="24">
             <a-form-item>
               <a-input
+                v-decorator="[
+                  `reactive${option.indicator}`,
+                  {
+                    rules: [
+                      {
+                        required: isRequiredOption[index],
+                        message: 'Favor de llenar el campo'
+                      }
+                    ],
+                    initialValue: reactivesValues[index]
+                  }
+                ]"
                 class="form-question__inputText"
                 :placeholder="`Reactivo ${option.indicator}`"
                 :disabled="!isAvailableOption[index]"
-                v-decorator="[
-									`reactive${option.indicator}`,
-									{
-										rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }],
-										initialValue: reactivesValues[index]
-									}
-								]"
-                @change="(e) => {onChangeReactiveValue(index, e.target.value); }"
+                @change="
+                  e => {
+                    onChangeReactiveValue(index, e.target.value);
+                  }
+                "
               />
             </a-form-item>
           </a-col>
@@ -55,17 +64,26 @@
           <a-col span="24">
             <a-form-item>
               <a-input
+                v-decorator="[
+                  `response${option.indicator}`,
+                  {
+                    rules: [
+                      {
+                        required: isRequiredOption[index],
+                        message: 'Favor de llenar el campo'
+                      }
+                    ],
+                    initialValue: responsesValues[index]
+                  }
+                ]"
                 class="form-question__inputText"
                 :placeholder="`Respuesta ${option.indicator}`"
                 :disabled="!isAvailableOption[index]"
-                v-decorator="[
-									`response${option.indicator}`,
-									{
-										rules: [{ required: isRequiredOption[index], message: 'Favor de llenar el campo' }],
-										initialValue: responsesValues[index]
-									}
-								]"
-                @change="(e) => {onChangeResponseValue(index, e.target.value); }"
+                @change="
+                  e => {
+                    onChangeResponseValue(index, e.target.value);
+                  }
+                "
               />
             </a-form-item>
           </a-col>
@@ -82,15 +100,21 @@
         <span class="form-question__bold-text">TIEMPO:</span>
 
         <a-input
-          :maxLength="19"
-          style="width: 120px"
           v-decorator="[
-						'time',
-						{
-							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
-							initialValue: time
-						}
-					]"
+            'time',
+            {
+              rules: [
+                {
+                  required: true,
+                  message: 'Favor de llenar el campo',
+                  pattern: '^\\d+$'
+                }
+              ],
+              initialValue: time
+            }
+          ]"
+          :max-length="19"
+          style="width: 120px"
         />
 
         <span class="form-question__bold-text">SEG</span>
@@ -103,15 +127,21 @@
       >ASIGNA UN PUNTAJE PARA ESTA PREGUNTA</label>
       <a-form-item style="margin-left: 7.9rem;">
         <a-input
-          :maxLength="19"
-          style="width: 120px"
           v-decorator="[
-						'points',
-						{
-							rules: [{ required: true, message: 'Favor de llenar el campo', pattern: '^\\d+$'}],
-							initialValue: points
-						}
-					]"
+            'points',
+            {
+              rules: [
+                {
+                  required: true,
+                  message: 'Favor de llenar el campo',
+                  pattern: '^\\d+$'
+                }
+              ],
+              initialValue: points
+            }
+          ]"
+          :max-length="19"
+          style="width: 120px"
         />
 
         <span class="form-question__bold-text">PTS</span>
@@ -318,11 +348,17 @@ export default {
             questions
           });
 
-          responses = this.shuffle(responses);
+          // console.log("questions: ", questions);
+
+          // console.log("responses: ", responses);
+
+          // responses = this.shuffle(responses);
 
           const answerJSON = JSON.stringify({
             responses
           });
+
+          // console.log("responses: ", responses);
 
           // console.log("contentJSON: ", questions);
           // console.log("answerJSON: ", this.shuffle(responses));
