@@ -4,8 +4,8 @@
       <a-row type="flex" justify="center" style="height: 100%;">
         <a-col :xs="{ span: 11 }" style="height: 100%;">
           <a-card class="container-logos" style="padding: 2rem; height: 100%;" align="middle">
-            <img class="logo-naos" alt="logo-naos" src="../assets/Logo_NAOS.png" width="300" />
-            <img class="logo-bioderma" alt="example" src="../assets/logo.png" width="130" />
+            <img class="logo-naos" alt="logo-naos" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/Logo_NAOS.png" width="300" />
+            <img class="logo-bioderma" alt="example" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/logo.png" width="130" />
             <div class="form-login">
               <a-form
                 id="components-form-demo-normal-login"
@@ -53,7 +53,7 @@
         </a-col>
         <a-col :xs="{ span: 13 }" style="height: 100%;">
           <div class="container-logo-pretty">
-            <img class="logo-pretty" alt="pretty" src="../assets/pretty.jpg" />
+            <img class="logo-pretty" alt="bg_naosapp" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/bg_naosapp.jpg" />
           </div>
         </a-col>
       </a-row>

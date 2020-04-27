@@ -254,7 +254,7 @@
                   <a-input
                     setFieldsValue="email"
                     placeholder="EMAIL"
-                    :disabled= "true"
+                    :disabled= "isEmailInputDisable"
                     v-decorator="[
                       'email',
                       {
@@ -714,7 +714,7 @@
                     <a-input
                       placeholder="EMAIL"
                       setFieldsValue="email"
-                      :disabled= "true"
+                      :disabled= "isEmailInputDisable"
                       v-decorator="[
                         'email',
                         {
@@ -851,7 +851,8 @@ export default {
       autoCompleteResult: [],
       userEmail: this.$route.query.email,
       userToken: this.$route.query.token,
-      fileList: []
+      fileList: [],
+      isEmailInputDisable: this.$route.query.email ? true : false
     };
   },
   beforeCreate() {
