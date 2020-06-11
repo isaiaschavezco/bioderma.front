@@ -242,6 +242,12 @@ const userColumns = [
     }
   },
   {
+    title: "Cadena",
+    dataIndex: "chain",
+    key: "chain",
+    align: "center"
+  },
+  {
     title: "Puntos acumulados",
     dataIndex: "points",
     key: "points",
@@ -338,7 +344,8 @@ export default {
             email: val.email,
             profile: val.type.name,
             position: val.position === null ? "" : val.position.name,
-            points: val.points
+            points: val.points,
+            chain: val.chain === null ? "" : val.chain.name
           };
         });
 
