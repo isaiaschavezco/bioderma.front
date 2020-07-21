@@ -234,7 +234,7 @@
             type="primary"
             icon="download"
             style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="() => exportCSModal = false"
+            @click="closeExportCSVModal"
           >DESCARGAR REPORTE</a-button>
         </download-csv>
       </template>
@@ -651,6 +651,8 @@ export default {
     },
     closeExportCSVModal() {
       this.exportCSVForm.resetFields();
+      this.exportCSModal = false;
+      this.isCSVReady = false;
     },
     onGenerateReportClick() {
       this.exportCSVForm.validateFields(async (err, values) => {
