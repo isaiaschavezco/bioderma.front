@@ -64,7 +64,7 @@
       </a-col>
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <div v-if="activeTab == 1">
-          <a-row style>
+          <a-row>
             <a-col>
               <a-button
                 shape="circle"
@@ -74,6 +74,34 @@
               />
             </a-col>
             <a-col>Añadir trivia</a-col>
+          </a-row>
+          <a-row style="margin-top:2rem;" v-if="!isCSVReady">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="file-text"
+                size="large"
+                :loading="exportCSVLoading"
+                @click="onGenerateReportClick"
+              />
+            </a-col>
+            <a-col class="title-span-tag">Generar CSV</a-col>
+          </a-row>
+          <a-row style="margin-top:2rem;" v-if="isCSVReady">
+            <a-col>
+              <download-csv
+                :data="dataToExport"
+                :name="'Campaing_' + campaingName + '_' + (new Date()).getTime().toString() + '.csv'"
+              >
+                <a-button
+                  shape="circle"
+                  icon="download"
+                  size="large"
+                  @click="() => isCSVReady = false"
+                />
+              </download-csv>
+            </a-col>
+            <a-col class="title-span-tag">Descargar CSV</a-col>
           </a-row>
         </div>
       </a-col>
@@ -216,14 +244,12 @@ export default {
       validityModalForm: false,
       collapsed: false,
       columns,
-      inviteUserModal: false,
       value: 1,
       activeTab: 1,
       quizzModalRegister: false,
       quizzForm: this.$form.createForm(this),
       chains: [],
       tableChains: [],
-      inviteUserModal: false,
       inviteUserLoading: false,
       campaingId: this.$route.query.id,
       campaingName: this.$route.params.name,
@@ -237,7 +263,10 @@ export default {
         },
         pageSize: 10
       },
-      usersTop: []
+      usersTop: [],
+      isCSVReady: false,
+      dataToExport: [],
+      exportCSVLoading: false
     };
   },
   mounted() {
@@ -511,6 +540,22 @@ export default {
       );
       this.usersTop = response.data.points;
       // console.log("usersTop: ", this.usersTop);
+    },
+    async onGenerateReportClick() {
+      this.exportCSVLoading = true;
+      try {
+        const response = await this.$axios(`campaing/report/${this.campaingId}`);
+        this.dataToExport = response.data.report;
+        this.exportCSVLoading = false;
+        this.isCSVReady = true;
+      } catch (err) {
+        this.exportCSVLoading = false;
+        this.showNotification(
+          "error",
+          "Error al generar reporte",
+          "Ha ocurrido un error al generar este reporte."
+        );
+      }
     }
   }
 };

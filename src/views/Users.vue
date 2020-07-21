@@ -75,6 +75,17 @@
             </a-col>
             <a-col class="title-span-tag">Nuevo usuario</a-col>
           </a-row>
+          <a-row style="margin-top:2rem;">
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="file-text"
+                size="large"
+                @click="() => (exportCSModal = true)"
+              />
+            </a-col>
+            <a-col class="title-span-tag">Exportar CSV</a-col>
+          </a-row>
         </div>
         <div v-if="activeTab == 2">
           <a-row>
@@ -170,6 +181,62 @@
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
         >REGISTRAR</a-button>
+      </template>
+    </a-modal>
+
+
+    <a-modal
+      title="Selecciona el tipo de usuario del que deseas obtener la información"
+      centered
+      v-model="exportCSModal"
+      :maskClosable="false"
+      @cancel="closeExportCSVModal"
+    >
+      <a-form :form="exportCSVForm">
+        <a-form-item>
+          <a-radio-group
+            v-decorator="[
+              'type',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Favor de seleccionar un tipo de usuario'
+                  }
+                ]
+              }
+            ]"
+          >
+            <a-radio :value="1">
+              <span class="item-modal">NAOS</span>
+            </a-radio>
+            <a-radio :value="2">
+              <span class="item-modal">Farmacia</span>
+            </a-radio>
+          </a-radio-group>
+        </a-form-item>
+      </a-form>
+      <template slot="footer">
+        <a-button
+          v-if="!isCSVReady"
+          key="submit"
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+          :loading="exportCSVLoading"
+          @click="onGenerateReportClick"
+        >GENERAR REPORTE</a-button>
+        <download-csv
+          v-else
+          :data="dataToExport"
+          :name="(reportSelected == 1 ? 'NAOS_' : 'FARMACIA_') + (new Date()).getTime().toString() + '.csv'"
+        >
+          <a-button
+            type="primary"
+            icon="download"
+            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+            @click="() => exportCSModal = false"
+          >DESCARGAR REPORTE</a-button>
+        </download-csv>
       </template>
     </a-modal>
 
@@ -301,11 +368,14 @@ export default {
       chainModal: false,
       chainForm: this.$form.createForm(this),
       inviteUserForm: this.$form.createForm(this),
+      exportCSVForm: this.$form.createForm(this),
       showResetPoints: false,
       chains: [],
       tableChains: [],
       inviteUserModal: false,
+      exportCSModal: false,
       inviteUserLoading: false,
+      exportCSVLoading: false,
       showUserInfoModal: false,
       isLoadingTable: true,
       userInfoModal: {
@@ -322,7 +392,10 @@ export default {
         email: "",
         totalPoints: "",
         pointsHistory: []
-      }
+      },
+      dataToExport: [],
+      isCSVReady: false,
+      reportSelected: 1
     };
   },
   mounted() {
@@ -575,6 +648,31 @@ export default {
     },
     closeInvitationModal() {
       this.inviteUserForm.resetFields();
+    },
+    closeExportCSVModal() {
+      this.exportCSVForm.resetFields();
+    },
+    onGenerateReportClick() {
+      this.exportCSVForm.validateFields(async (err, values) => {
+        if (!err) {
+          this.exportCSVLoading = true;
+          try {
+            const response = await this.$axios(`user/report/${values.type}`);
+            this.exportCSVForm.resetFields();
+            this.reportSelected = values.type;
+            this.dataToExport = response.data.report;
+            this.exportCSVLoading = false;
+            this.isCSVReady = true;
+          } catch (err) {
+            this.exportCSVLoading = false;
+            this.showNotification(
+              "error",
+              "Error al generar reporte",
+              "Ha ocurrido un error al generar este reporte."
+            );
+          }
+        }
+      });
     }
   }
 };
