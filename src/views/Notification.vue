@@ -257,8 +257,9 @@ export default {
     async getLastNotifications() {
       try {
         const response = await this.$axios("notification/list");
-        //console.log("response: ", response.data);
+        console.log("response: ", response.data);
         this.notificationList = response.data.notificacions;
+
       } catch (err) {
         //console.log("err: ", err);
       }
