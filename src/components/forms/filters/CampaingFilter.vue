@@ -512,7 +512,7 @@ export default {
         this.disabledAge= true;
         this.disabledGender= true;
         console.log("Desactivando filtros")
-    },
+    }
   }
 };
 </script>
