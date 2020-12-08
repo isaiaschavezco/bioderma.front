@@ -23,9 +23,10 @@
                   name="user-type"
                   :defaultValue="1"
                   v-model="filterToSend.userType"
+                  @change="blockFilters"
                 >
-                  <a-radio :value="1" @change="blockFilters()">NAOS</a-radio>
-                  <a-radio :value="2" @change="blockFilters()">Farmacia</a-radio>
+                  <a-radio :value="1">NAOS</a-radio>
+                  <a-radio :value="2">Farmacia</a-radio>
                   <a-radio :value="3" v-if="!isNotificationView">ADMIN</a-radio>
                 </a-radio-group>
               </a-checkbox>
