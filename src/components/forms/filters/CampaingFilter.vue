@@ -508,6 +508,7 @@ export default {
         this.disabledChain = true;
         this.disabledAge= true;
         this.disabledGender= true;
+        console.log("Desactivando filtros")
     },
   }
 };
