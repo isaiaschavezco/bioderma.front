@@ -249,8 +249,8 @@ export default {
         this.$emit("updateFilters", this.filters.slice(), false);
       }
     },
-    signalChange: function(evt){
-                   this.$emit("change", evt);
+    blockFilters: function() {
+      this.$emit("blockFilters");
     }
   },
   data() {
