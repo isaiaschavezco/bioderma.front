@@ -24,8 +24,8 @@
                   :defaultValue="1"
                   v-model="filterToSend.userType"
                 >
-                  <a-radio :value="1" @change="blockFilters">NAOS</a-radio>
-                  <a-radio :value="2" @change="blockFilters">Farmacia</a-radio>
+                  <a-radio :value="1" @change="blockFilters()">NAOS</a-radio>
+                  <a-radio :value="2" @change="blockFilters()">Farmacia</a-radio>
                   <a-radio :value="3" v-if="!isNotificationView">ADMIN</a-radio>
                 </a-radio-group>
               </a-checkbox>
@@ -248,6 +248,9 @@ export default {
         this.disabledPosition = true;
         this.$emit("updateFilters", this.filters.slice(), false);
       }
+    },
+    signalChange: function(evt){
+                   this.$emit("change", evt);
     }
   },
   data() {
