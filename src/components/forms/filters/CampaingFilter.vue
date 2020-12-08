@@ -190,7 +190,7 @@
             type="primary"
             style="background-color:#009FD1; border: none; margin-top:15px"
             :loading="isAddingFilter"
-            :disabled="allUsers"
+            
           >Agregar filtro a la lista</a-button>
         </div>
       </a-card>
@@ -487,6 +487,7 @@ export default {
       }
     },
     updateFilters() {
+      
         this.disabledState = true;
         this.disabledCity = true;
         this.disabledChain = true;
