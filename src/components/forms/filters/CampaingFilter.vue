@@ -24,8 +24,8 @@
                   :defaultValue="1"
                   v-model="filterToSend.userType"
                 >
-                  <a-radio :value="1">NAOS</a-radio>
-                  <a-radio :value="2">Farmacia</a-radio>
+                  <a-radio :value="1" @change="blockFilters">NAOS</a-radio>
+                  <a-radio :value="2" @change="blockFilters">Farmacia</a-radio>
                   <a-radio :value="3" v-if="!isNotificationView">ADMIN</a-radio>
                 </a-radio-group>
               </a-checkbox>
@@ -190,7 +190,7 @@
             type="primary"
             style="background-color:#009FD1; border: none; margin-top:15px"
             :loading="isAddingFilter"
-            :disabled="allUsers"
+            
           >Agregar filtro a la lista</a-button>
         </div>
       </a-card>
@@ -239,7 +239,13 @@ export default {
     resetFilters: function() {
       if (this.resetFilters) {
         this.filters = [];
-        this.allUsers = false;
+        this.allUsers = true;
+        this.disabledState = true;
+        this.disabledCity = true;
+        this.disabledChain = true;
+        this.disabledAge= true;
+        this.disabledGender= true;
+        this.disabledPosition = true;
         this.$emit("updateFilters", this.filters.slice(), false);
       }
     }
@@ -481,13 +487,27 @@ export default {
       }
     },
     updateFilters() {
-      this.allUsers = false;
+        this.disabledState = true;
+        this.disabledCity = true;
+        this.disabledChain = true;
+        this.disabledAge= true;
+        this.disabledGender= true;
+        this.disabledPosition = true;
+
       for (const filter of this.filters) {
         this.allUsers = this.allUsers || filter.allUsers;
       }
 
       this.$emit("updateFilters", this.filters.slice());
-    }
+    },
+    blockFilters(){
+        this.disabledPosition = true;
+        this.disabledState = true;
+        this.disabledCity = true;
+        this.disabledChain = true;
+        this.disabledAge= true;
+        this.disabledGender= true;
+    },
   }
 };
 </script>

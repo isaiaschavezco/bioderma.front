@@ -459,12 +459,12 @@ export default {
       const quizzId = this.currentModalId;
       const urlValidityDate = "quizz/send";
 
-      // console.log("Submited Dates: ");
-      // console.log(
-      //   quizzId,
-      //   this.startValidityDate.format("YYYY-MM-DD"),
-      //   this.endValidityDate.format("YYYY-MM-DD")
-      // );
+      console.log("Submited Dates: ");
+      console.log(
+        quizzId,
+        this.startValidityDate.format("YYYY-MM-DD"),
+        this.endValidityDate.format("YYYY-MM-DD")
+      );
 
       try {
         const validityDate = {

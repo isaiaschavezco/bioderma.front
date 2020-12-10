@@ -212,6 +212,7 @@ export default {
         }
       },
       tags: [],
+      filters: [],
       tagIds: [],
       articleSubtitle: "",
       articleTitle: "",
@@ -221,10 +222,12 @@ export default {
       isTagFormLoading: false,
       isBiodermaGame: false,
       isBlogNaos: true,
+      isAll: true,
       uploadFileStatus: true,
       blogData: null,
       isEditing: false,
-      articleId: null
+      articleId: null,
+      nullable: null
     };
   },
   computed: {},
@@ -285,7 +288,6 @@ export default {
 
       this.assetsForm.validateFields(async (err, values) => {
         console.log("values.upload: ", values.upload);
-
         if (!err) {
           //console.log("assetsForm: ", values);
 
@@ -329,6 +331,7 @@ export default {
               subtitle: this.articleSubtitle,
               content: this.editorData,
               tags: this.tagIds
+
             });
           } else {
             response = await this.$axios.post("article", {
@@ -338,11 +341,19 @@ export default {
               subtitle: this.articleSubtitle,
               content: this.editorData,
               isBiodermaGame: this.isBiodermaGame,
+              isBlogNaos: this.isBlogNaos,
+              isBlogEsthederm: this.isBlogEsthederm,
+              isAll: this.isBiodermaGame ? null : this.isAll,
               tags: this.tagIds,
-              isBlogNaos: this.isBlogNaos
+              targets: [...this.filters]
             });
           }
           //console.log("response", response);
+          this.$notification["success"]({
+            message: "Entrada enviada correctamente",
+            description: "Se ha enviado la entrada exitosamente."
+          });
+          
           this.$router.push({
             name: "blog"
           });
@@ -438,6 +449,10 @@ export default {
       this.articleImage = this.$route.params.image;
       this.isBiodermaGame = this.$route.params.isBiodermaGame;
       this.isBlogNaos = this.$route.params.isBlogNaos;
+      this.isBlogEsthederm = this.$route.params.isBlogEsthederm;
+      this.isAll = this.$route.params.isAll;
+      this.filters = this.$route.params.filters;
+      console.log("¡FILTROS!",this.filters,this.isBiodermaGame);
     }
   }
 };

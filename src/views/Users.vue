@@ -52,10 +52,38 @@
                 </span>
               </a-table>
             </a-tab-pane>
+            <!--ISAIAS-->
+            <a-tab-pane tab="CLINICAS" key="3">
+              <a-input-search
+                placeholder="Buscar clínica"
+                @search="onSearchClinics"
+                v-model="clinicSearch"
+                enterButton
+              />
+              <a-table
+                :columns="clinicColumns"
+                :dataSource="tableClinics"
+                style="margin-top: 1rem;"
+                :rowKey="record => record.id"
+              >
+                <span slot="action" slot-scope="text, record">
+                  <a-button
+                    shape="circle"
+                    icon="delete"
+                    size="large"
+                    @click="showDeleteConfirmClinic(record.id, onDeleteClinic)"
+                  />
+                </span>
+              </a-table>
+            </a-tab-pane>
+            <!--ISAIAS-->
+
           </a-tabs>
           <a-skeleton :loading="isLoadingTable" active />
         </div>
       </a-col>
+
+      <!--columna de nuevo usuario-->
       <a-col class="column-right" :xs="{ span: 2 }" style="text-align:center;">
         <div v-if="activeTab == 1">
           <a-row>
@@ -100,9 +128,24 @@
             <a-col>Nueva cadena</a-col>
           </a-row>
         </div>
+        <!--ISAIAS-->
+        <div v-if="activeTab == 3">
+          <a-row>
+            <a-col>
+              <a-button
+                shape="circle"
+                icon="user-add"
+                size="large"
+                @click="() => (clinicModal = true)"
+              />
+            </a-col>
+            <a-col>Nueva clínica</a-col>
+          </a-row>
+        </div>
+        <!--ISAIAS-->
       </a-col>
     </a-row>
-
+    <!--Modal Invita a un nuevo miembro a ser parte de Bioderma-->
     <a-modal
       title="Invita a un nuevo miembro a ser parte de Bioderma"
       centered
@@ -141,6 +184,9 @@
             </a-radio>
             <a-radio :value="2">
               <span class="item-modal">Farmacia</span>
+            </a-radio>
+            <a-radio :value="3">
+              <span class="item-modal">Esthederm</span>
             </a-radio>
           </a-radio-group>
         </a-form-item>
@@ -183,6 +229,36 @@
         >REGISTRAR</a-button>
       </template>
     </a-modal>
+    <!--ISAIAS CLINICA-->
+    <a-modal title="Registrar clínica" centered v-model="clinicModal">
+      <p>
+        <a-form :form="clinicForm">
+          <a-form-item>
+            <a-input
+              placeholder="Ingresa el nombre de la clínica"
+              v-decorator="[
+                'clinic',
+                {
+                  rules: [
+                    { required: true, message: 'Favor de llenar el campo' }
+                  ]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-form>
+      </p>
+      <template slot="footer">
+        <a-button
+          class="btn-center"
+          @click="onSubmitClinicForm"
+          type="primary"
+          style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
+        >REGISTRAR CLINICA</a-button>
+      </template>
+    </a-modal>
+    <!--ISAIAS CLINICA-->
+
 
 
     <a-modal
@@ -213,6 +289,9 @@
             <a-radio :value="2">
               <span class="item-modal">Farmacia</span>
             </a-radio>
+            <a-radio :value="3">
+              <span class="item-modal">Esthederm</span>
+            </a-radio>
           </a-radio-group>
         </a-form-item>
       </a-form>
@@ -228,7 +307,7 @@
         <download-csv
           v-else
           :data="dataToExport"
-          :name="(reportSelected == 1 ? 'NAOS_' : 'FARMACIA_') + (new Date()).getTime().toString() + '.csv'"
+          :name="(reportSelected == 1 ? 'NAOS_': (reportSelected == 2) ?  'FARMACIA_': 'ESTHEDERM_') + (new Date()).getTime().toString() + '.csv'"
         >
           <a-button
             type="primary"
@@ -315,6 +394,12 @@ const userColumns = [
     align: "center"
   },
   {
+    title: "Clinica",
+    dataIndex: "clinic",
+    key: "clinic",
+    align: "center"
+  },
+  {
     title: "Puntos acumulados",
     dataIndex: "points",
     key: "points",
@@ -349,6 +434,28 @@ const chainColumns = [
     scopedSlots: { customRender: "action" }
   }
 ];
+const clinicColumns = [
+  {
+    dataIndex: "name",
+    key: "name",
+    title: "Clinica",
+    align: "center",
+    sorter: (a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    }
+  },
+  {
+    title: "",
+    key: "action",
+    scopedSlots: { customRender: "action" }
+  }
+];
 export default {
   components: {
     ModalUserInfo,
@@ -359,19 +466,25 @@ export default {
       collapsed: false,
       userSearch: "",
       chainSearch: "",
+      clinicSearch: "",
       usersListInfo: [],
       users: [],
       userColumns,
       chainColumns,
+      clinicColumns,
       value: 1,
       activeTab: 1,
       chainModal: false,
+      clinicModal: false,
       chainForm: this.$form.createForm(this),
+      clinicForm: this.$form.createForm(this),
       inviteUserForm: this.$form.createForm(this),
       exportCSVForm: this.$form.createForm(this),
       showResetPoints: false,
       chains: [],
+      clinics: [],
       tableChains: [],
+      tableClinics: [],
       inviteUserModal: false,
       exportCSModal: false,
       inviteUserLoading: false,
@@ -409,7 +522,6 @@ export default {
       try {
         this.isLoadingTable = true;
         const response = await this.$axios("user");
-
         const usersList = response.data.users.map((val, index) => {
           return {
             key: val.id,
@@ -418,7 +530,8 @@ export default {
             profile: val.type.name,
             position: val.position === null ? "" : val.position.name,
             points: val.points,
-            chain: val.chain === null ? "" : val.chain.name
+            chain: val.chain === null ? "" : val.chain.name,
+            clinic: val.clinic === null ? "" : val.clinic.name,
           };
         });
 
@@ -441,6 +554,10 @@ export default {
           this.getChains();
           this.chainSearch = "";
           break;
+        case "3":
+          this.getClinics();
+          this.clinicSearch = "";
+          break;
         default:
           break;
       }
@@ -453,6 +570,17 @@ export default {
         this.tableChains = this.chains;
       } catch (error) {
         console.log("Hubo un error al obtener las cadenas: ", error);
+      }
+      this.isLoadingTable = false;
+    },
+    async getClinics() {
+      try {
+        this.isLoadingTable = true;
+        const responseClinics = await this.$axios("clinic");
+        this.clinics = responseClinics.data.clinics;
+        this.tableClinics = this.clinics;
+      } catch (error) {
+        console.log("Hubo un error al obtener las clinicas: ", error);
       }
       this.isLoadingTable = false;
     },
@@ -490,6 +618,42 @@ export default {
         }
       });
     },
+    onSubmitClinicForm() {
+      this.clinicForm.validateFields(async (err, values) => {
+        if (!err) {
+          try {
+            const response = await this.$axios.post("clinic", {
+              name: values.clinic.toUpperCase().trim(),
+              isDeleted: false
+            });
+            this.clinicModal = false;
+            this.clinicForm.resetFields();
+            if (response.data == 1) {
+              // ----AQUÍ
+              this.getClinics();
+              this.showNotification(
+                "success",
+                "Cadena registrada",
+                "La clinica ha sido registrada correctamente."
+              );
+            } else if (response.data == 2) {
+              this.showNotification(
+                "info",
+                "Esta clinica ya existe",
+                "La clinica que ha intentando registrar, ya existe."
+              );
+            }
+          } catch (err) {
+            this.showNotification(
+              "error",
+              "Error al agregar clinica",
+              "Ha ocurrido un error al registrar la clinica."
+            );
+            console.log(err)
+          }
+        }
+      });
+    },
     showNotification(type, title, message) {
       this.$notification[type]({
         message: title,
@@ -515,6 +679,25 @@ export default {
         );
       }
     },
+     async onDeleteClinic(clinicId) {
+      try {
+        const response = await this.$axios.delete(`clinic/${clinicId}`);
+        if (response.data == 1) {
+          this.getClinics();
+          this.showNotification(
+            "success",
+            "Clinica eliminada",
+            "La clinica ha sido eliminada exitosamente."
+          );
+        }
+      } catch (err) {
+        this.showNotification(
+          "error",
+          "Error al eliminar clinica",
+          "Ha ocurrido un error al intentar eliminar la clinica."
+        );
+      }
+    },
     showDeleteConfirmChain(chaindId, onDelete) {
       this.$confirm({
         title: "¿Estás seguro que deseas eliminar esta cadena?",
@@ -524,6 +707,19 @@ export default {
         centered: true,
         onOk() {
           onDelete(chaindId);
+        },
+        onCancel() {}
+      });
+    },
+    showDeleteConfirmClinic(clinicId, onDelete) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas eliminar esta clinica?",
+        okText: "ELIMINAR",
+        okType: "danger",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onDelete(clinicId);
         },
         onCancel() {}
       });
@@ -572,6 +768,20 @@ export default {
         );
       } else {
         this.tableChains = newChain;
+      }
+    },
+    onSearchClinics(value) {
+      const newClinic = this.clinics.filter(element => {
+        return element.name.indexOf(value.toUpperCase()) >= 0;
+      });
+      if (newClinic.length === 0) {
+        this.showNotification(
+          "info",
+          "No se encontraron coincidencias para esta clínica",
+          "No se encontraron registros para esta búsqueda."
+        );
+      } else {
+        this.tableClinics = newClinic;
       }
     },
     onSubmitInvitationForm() {
