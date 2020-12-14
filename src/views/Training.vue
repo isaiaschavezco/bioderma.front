@@ -115,7 +115,7 @@
               v-decorator="['upload', {rules: [{ required: true, message: 'Favor de cargar un archivo PDF' }]
           }]"
               name="upload"
-              action="https://bioderma-desarrollo.herokuapp.com/upload/1"
+              action="https://bioderma-api-inmersys.herokuapp.com/upload/1"
               accept=".pdf"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"

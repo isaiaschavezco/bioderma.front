@@ -73,7 +73,7 @@
 												{rules: [{ required: isRequiredOption[index], message: 'Favor de subir una imagen' }]}
 											]"
                       name="upload"
-                      action="https://bioderma-desarrollo.herokuapp.com/upload/3"
+                      action="https://bioderma-api-inmersys.herokuapp.com/upload/3"
                       accept=".png, .jpg, jpeg"
                       @change="(info) => handleChangeFileUpload(info, index)"
                       :beforeUpload="(file) => beforeUpload(file, index)"

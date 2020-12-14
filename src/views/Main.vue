@@ -169,7 +169,7 @@ export default {
   },
   created() {
     this.alertSocket = io(
-      "https://bioderma-desarrollo.herokuapp.com/chatAdmin"
+      "https://bioderma-api-inmersys.herokuapp.com/chatAdmin"
     );
     // this.alertSocket = io("http://localhost:3000/chatAdmin");
 
