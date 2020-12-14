@@ -23,6 +23,7 @@
                   name="user-type"
                   :defaultValue="1"
                   v-model="filterToSend.userType"
+                  @change="blockFilters"
                 >
                   <a-radio :value="1" @change="blockFilters">NAOS</a-radio>
                   <a-radio :value="2" @change="blockFilters">Farmacia</a-radio>
@@ -278,6 +279,9 @@ export default {
         this.disabledPosition = true;
         this.$emit("updateFilters", this.filters.slice(), false);
       }
+    },
+    blockFilters: function() {
+      this.$emit("blockFilters");
     }
   },
   data() {
@@ -533,10 +537,10 @@ export default {
       }
     },
     updateFilters() {
+      
         this.disabledState = true;
         this.disabledCity = true;
         this.disabledChain = true;
-        this.disabledClinic = true;
         this.disabledAge= true;
         this.disabledGender= true;
         this.disabledPosition = true;
@@ -552,10 +556,10 @@ export default {
         this.disabledState = true;
         this.disabledCity = true;
         this.disabledChain = true;
-        this.disabledClinic = true;
         this.disabledAge= true;
         this.disabledGender= true;
-    },
+        console.log("Desactivando filtros")
+    }
   }
 };
 </script>
