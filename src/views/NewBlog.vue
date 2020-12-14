@@ -50,7 +50,7 @@
                       }
                     ]"
                     name="upload"
-                    action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                    action="https://bioderma-desarrollo.herokuapp.com/upload/4"
                     accept=".png, .jpg, .jpge, .mp4"
                     @change="handleChangeFileUpload"
                     :beforeUpload="beforeUpload"
@@ -85,7 +85,7 @@
                     }
                   ]"
                     name="upload2"
-                    action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                    action="https://bioderma-desarrollo.herokuapp.com/upload/4"
                     accept=".png, .jpg, jpge"
                     @change="handleChangeFileUpload2"
                     :beforeUpload="beforeUpload"
@@ -115,7 +115,7 @@
                     }
                   ]"
                   name="upload"
-                  action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+                  action="https://bioderma-desarrollo.herokuapp.com/upload/4"
                   accept=".png, .jpg, jpge"
                   @change="handleChangeFileUpload"
                   :beforeUpload="beforeUpload"

@@ -26,12 +26,13 @@
                 >
                   <a-radio :value="1" @change="blockFilters">NAOS</a-radio>
                   <a-radio :value="2" @change="blockFilters">Farmacia</a-radio>
+                  <a-radio :value="4" @change="blockFilters">Esthederm</a-radio>
                   <a-radio :value="3" v-if="!isNotificationView">ADMIN</a-radio>
                 </a-radio-group>
               </a-checkbox>
             </a-row>
 
-            <a-row class="select-item" :class="(filterToSend.userType==2)?'hidden':''">
+            <a-row class="select-item" :class="(filterToSend.userType!==1)?'hidden':''">
               <!-- Row checkbox -->
               <a-checkbox
                 :checked="!disabledFilters && !disabledPosition"
@@ -110,6 +111,35 @@
               </a-select>
             </a-row>
 
+
+            <!--CLINICA-->
+            <!-- Row checkbox -->
+            <a-row class="select-item" :class="(filterToSend.userType===4)?'' : 'hidden'">
+              <a-checkbox
+                :disabled="disabledFilters"
+                :checked="!disabledClinic && !disabledFilters"
+                style="margin-right:7px; "
+                @click="toggleClinic"
+              ></a-checkbox>
+
+              <a-select
+                showSearch
+                placeholder="Clinica"
+                optionFilterProp="children"
+                style="width: 170px"
+                :filterOption="filterOption"
+                :disabled="disabledClinic || disabledFilters"
+                v-model="filterToSend.clinic"
+                name="clinic"
+              >
+                <a-select-option
+                  v-for="clinic in clinics"
+                  :value="clinic.id"
+                  :key="clinic.id"
+                >{{ clinic.name }}</a-select-option>
+              </a-select>
+            </a-row>
+            <!--CADENA-->
             <!-- Row checkbox -->
             <a-row class="select-item" :class="(filterToSend.userType!=2)?'hidden':''">
               <a-checkbox
@@ -276,6 +306,7 @@ export default {
       disabledCity: true,
       disabled: true,
       disabledChain: true,
+      disabledClinic: true,
       disabledAge: true,
       disabledGender: true,
       filters: [],
@@ -288,6 +319,7 @@ export default {
       await this.getCities();
       this.positions = await this.getWorkPositions();
       this.chains = await this.getChains();
+      this.clinics = await this.getClinics();
       // console.log("ESTOY EN: ", this.$route.name);
       if (this.$route.name == "notification") {
         this.isNotificationView = true;
@@ -333,6 +365,15 @@ export default {
       }
       return [];
     },
+    async getClinics() {
+      try {
+        const response = await this.$axios("clinic");
+        return response.data.clinics;
+      } catch (error) {
+        console.log("Hubo un error.");
+      }
+      return [];
+    },
     onChangeMainFilter(e) {
       this.disabledFilters = e.target.checked;
       this.filterToSend.allUsers = e.target.checked;
@@ -359,6 +400,9 @@ export default {
     },
     toggleChain() {
       this.disabledChain = !this.disabledChain;
+    },
+    toggleClinic() {
+      this.disabledClinic = !this.disabledClinic;
     },
     toggleAge() {
       this.disabledAge = !this.disabledAge;
@@ -422,6 +466,7 @@ export default {
         state: this.filterToSend.state,
         city: this.filterToSend.city,
         chain: this.filterToSend.chain,
+        clinic: this.filterToSend.clinic,
         naosPosition: this.filterToSend.naosPosition,
         initAge: this.filterToSend.initAge,
         finalAge: this.filterToSend.finalAge,
@@ -440,6 +485,7 @@ export default {
         if (this.disabledCity) filterData.city = -1;
 
         if (this.disabledChain || this.userType === 1) filterData.chain = -1;
+        if (this.disabledClinic || this.userType === 1) filterData.clinic = -1;
 
         if (this.disabledAge) {
           filterData.initAge = -1;
@@ -490,6 +536,7 @@ export default {
         this.disabledState = true;
         this.disabledCity = true;
         this.disabledChain = true;
+        this.disabledClinic = true;
         this.disabledAge= true;
         this.disabledGender= true;
         this.disabledPosition = true;
@@ -505,6 +552,7 @@ export default {
         this.disabledState = true;
         this.disabledCity = true;
         this.disabledChain = true;
+        this.disabledClinic = true;
         this.disabledAge= true;
         this.disabledGender= true;
     },

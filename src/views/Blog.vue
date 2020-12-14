@@ -165,7 +165,7 @@
                 }
               ]"
               name="upload"
-              action="https://bioderma-api-inmersys.herokuapp.com/upload/4"
+              action="https://bioderma-desarrollo.herokuapp.com/upload/4"
               accept=".png, .jpg, jpge"
               @change="handleChangeFileUpload"
               :beforeUpload="beforeUpload"
