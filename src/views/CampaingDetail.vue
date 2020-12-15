@@ -154,8 +154,9 @@
         <span>VIGENCIAL DEL:</span>
         <a-date-picker
           :disabledDate="disabledStartValidityDate"
-          showTime
+          :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
           format="DD-MM-YYYY HH:mm:ss"
+          
           v-model="startValidityDate"
           placeholder="Inicio de trivia"
           @openChange="handleStartOpenChange"
@@ -163,7 +164,7 @@
         <span>AL</span>
         <a-date-picker
           :disabledDate="disabledEndValidityDate"
-          showTime
+          :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
           format="DD-MM-YYYY HH:mm:ss"
           placeholder="Fin trivia"
           v-model="endValidityDate"
