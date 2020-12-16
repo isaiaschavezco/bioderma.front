@@ -46,7 +46,9 @@
 				<a-row style="margin-left: 4rem; margin-right: 4rem;" v-for="(option, index) in textOptions" :key="index">
 					<a-col class="form-question__option" span="24">
 						<a-col span="2">
-							<a-radio class="option__radioOption" :value="index" :disabled="!isAvailableOption[index]"></a-radio>
+							<a-radio
+								@change="(e) => onChangeAnswer()"
+							 class="option__radioOption" :value="index" :disabled="!isAvailableOption[index]"></a-radio>
 						</a-col>
 						<a-col span="1" class="option__labelOption">
 							{{ `${option.indicator})` }}
@@ -268,9 +270,9 @@ export default {
 		},
 		onChangeAnswer() {
 			const option = this.optionsValues[this.answer];
-			if (!this.isAvailableOption[this.answer] || option.length == 0) {
+			if (!this.isAvailableOption[this.answer] || option.length === 0 || option.length === "" ) {
 				for (let i = 4; i >= 0; --i) {
-					if (i < 2 || (this.isAvailableOption[i] && this.optionsValues[i].length > 0)) {
+					if (i < 2 || (this.isAvailableOption[i] && (this.optionsValues[i].length !== ""))) {
 						this.answer = i;
 						break;
 					}
@@ -299,12 +301,10 @@ export default {
 					newAvailableValues[i] = true;
 				else {
 					let available = true;
-
-					for (let j = 0; j < i && available; ++j)
-						available &= (this.optionsValues[j].length > 0);
-					
-
+					for (let j = 0; j < i && available; ++j){
+						available &= (this.optionsValues[j].length !== 0 && this.optionsValues[j] !== "" );
 					newAvailableValues[i] = available;
+					}
 				}
 			}
 
