@@ -254,9 +254,15 @@ export default {
     };
   },
   async created() {
+    console.log("SE CREÓ ESTE COMPONENTE");
+    if(this.isAll){
+        console.log("Es para todos!");
+        this.addFilter()
+      }
     try {
       await this.getData();
       this.filterToSend.userType = this.getUserTypeId();
+
     } catch (error) {
       console.log("Error: ", error.message);
     }

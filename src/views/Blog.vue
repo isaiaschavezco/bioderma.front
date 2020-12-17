@@ -198,6 +198,7 @@
       <FormFilter />
       <template slot="footer">
         <a-button
+        :loading="loading"
           type="primary"
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
           @click="onSubmitBlog"
@@ -291,18 +292,23 @@ export default {
       isAll: false,
       blogList: [],
       deleteFilters: false,
-      filters: []
+      filters: [],
+      loading:false
     };
   },
   methods: {
     onSubmitBlog() {
 
+      this.loading=true
+      
+      console.log(this.filters);
       if(this.filters.length === 0){
         this.showNotification(
             "warning",
             "Debes selecionar al menos un filtro",
             "Por favor selecciona un filtro"
           );
+          return 
       }
 
       this.fileBlogForm.validateFields(async (err, values) => {
@@ -320,6 +326,9 @@ export default {
               filters: this.filters
             }
           });
+        }
+        else{
+          return
         }
       });
     },
