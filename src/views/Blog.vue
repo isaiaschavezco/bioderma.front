@@ -308,11 +308,15 @@ export default {
             "Debes selecionar al menos un filtro",
             "Por favor selecciona un filtro"
           );
+                this.loading=false
+
           return 
       }
 
       this.fileBlogForm.validateFields(async (err, values) => {
         if (!err) {
+                this.loading=false
+
           console.log("this.fileBlogForm: ", this.fileBlogForm);
           this.$router.push({
             name: "newblog",
