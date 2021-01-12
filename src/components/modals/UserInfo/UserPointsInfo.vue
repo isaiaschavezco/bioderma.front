@@ -42,9 +42,14 @@ export default {
 	props: {
 		dataPoints : Object
 	},
+	mounted() {
+			console.log("D",this.dataPoints)
+	},
+
+	//
 	watch: {
 		dataPoints: function() {
-			// console.log("Nuevo historial: ", this.dataPoints);
+			console.log("Nuevo historial: ", this.dataPoints);
 			this.history = this.dataPoints.pointsHistory;
 		}
 	},

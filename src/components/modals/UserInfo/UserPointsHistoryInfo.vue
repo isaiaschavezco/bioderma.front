@@ -6,12 +6,14 @@
 				<a-row style="width: 100%;">
 					<a-col class="main-history-info" span="10" offset="2">
 						<p class="date-history-info">
-							Fecha {{ record.date }}
+							Fecha {{ record.createdAt }}
 						</p>
 						<p class="name-history-info"> {{ record.name.toUpperCase() }} </p>
 					</a-col>
 					<a-col class="amount-history-info" span="12">
-						<p>{{ record.points }} PTS</p>
+						<p>    {{ record.points }} PTS <Space size="middle"> <a-tag class="ml-4" v-if="record.points.includes('-')" color="blue">      
+        canje
+      </a-tag> </Space> </p>
 					</a-col>
 				</a-row>
 			</a-list-item>
@@ -29,6 +31,9 @@ export default {
 		pointsHistory: function() {
 			this.history = this.pointsHistory;
 		}
+	},
+	mounted() {
+		console.log(this.pointsHistory)
 	},
 	data() {
 		return {

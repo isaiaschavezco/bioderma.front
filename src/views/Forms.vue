@@ -1405,12 +1405,13 @@ export default {
         )
       });
     },
-    fail() {
+    fail(error) {
       this.$error({
         content: (
           <p style="text-align:center">
             HA OCURRIDO UN ERROR DURANTE EL REGISTRO, FAVOR DE INTENTARLO MÁS
             TARDE
+            error: {error.message}
           </p>
         )
       });
@@ -1486,7 +1487,8 @@ export default {
             }
           } catch (error) {
             console.log("error: ", error);
-            this.fail();
+
+            this.fail(error);
           }
         } else {
           console.log(err);

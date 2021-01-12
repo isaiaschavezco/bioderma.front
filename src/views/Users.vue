@@ -838,8 +838,9 @@ export default {
         email,
         page: 0
       });
-
       const response = await this.$axios(`user/${email}`);
+      console.log("responseList",responseList)
+      console.log("response",response.data.profile)
 
       response.data.profile.pointsHistory = responseList.data.points;
 
