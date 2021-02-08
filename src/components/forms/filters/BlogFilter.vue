@@ -215,6 +215,7 @@ export default {
     isBlogEsthederm: Boolean,
     isBiodermaGame: Boolean,
     isBlogNaos: Boolean,
+    //Esta variable es para cuando se quiere mandar un blog hacia toooodos los tipos de usuario
     isAll: Boolean
 
   },
@@ -289,7 +290,7 @@ export default {
       this.states = resState.data.states
     },
     onChangeFilter(e) {
-      console.log(e.target);
+      console.log("e.targetttt",e.target);
       this.disabled[e.target.name] = e.target.checked
     },
     filterOption(input, option) {
@@ -349,19 +350,25 @@ export default {
         gender: -1
       };
 
+      console.log("this.isAll", this.isAll);  
+      console.log("this.disabled.allUsers", this.disabled.allUsers);  
+      console.log("!this.disabled.allUsers: ",!this.disabled.allUsers)
+      console.log("!this.disabled.state: ",!this.disabled.state)
+      console.log("!this.disabled.chain: ",!this.disabled.chain)
+      console.log("!this.disabled.clinic: ",!this.disabled.clinic)
+
       if (this.isAll) {
         for (const key in filterData) filterData[key] = -1;
         filterData.allUsers = true;
         console.log("Entro al primero");
         // eslint-disable-next-line
+        //El hecho de que sea true significa que no la desmarcaron
       } else if(this.disabled.allUsers){
         for (const key in filterData) filterData[key] = -1;
-        console.log("Entro al segundo");
         for (const key in filterData) filterData[key] = -1;
         filterData.allUsers = true;
         filterData.userType = this.getUserTypeId()
-      } else if(!this.disabled.allUsers && (!this.disabled.state || !this.disabled.chain || !this.disabled.clinic)){
-        console.log("Entro al tercero");
+      } else if(!this.disabled.allUsers && (!this.disabled.state || !this.disabled.chain || !this.disabled.clinic || !this.disabled.position)){
         filterData.allUsers = false;
         filterData.userType = this.getUserTypeId()
         filterData.city = -1;
