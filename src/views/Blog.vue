@@ -1,5 +1,6 @@
 <template>
   <div class="container-blog">
+
     <a-row>
       <a-col :xs="{ span: 22 }">
         <div class="card-container">
@@ -24,6 +25,14 @@
                     size="large"
                     @click="showDeleteConfirm(record.id, onDeleteBlog)"
                   />
+                  <a-divider type="vertical" />
+                  <a-button
+                    shape="circle"
+                    size="large"
+                    @click="showRepostModal(record, onRepostBlog)"
+                  >
+                  <a-icon type="undo" />
+                  </a-button>
                 </span>
               </a-table>
             </a-tab-pane>
@@ -205,6 +214,10 @@
         >SIGUIENTE</a-button>
       </template>
     </a-modal>
+
+
+
+
   </div>
 </template>
 <script>
@@ -410,6 +423,19 @@ export default {
         onCancel() {}
       });
     },
+    showRepostModal(blogId, onRepost,blogType) {
+      this.$confirm({
+        title: "¿Estás seguro que deseas volver a publicar esta entrada?",
+        okText: "Si, lo estoy",
+        okType: "info",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          onRepost(blogId,blogType);
+        },
+        onCancel() {}
+      });
+    },
     async onDeleteBlog(blogId,typeBlog) {
       try {
         const response = await this.$axios.delete(`article/${blogId}`);
@@ -427,6 +453,30 @@ export default {
           "error",
           "Error al eliminar entrada",
           "Ha ocurrido un error al intentar eliminar la entrada."
+        );
+      }
+    },
+    
+    async onRepostBlog(record,typeBlog) {
+      try {
+        console.log(record)
+        alert("Tratando de repostear")
+
+/*         const response = await this.$axios.delete(`article/${blogId}`);
+ */        /* if (response.data.status == 0) {
+
+          typeBlog !== 5 ? this.getBlogList() : this.getAllBlogs() 
+          this.showNotification(
+            "success",
+            "Entrada reposteada",
+            "La entrada ha sido reposteada exitosamente."
+          );
+        } */
+      } catch (err) {
+        this.showNotification(
+          "error",
+          "Error al repostear entrada.",
+          "Ha ocurrido un error al intentar repostear la entrada. Intente mas tarde."
         );
       }
     },

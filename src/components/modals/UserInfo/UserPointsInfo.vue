@@ -27,7 +27,7 @@
 				</a-col>
 			</a-row>
 		</div>
-		<UserPointsHistoryInfo :pointsHistory="history"/>
+		<UserPointsHistoryInfo :restartPointsUser="restartPointsUser" :pointsHistory="history" />
   </a-col>
 </template>
 
@@ -40,10 +40,11 @@ export default {
 		UserPointsHistoryInfo
 	},
 	props: {
-		dataPoints : Object
+		dataPoints : Object,
+		restartPointsUser:Function
 	},
 	mounted() {
-			console.log("D",this.dataPoints)
+			console.log("Data pointsss",this.dataPoints)
 	},
 
 	//

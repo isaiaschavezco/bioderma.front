@@ -8,7 +8,7 @@
 	>
 		<a-row style="margin-top: 1rem;">
 			<SidebarUserInfo :userInfo="user"/>
-			<UserPointsInfo :dataPoints="dataUserPoints"/>
+			<UserPointsInfo :dataPoints="dataUserPoints" :restartPointsUser="restartPointsUser"/>
 		</a-row>
 	</a-modal>
 </template>
@@ -33,7 +33,7 @@ export default {
 			this.dataUserPoints = {
 				pointsHistory: this.user.pointsHistory,
 				total: this.userInfo.totalPoints,
-				biodermaGame: this.userInfo.biodermaGamePoints
+				biodermaGame: this.userInfo.biodermaGamePoints,
 			}
 		},
 		visible: function() {
@@ -50,6 +50,18 @@ export default {
 			},
 			isVisible: this.visible
 		};
+	},
+	methods: {
+		restartPointsUser(id){
+			console.log(this.user)
+		/* 	const dataReiniciar = {
+				triviaId: id,
+				userId: this.user.id,
+				userPoints: this.user.totalPoints
+			} */
+			console.log("Voy a restarurar:",id)
+
+		}
 	}
 }
 </script>
