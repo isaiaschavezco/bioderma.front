@@ -432,6 +432,7 @@ export default {
       });
 
       this.blogData.images.forEach(tempAsset => {
+        console.log("tempAsset",tempAsset)
         let isVideo = tempAsset.video ? tempAsset.video.length > 0 : false;
         let assetName = isVideo
           ? tempAsset.video.split("-")

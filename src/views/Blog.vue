@@ -29,7 +29,7 @@
                   <a-button
                     shape="circle"
                     size="large"
-                    @click="showRepostModal(record, onRepostBlog)"
+                    @click="showRepostModal(record.id, onRepostBlog)"
                   >
                   <a-icon type="undo" />
                   </a-button>
@@ -457,10 +457,27 @@ export default {
       }
     },
     
-    async onRepostBlog(record,typeBlog) {
+    async onRepostBlog(blogId,typeBlog) {
       try {
-        console.log(record)
         alert("Tratando de repostear")
+        const response = await this.$axios(`article/${blogId}`);
+
+        console.log(response)
+        let {images,subtitle,description,tags} = response.data.blogs
+        console.log(response.data.blogs)
+
+        let nuevaPeticion= {
+              id: blogId,
+              galery: JSON.stringify(images),
+              subtitle: subtitle,
+              content: description,
+              tags: tags,
+              repost:true
+            }
+            console.log("nuevaPeticion)",nuevaPeticion)
+
+        let responseRepost = await this.$axios.put("article",nuevaPeticion );
+          console.log("responseRepost",responseRepost)
 
 /*         const response = await this.$axios.delete(`article/${blogId}`);
  */        /* if (response.data.status == 0) {
