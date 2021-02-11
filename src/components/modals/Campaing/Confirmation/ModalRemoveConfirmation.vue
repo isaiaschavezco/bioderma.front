@@ -6,7 +6,7 @@
     @cancel="onClose"
   >
     <div class="info-confirmation">
-      <p>Escribe tu contraseña para confirmar que quieres eliminar la {{ target }}</p>
+      <p>Escribe tu contraseña para confirmar que quieres eliminar la ddd {{ target }}</p>
       <a-form :form="passwordForm">
         <a-form-item>
           <a-input

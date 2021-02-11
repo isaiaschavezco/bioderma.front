@@ -52,8 +52,13 @@ export default {
 		};
 	},
 	methods: {
-		restartPointsUser(id){
+		async restartPointsUser(id){
 			console.log(this.user)
+			  const response = await this.$axios.put("quizz/user/remove", {
+				id:this.user.id,
+                quizzId: id,
+              });
+			  console.log("responseDEEEELEEETEEEEE",response)
 		/* 	const dataReiniciar = {
 				triviaId: id,
 				userId: this.user.id,

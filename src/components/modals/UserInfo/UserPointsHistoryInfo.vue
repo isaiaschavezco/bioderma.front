@@ -27,14 +27,14 @@
               </Space>
             </p>
           </a-col>
-		  <a-col class="amount-history-info" span="12">		
-			   <Space size="middle">
-				   
-			  	 <a-button
-				   class="mt-4"
-				   @click="handleRestartTrivia(record.id,record)"
-				   >Reiniciar trivia</a-button>
-			   </Space>
+          <a-col class="amount-history-info" span="12">
+            <Space size="middle">
+              <a-button
+                class="mt-4"
+                @click="handleRestartTrivia(record.id, record)"
+                >Reiniciar trivia</a-button
+              >
+            </Space>
           </a-col>
         </a-row>
       </a-list-item>
@@ -43,13 +43,11 @@
 </template>
 
 <script>
-
 export default {
   name: "UserPointsHistoryInfo",
   props: {
     pointsHistory: Array,
-	restartPointsUser:Function,
-
+    restartPointsUser: Function
   },
   watch: {
     pointsHistory: function() {
@@ -57,7 +55,7 @@ export default {
     }
   },
   mounted() {
-    console.log("this.pointsHistory",this.pointsHistory);
+    console.log("this.pointsHistory", this.pointsHistory);
   },
   data() {
     return {
@@ -65,13 +63,21 @@ export default {
     };
   },
   methods: {
-	  handleRestartTrivia(id,record){
-		  	console.log(record)
-		  	
-			if (true) {
-				this.restartPointsUser(id)
-			}
-	  }
+    handleRestartTrivia(id, record) {
+      console.log("record",record)
+      let restart = this.restartPointsUser
+      this.$confirm({
+        title: "¿Estás seguro que deseas eliminar estos puntos?",
+        okText: "Si, lo estoy",
+        okType: "info",
+        cancelText: "CANCELAR",
+        centered: true,
+        onOk() {
+          restart(id);
+        },
+        onCancel() {}
+      });
+    }
   }
 };
 </script>
@@ -118,6 +124,6 @@ p {
   align-items: flex-end;
 }
 .mt-4 {
-  margin-top:1rem;
+  margin-top: 1rem;
 }
 </style>
