@@ -39,6 +39,17 @@
             <a-col>
               <a-button
                 shape="circle"
+                icon="bars"
+                size="large"
+                @click="openQuestionModal(6)"
+              />
+            </a-col>
+            <a-col class="description-icon title-span-tag">Agregar Opcion Multiple (Varias respuestas)</a-col>
+          </a-row>
+          <a-row class="btn-description">
+            <a-col>
+              <a-button
+                shape="circle"
                 icon="rise"
                 size="large"
                 @click="openQuestionModal(2)"
@@ -87,6 +98,7 @@
 
     <!-- OPCION MULTIPLE -->
     <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
+    <ModalMultipleOptionMultipleAnswers :isVisible="multipleOptionMultipleAnswersModal" :quizz="quizzId" :questionJSON="questionDataMultipleOptionMultipleAnswers" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
 
     <!-- RELACION DE COLUMNAS -->
     <ModalColumnsRelation :isVisible="columnRelationModal" :quizz="quizzId" :questionJSON="questionDataColumnRelation" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
@@ -104,6 +116,8 @@
 <script>
 import ModalRemoveConfirmation from "../components/modals/Campaing/Confirmation/ModalRemoveConfirmation.vue";
 import ModalMultipleOption from "../components/modals/Campaing/Questions/ModalMultipleOption.vue";
+import ModalMultipleOptionMultipleAnswers from "../components/modals/Campaing/Questions/ModalMultipleOptionMultipleAnswers.vue";
+
 import ModalCompleteSentence from "../components/modals/Campaing/Questions/ModalCompleteSentence.vue";
 import ModalMultipleImageOption from "../components/modals/Campaing/Questions/ModalMultipleImageOption.vue";
 import ModalSortWords from "../components/modals/Campaing/Questions/ModalSortWords.vue";
@@ -113,6 +127,7 @@ export default {
   components: {
     ModalRemoveConfirmation,
     ModalMultipleOption,
+    ModalMultipleOptionMultipleAnswers,
     ModalCompleteSentence,
     ModalMultipleImageOption,
     ModalSortWords,
@@ -127,6 +142,7 @@ export default {
       collapsed: false,
       questionsData: [],
       questionDataMultipleOption: {},
+      questionDataMultipleOptionMultipleAnswers: {},
       questionDataColumnRelation: {},
       questionDataCompleteSentence: {},
       questionDataMultipleImage: {},
@@ -168,6 +184,7 @@ export default {
       ],
       sortWordsModal: false,
       multipleOptionModal: false,
+      multipleOptionMultipleAnswersModal:false,
       columnRelationModal: false,
       completeSentenceModal: false,
       multipleImageOptionModal: false,
@@ -177,6 +194,9 @@ export default {
   mounted() {
     this.getQuestions();
   },
+  created() {
+    console.log("questionsData",this.questionsData)
+  },
   methods: {
     async getQuestions() {
       let questions = [];
@@ -184,9 +204,12 @@ export default {
       try {
         const response = await this.$axios(`question/${this.quizzId}`);
         
+        console.log("questionsData",response)
         questions = this.getFormatedQuestions(response.data);
+        console.log("questions",questions)
+
       } catch (error) {
-        console.log("Hubo un error: ", error);
+        console.log("Hubo un errord: ", error);
       }
 
       this.questionsData = questions;
@@ -229,7 +252,7 @@ export default {
 
         let newQuestion = {
           key: question.id,
-          title: title,
+          title,
           time: question.time,
           points: question.points,
           type: question.question_type.name
@@ -253,8 +276,10 @@ export default {
       else if (questionType === 4) {
         this.sortWordsModal = true;
       }
-      else {
+      else if (questionType === 5){
         this.multipleImageOptionModal = true;
+      }else if (questionType === 6){
+         this.multipleOptionMultipleAnswersModal = true;        
       }
 
       this.action = this.registerQuestion;
@@ -265,12 +290,13 @@ export default {
     onCloseModal() {
       this.sortWordsModal = false;
       this.multipleOptionModal = false;
+      this.multipleOptionMultipleAnswersModal = false;
       this.completeSentenceModal = false;
       this.multipleImageOptionModal = false;
       this.columnRelationModal = false;
       this.removeConfirmationModal = false;
       this.questionDataMultipleOption = {};
-
+      this.questionDataMultipleOptionMultipleAnswers={}
       this.getQuestions();
     },
     async registerQuestion(questionData) {
@@ -338,6 +364,11 @@ export default {
         this.multipleOptionModal = true;
         this.questionDataMultipleOption = question; 
       }
+      else if (questionType === "OPCION MULTIPLE RESPUESTAS") {
+        this.multipleOptionMultipleAnswersModal = true;
+        this.questionDataMultipleOptionMultipleAnswers = question; 
+      }
+      
     },
     async updateQuestion(questionData) {
       try {
