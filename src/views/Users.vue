@@ -322,7 +322,9 @@
     <ModalUserInfo
       :userInfo="userInfoModal"
       @cancel="onCloseInfoUser"
+      :onCloseInfoUser="onCloseInfoUser"
       :visible="showUserInfoModal"
+      :getUsersListInfo="getUsersListInfo"
     />
     <ModalResetPoints
       :visible="showResetPoints"

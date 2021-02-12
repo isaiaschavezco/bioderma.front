@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     handleRestartTrivia(id, record) {
-      console.log("record",record)
       let restart = this.restartPointsUser
       this.$confirm({
         title: "¿Estás seguro que deseas eliminar estos puntos?",
@@ -73,7 +72,7 @@ export default {
         cancelText: "CANCELAR",
         centered: true,
         onOk() {
-          restart(id);
+          restart(id,record.quizz_id.id);
         },
         onCancel() {}
       });
