@@ -68,7 +68,7 @@
               />
             </a-col>
             <a-col span="1" class="option__labelOption">{{
-              `${option.indicator})`
+              `${option.indicator}`
             }}</a-col>
             <!-- Esta columna es donde se pone la respuesta -->
             <a-col span="21">
@@ -278,7 +278,6 @@ export default {
       this.optionsValues[index] = value;
       this.setAvailableOptions();
       if (value === "" || value === null) {
-        alert("Vacioo");
         if (this.optionAnswers.includes(index)) {
           this.optionAnswers.splice(this.optionAnswers.indexOf(index), 1);
         }
