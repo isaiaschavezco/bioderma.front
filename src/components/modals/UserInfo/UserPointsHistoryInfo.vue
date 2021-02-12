@@ -32,7 +32,7 @@
               <a-button
                 class="mt-4"
                 @click="handleRestartTrivia(record.id, record)"
-                >Reiniciar trivia</a-button
+                >Eliminar Registro</a-button
               >
             </Space>
           </a-col>
