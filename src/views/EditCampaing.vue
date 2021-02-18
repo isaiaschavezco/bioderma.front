@@ -35,7 +35,7 @@
             </a-col>
             <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
           </a-row>
-          <a-row class="btn-description">
+          <!-- <a-row class="btn-description">
             <a-col>
               <a-button
                 shape="circle"
@@ -45,7 +45,7 @@
               />
             </a-col>
             <a-col class="description-icon title-span-tag">Agregar Opcion Multiple (Varias respuestas)</a-col>
-          </a-row>
+          </a-row> -->
           <a-row class="btn-description">
             <a-col>
               <a-button
