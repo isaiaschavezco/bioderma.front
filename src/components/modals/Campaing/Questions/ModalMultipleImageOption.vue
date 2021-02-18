@@ -145,8 +145,8 @@
 
       <a-divider />
 
+        <!-- v-if="registerButton" Antes solo se podia editar antes de enviar, si es necesario restablecer esa función solo colocar esta linea abajo--> 
       <a-row
-        v-if="registerButton"
         class="form-question__actions"
         type="flex"
         justify="center"

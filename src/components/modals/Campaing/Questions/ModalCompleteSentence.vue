@@ -118,7 +118,9 @@
     
 			<a-divider />
 			
-			<a-row v-if="registerButton" class="form-question__actions" type="flex" justify="center" :gutter="24">
+			<!-- <a-row v-if="registerButton" -->
+			<a-row 
+			 class="form-question__actions" type="flex" justify="center" :gutter="24">
 				<a-col span="7">
 					<a-button type="primary" @click="onCloseModal">CANCELAR</a-button>
 				</a-col>

@@ -149,8 +149,8 @@
 
       <a-divider />
 
+        <!-- v-if="registerButton" -->
       <a-row
-        v-if="registerButton"
         class="form-question__actions"
         type="flex"
         justify="center"

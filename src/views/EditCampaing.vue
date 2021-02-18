@@ -316,15 +316,13 @@ export default {
       
       return responseData;
     },
-    async editQuestion(id, questionType) {    
+    async editQuestion(id, questionType) {
       try {
         this.idEditQuestion = id;
         const url = `question/detail/${id}`;
         const response = await this.$axios(url);
         const question = response.data.question;
-
-        this.nameAction = "GUARDAR CAMBIOS";
-
+        this.nameAction = "EDITAR TRIVIA";
         question.content = JSON.parse(question.content);
         question.answer = JSON.parse(question.answer);
         
@@ -374,9 +372,20 @@ export default {
       try {
         questionData.id = this.idEditQuestion;
         const response = await this.$axios.put("/question", questionData);
+        console.log("RESPUESTA EDITARRRRR",response);
+         this.$notification["success"]({
+          message: "Se ha editado con éxito.",
+          description:
+          'La pregunta se actualizó correctamente.',
+        });
+        this.nameAction = "CREAR"
 
         this.getQuestions();
       } catch (error) {
+        this.$notification["error"]({
+         message: "Ha ocurrido un error.",
+         description:'Por favor contacte ha soporte o vuelva a intentarlo.',
+       });
         console.log("Hubo un error al actualizar:", error.message);
       }
     },
