@@ -35,7 +35,7 @@
             </a-col>
             <a-col class="description-icon title-span-tag">Agregar Opcion Multiple</a-col>
           </a-row>
-          <!-- <a-row class="btn-description">
+<a-row Kclass="btn-description">
             <a-col>
               <a-button
                 shape="circle"
@@ -44,8 +44,8 @@
                 @click="openQuestionModal(6)"
               />
             </a-col>
-            <a-col class="description-icon title-span-tag">Agregar Opcion Multiple (Varias respuestas)</a-col>
-          </a-row> -->
+            <a-col claKss="description-icon title-span-tag">Agregar Opcion Multiple (Varias respuestas)</a-col>
+          </a-row>
           <a-row class="btn-description">
             <a-col>
               <a-button
@@ -96,8 +96,10 @@
 
     <!-- MODALES -->
 
+
     <!-- OPCION MULTIPLE -->
     <ModalMultipleOption :isVisible="multipleOptionModal" :quizz="quizzId" :questionJSON="questionDataMultipleOption" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
+    <!-- OPCION MULTIPLE MULTIPLES RESPUESTAS -->
     <ModalMultipleOptionMultipleAnswers :isVisible="multipleOptionMultipleAnswersModal" :quizz="quizzId" :questionJSON="questionDataMultipleOptionMultipleAnswers" @register="action" :textButton="nameAction" @close="onCloseModal" :onlyView="!availableButtons" />
 
     <!-- RELACION DE COLUMNAS -->
@@ -264,6 +266,7 @@ export default {
       return questions;
     },
     openQuestionModal(questionType) {
+      console.log("questionType",questionType)
       if (questionType === 1) {
         this.multipleOptionModal = true;
       }
@@ -338,7 +341,7 @@ export default {
     },
     openEditModal(question, questionType) {
       this.action = this.updateQuestion;
-
+      
       question.time = question.time.toString();
       question.points = question.points.toString();
 
