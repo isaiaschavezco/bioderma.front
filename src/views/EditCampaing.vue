@@ -324,6 +324,7 @@ export default {
         this.idEditQuestion = id;
         const url = `question/detail/${id}`;
         const response = await this.$axios(url);
+        console.log("Editar ",response)
         const question = response.data.question;
         this.nameAction = "EDITAR TRIVIA";
         question.content = JSON.parse(question.content);
