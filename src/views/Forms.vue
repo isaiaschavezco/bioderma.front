@@ -1260,7 +1260,22 @@
       </a-row>
     </div>
 
-
+  <FormPerfilExterno
+  :success="success"
+    :failEmail="failEmail"
+    :failIncorrect="failIncorrect"
+    :failToken="failToken"
+    :fail="fail"
+    :titleCard="Convenio"
+    :onStateChange="onStateChange"
+    :states="states"
+    :cities="cities"
+    :workPositions="workPositions"
+    :isEmailInputDisable="isEmailInputDisable"
+    :userEmail="userEmail"
+    :userToken="userToken"
+    :validateToNextPassword="validateToNextPassword"
+  />
 
   </div>
 </template>
@@ -1268,8 +1283,10 @@
 import moment from "moment";
 import "moment/locale/es";
 import { async } from "q";
+import FormPerfilExterno from '../components/forms/FormPerfilExterno.vue';
 moment.locale("es");
 export default {
+  components: { FormPerfilExterno },
   data() {
     return {
       passw:"password",
