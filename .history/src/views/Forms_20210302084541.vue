@@ -1,17 +1,8 @@
 <template>
-  <div
-    :style="{ height: 'calc(100vh - 64px)' }"
-    breakpoint="md"
-    collapsed-width="0"
-  >
+  <div :style="{ height: 'calc(100vh - 64px)' }" breakpoint="md" collapsed-width="0">
     <div v-if="User" style="background:#f0f2f5; 0">
       <a-Row :gutter="1">
-        <a-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 24 }"
-          :md="{ span: 5, offset: 1 }"
-          :lg="{ span: 5, offset: 1 }"
-        >
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 5, offset:1}" :lg="{span: 5, offset:1}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -32,30 +23,15 @@
               listType="picture"
               :fileList="fileList"
             >
-              <img
-                alt="editProfile"
-                src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png"
-                class="imgSize"
-              />
+              <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col
-          :lg="{ span: 16, offset: 1 }"
-          :md="{ span: 16, offset: 1 }"
-          :sm="{ span: 24 }"
-          :xs="{ span: 24 }"
-        >
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset: 1}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro NAOS" class="forms">
             <a-form :form="form" @submit="handleSubmit1">
               <a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="nickName"
@@ -75,13 +51,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="name"
@@ -101,13 +71,7 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       setFieldsValue="lastName"
@@ -144,7 +108,7 @@
                             message: 'Seleccione su fecha de nacimiento'
                           }
                         ]
-                      }
+                      },
                     ]"
                     option.initialValue="moment('01-01-2000', dateFormat)"
                     :format="dateFormat"
@@ -152,13 +116,7 @@
                 </a-form-item>
               </a-col>
 
-              <a-col
-                :lg="{ span: 22 }"
-                :md="{ span: 22 }"
-                :sm="{ span: 24 }"
-                :xs="{ span: 24 }"
-                :offset="2"
-              >
+              <a-col :lg="{span: 22}" :md="{span:22}" :sm="{span:24}" :xs="{span:24}" :offset="2">
                 <a-form-item>
                   <a-radio-group
                     setFieldsValue="gender"
@@ -178,13 +136,7 @@
                   </a-radio-group>
                 </a-form-item>
               </a-col>
-              <a-col
-                :lg="{ span: 8 }"
-                :md="{ span: 8 }"
-                :sm="{ span: 20 }"
-                :xs="{ span: 20 }"
-                :offset="2"
-              >
+              <a-col :lg="{span: 8}" :md="{span:8}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-bottom: 15px">
                   <a-select
                     setFieldsValue="state"
@@ -204,18 +156,11 @@
                       :value="state.id"
                       v-for="state in states"
                       :key="state.id"
-                      >{{ state.name }}</a-select-option
-                    >
+                    >{{ state.name }}</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
-              <a-col
-                :lg="{ span: 8 }"
-                :md="{ span: 8 }"
-                :sm="{ span: 20 }"
-                :xs="{ span: 20 }"
-                :offset="2"
-              >
+              <a-col :lg="{span: 8}" :md="{span:8}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                 <a-form-item style="margin-botton: 15px">
                   <a-select
                     optionFilterProp="children"
@@ -235,17 +180,16 @@
                       :value="city.id"
                       v-for="city in cities"
                       :key="city.id"
-                      >{{ city.name }}</a-select-option
-                    >
+                    >{{ city.name }}</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
               <a-col
                 :span="5"
-                :lg="{ span: 12 }"
-                :md="{ span: 12 }"
-                :sm="{ span: 20 }"
-                :xs="{ span: 20 }"
+                :lg="{span: 12}"
+                :md="{span:12}"
+                :sm="{span:20}"
+                :xs="{span:20}"
                 :offset="2"
               >
                 <a-form-item style="margin-botton: 15px">
@@ -270,8 +214,7 @@
                       :value="position.id"
                       v-for="position in workPositions"
                       :key="position.id"
-                      >{{ position.name }}</a-select-option
-                    >
+                    >{{ position.name }}</a-select-option>
                   </a-select>
                 </a-form-item>
               </a-col>
@@ -311,7 +254,7 @@
                   <a-input
                     setFieldsValue="email"
                     placeholder="EMAIL"
-                    :disabled="isEmailInputDisable"
+                    :disabled= "isEmailInputDisable"
                     v-decorator="[
                       'email',
                       {
@@ -331,13 +274,7 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col
-                :lg="{ span: 9 }"
-                :md="{ span: 9 }"
-                :sm="{ span: 20, offset: 2 }"
-                :xs="{ span: 20 }"
-                :offset="2"
-              >
+              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20,offset:2}" :xs="{span:20}" :offset="2">
                 <a-form-item help="Contraseña al menos 8 caracteres">
                   <a-input-search
                     enterButton="Mostrar"
@@ -364,14 +301,8 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col
-                :lg="{ span: 9 }"
-                :md="{ span: 9 }"
-                :sm="{ span: 20 }"
-                :xs="{ span: 20 }"
-                :offset="2"
-              >
-                <a-form-item>
+              <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
+                <a-form-item >
                   <a-input-search
                     enterButton="Mostrar"
                     @search="showConfirmPw"
@@ -402,23 +333,17 @@
                     style="background-color:#001529; border: 1px solid #001529; width: 100%"
                     @click="onSubmitFileForm"
                     html-type="submit"
-                    >Registrar</a-button
-                  >
+                  >Registrar</a-button>
                 </a-form-item>
               </a-col>
             </a-form>
           </a-card>
         </a-col>
-      </a-Row>
+      </a-row>
     </div>
     <div v-if="Pharmacy" style="background:#f0f2f5; 0">
       <a-row :gutter="1">
-        <a-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 24 }"
-          :md="{ span: 5, offset: 1 }"
-          :lg="{ span: 5, offset: 1 }"
-        >
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 5, offset:1}" :lg="{span: 5, offset:1}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -439,20 +364,11 @@
               listType="picture"
               :fileList="fileList"
             >
-              <img
-                alt="editProfile"
-                src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png"
-                class="imgSize"
-              />
+              <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col
-          :lg="{ span: 16, offset: 1 }"
-          :md="{ span: 16, offset: 1 }"
-          :sm="{ span: 24 }"
-          :xs="{ span: 24 }"
-        >
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset: 1}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro de Farmacias" class="forms">
             <!-- <h1 style="text-align:center">Registro de Farmacias</h1> -->
             <a-form :form="form" @submit="handleSubmit2">
@@ -478,13 +394,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col>
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         setFieldsValue="name"
@@ -505,10 +415,10 @@
                     </a-form-item>
                   </a-col>
                   <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
+                    :lg="{span: 9}"
+                    :md="{span: 9}"
+                    :sm="{span:20}"
+                    :xs="{span:20}"
                     :offset="2"
                   >
                     <a-form-item>
@@ -535,10 +445,10 @@
                 <a-col>
                   <!-- Genero -->
                   <a-col
-                    :lg="{ span: 22 }"
-                    :md="{ span: 22 }"
-                    :sm="{ span: 24 }"
-                    :xs="{ span: 24 }"
+                    :lg="{span: 22}"
+                    :md="{span:22}"
+                    :sm="{span:24}"
+                    :xs="{span:24}"
                     :offset="2"
                   >
                     <a-form-item>
@@ -573,10 +483,7 @@
                           'birthDate',
                           {
                             rules: [
-                              {
-                                required: true,
-                                message: 'Seleccione su fecha de nacimiento'
-                              }
+                              { required: true, message: 'Seleccione su fecha de nacimiento' }
                             ]
                           }
                         ]"
@@ -587,13 +494,7 @@
                   </a-col>
                 </a-col>
                 <!-- Cadena -->
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       setFieldsValue="chain"
@@ -612,19 +513,12 @@
                         :value="chains.id"
                         v-for="chains in chains"
                         :key="chains.id"
-                        >{{ chains.name }}</a-select-option
-                      >
+                      >{{ chains.name }}</a-select-option>
                     </a-select>
                   </a-form-item>
                 </a-col>
                 <!-- Sucursal -->
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       placeholder="Sucursal"
@@ -645,13 +539,7 @@
                   </a-form-item>
                 </a-col>
                 <!-- Estado -->
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       optionFilterProp="children"
@@ -671,20 +559,13 @@
                         :value="state.id"
                         v-for="state in states"
                         :key="state.id"
-                        >{{ state.name }}</a-select-option
-                      >
+                      >{{ state.name }}</a-select-option>
                     </a-select>
                   </a-form-item>
                 </a-col>
                 <!-- Municipio -->
                 <a-col>
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item style="margin-bottom: 15px">
                       <a-select
                         optionFilterProp="children"
@@ -707,8 +588,7 @@
                           :value="city.id"
                           v-for="city in cities"
                           :key="city.id"
-                          >{{ city.name }}</a-select-option
-                        >
+                        >{{ city.name }}</a-select-option>
                       </a-select>
                     </a-form-item>
                   </a-col>
@@ -734,13 +614,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Colonia -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Colonia"
@@ -761,13 +635,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Codigo Postal -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         pattern="[0-9]{5}"
@@ -789,13 +657,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Cargo -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Cargo"
@@ -816,13 +678,7 @@
                     </a-form-item>
                   </a-col>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       pattern="[0-9]{10}"
@@ -858,7 +714,7 @@
                     <a-input
                       placeholder="EMAIL"
                       setFieldsValue="email"
-                      :disabled="isEmailInputDisable"
+                      :disabled= "isEmailInputDisable"
                       v-decorator="[
                         'email',
                         {
@@ -878,17 +734,11 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item help="Contraseña al menos 8 caracteres">
                     <a-input-search
-                      enterButton="Mostrar"
-                      @search="showPassword"
+                    enterButton="Mostrar"
+                    @search="showPassword"
                       pattern=".{8,}"
                       placeholder="CONTRASEÑA"
                       setFieldsValue="password"
@@ -911,17 +761,17 @@
                   </a-form-item>
                 </a-col>
                 <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
+                  :lg="{span: 9}"
+                  :md="{span: 9}"
+                  :sm="{span:20}"
+                  :xs="{span:20}"
                   :offset="2"
                   style="margin-bottom:10px"
                 >
                   <a-form-item help="Confirme su contraseña">
                     <a-input-search
-                      enterButton="Mostrar"
-                      @search="showConfirmPw"
+                    enterButton="Mostrar"
+                    @search="showConfirmPw"
                       placeholder="CONFIRMAR CONTRASEÑA"
                       v-decorator="[
                         'confirm',
@@ -950,8 +800,7 @@
                       style="background-color:#001529; border: 1px solid #001529; width: 100%"
                       @click="onSubmitFileForm"
                       html-type="submit"
-                      >Registrar</a-button
-                    >
+                    >Registrar</a-button>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -963,13 +812,8 @@
 
     <div v-if="Esthederm" style="background:#f0f2f5; 0">
       <a-row :gutter="1">
-        <!-- Subir foto de perfil-->
-        <a-col
-          :xs="{ span: 24 }"
-          :sm="{ span: 24 }"
-          :md="{ span: 5, offset: 1 }"
-          :lg="{ span: 5, offset: 1 }"
-        >
+      <!-- Subir foto de perfil-->
+        <a-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 5, offset:1}" :lg="{span: 5, offset:1}">
           <a-card class="imgPosition">
             <a-upload-dragger
               v-decorator="[
@@ -990,22 +834,13 @@
               listType="picture"
               :fileList="fileList"
             >
-              <img
-                alt="editProfile"
-                src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png"
-                class="imgSize"
-              />
+              <img alt="editProfile" src="https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png" class="imgSize" />
             </a-upload-dragger>
           </a-card>
         </a-col>
-        <a-col
-          :lg="{ span: 16, offset: 1 }"
-          :md="{ span: 16, offset: 1 }"
-          :sm="{ span: 24 }"
-          :xs="{ span: 24 }"
-        >
+        <a-col :lg="{span: 16,offset:1}" :md="{span:16, offset: 1}" :sm="{span:24}" :xs="{span:24}">
           <a-card title="Registro de Estherdem" class="forms">
-            <!--<h1 style="text-align:center">Registro de Esthederm</h1>-->
+             <!--<h1 style="text-align:center">Registro de Esthederm</h1>--> 
             <a-form :form="form" @submit="handleSubmitEsthederm">
               <a-row>
                 <a-col :span="20" :offset="2">
@@ -1029,13 +864,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col>
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         setFieldsValue="name"
@@ -1056,10 +885,10 @@
                     </a-form-item>
                   </a-col>
                   <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
+                    :lg="{span: 9}"
+                    :md="{span: 9}"
+                    :sm="{span:20}"
+                    :xs="{span:20}"
                     :offset="2"
                   >
                     <a-form-item>
@@ -1086,10 +915,10 @@
                 <a-col>
                   <!-- Genero -->
                   <a-col
-                    :lg="{ span: 22 }"
-                    :md="{ span: 22 }"
-                    :sm="{ span: 24 }"
-                    :xs="{ span: 24 }"
+                    :lg="{span: 22}"
+                    :md="{span:22}"
+                    :sm="{span:24}"
+                    :xs="{span:24}"
                     :offset="2"
                   >
                     <a-form-item>
@@ -1124,10 +953,7 @@
                           'birthDate',
                           {
                             rules: [
-                              {
-                                required: true,
-                                message: 'Seleccione su fecha de nacimiento'
-                              }
+                              { required: true, message: 'Seleccione su fecha de nacimiento' }
                             ]
                           }
                         ]"
@@ -1138,13 +964,7 @@
                   </a-col>
                 </a-col>
                 <!-- CLINICA -->
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       setFieldsValue="clinic"
@@ -1163,20 +983,13 @@
                         v-for="clinic in clinics"
                         :value="clinic.id"
                         :key="clinic.id"
-                        >{{ clinic.name }}</a-select-option
-                      >
+                      >{{ clinic.name }}</a-select-option>
                     </a-select>
                   </a-form-item>
                 </a-col>
                 <!-- Sucursal -->
                 <!-- Estado -->
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item style="margin-bottom: 15px">
                     <a-select
                       optionFilterProp="children"
@@ -1196,20 +1009,13 @@
                         :value="state.id"
                         v-for="state in states"
                         :key="state.id"
-                        >{{ state.name }}</a-select-option
-                      >
+                      >{{ state.name }}</a-select-option>
                     </a-select>
                   </a-form-item>
                 </a-col>
                 <!-- Municipio -->
                 <a-col>
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item style="margin-bottom: 15px">
                       <a-select
                         optionFilterProp="children"
@@ -1232,8 +1038,7 @@
                           :value="city.id"
                           v-for="city in cities"
                           :key="city.id"
-                          >{{ city.name }}</a-select-option
-                        >
+                        >{{ city.name }}</a-select-option>
                       </a-select>
                     </a-form-item>
                   </a-col>
@@ -1259,13 +1064,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Colonia -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Colonia"
@@ -1286,13 +1085,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Codigo Postal -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         pattern="[0-9]{5}"
@@ -1314,13 +1107,7 @@
                     </a-form-item>
                   </a-col>
                   <!-- Cargo -->
-                  <a-col
-                    :lg="{ span: 9 }"
-                    :md="{ span: 9 }"
-                    :sm="{ span: 20 }"
-                    :xs="{ span: 20 }"
-                    :offset="2"
-                  >
+                  <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                     <a-form-item>
                       <a-input
                         placeholder="Cargo"
@@ -1341,13 +1128,7 @@
                     </a-form-item>
                   </a-col>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item>
                     <a-input
                       pattern="[0-9]{10}"
@@ -1383,7 +1164,7 @@
                     <a-input
                       placeholder="EMAIL"
                       setFieldsValue="email"
-                      :disabled="isEmailInputDisable"
+                      :disabled= "isEmailInputDisable"
                       v-decorator="[
                         'email',
                         {
@@ -1403,17 +1184,11 @@
                     />
                   </a-form-item>
                 </a-col>
-                <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
-                  :offset="2"
-                >
+                <a-col :lg="{span: 9}" :md="{span:9}" :sm="{span:20}" :xs="{span:20}" :offset="2">
                   <a-form-item help="Contraseña al menos 8 caracteres">
                     <a-input-search
-                      enterButton="Mostrar"
-                      @search="showPassword"
+                    enterButton="Mostrar"
+                    @search="showPassword"
                       pattern=".{8,}"
                       placeholder="CONTRASEÑA"
                       setFieldsValue="password"
@@ -1436,17 +1211,17 @@
                   </a-form-item>
                 </a-col>
                 <a-col
-                  :lg="{ span: 9 }"
-                  :md="{ span: 9 }"
-                  :sm="{ span: 20 }"
-                  :xs="{ span: 20 }"
+                  :lg="{span: 9}"
+                  :md="{span: 9}"
+                  :sm="{span:20}"
+                  :xs="{span:20}"
                   :offset="2"
                   style="margin-bottom:10px"
                 >
                   <a-form-item help="Confirme su contraseña">
                     <a-input-search
-                      enterButton="Mostrar"
-                      @search="showConfirmPw"
+                    enterButton="Mostrar"
+                    @search="showConfirmPw"
                       placeholder="CONFIRMAR CONTRASEÑA"
                       v-decorator="[
                         'confirm',
@@ -1475,8 +1250,7 @@
                       style="background-color:#001529; border: 1px solid #001529; width: 100%"
                       @click="onSubmitFileForm"
                       html-type="submit"
-                      >Registrar</a-button
-                    >
+                    >Registrar</a-button>
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -1486,36 +1260,20 @@
       </a-row>
     </div>
 
-    <FormPerfilExterno
-      :success="success"
-      :failEmail="failEmail"
-      :failIncorrect="failIncorrect"
-      :failToken="failToken"
-      :fail="fail"
-      :titleCard="Convenio"
-      :onStateChange="onStateChange"
-      :states="states"
-      :cities="cities"
-      :workPositions="workPositions"
-      :isEmailInputDisable="isEmailInputDisable"
-      :userEmail="userEmail"
-      :userToken="userToken"
-      :validateToNextPassword="validateToNextPassword"
-    />
+
+
   </div>
 </template>
 <script>
 import moment from "moment";
 import "moment/locale/es";
 import { async } from "q";
-import FormPerfilExterno from "../components/forms/FormPerfilExterno.vue";
 moment.locale("es");
 export default {
-  components: { FormPerfilExterno },
   data() {
     return {
-      passw: "password",
-      passwCon: "password",
+      passw:"password",
+      passwCon:"password",
       name: "",
       photo: "URL",
       lastName: "",
@@ -1591,9 +1349,9 @@ export default {
         centered: true,
         closable: false,
         okButtonProps: {
-          props: { disabled: true }
+            props: { disabled: true },
         },
-        okText: "",
+        okText: '',
         content: (
           <div>
             <p style="text-align:center">
@@ -1633,8 +1391,7 @@ export default {
         centered: true,
         content: (
           <p style="text-align:center">
-            Error con token de autenticación, favor de comunicarse con el equipo
-            de soporte de NAOS.
+            Error con token de autenticación, favor de comunicarse con el equipo de soporte de NAOS.
           </p>
         )
       });
@@ -1653,7 +1410,8 @@ export default {
         content: (
           <p style="text-align:center">
             HA OCURRIDO UN ERROR DURANTE EL REGISTRO, FAVOR DE INTENTARLO MÁS
-            TARDE error: {error.message}
+            TARDE
+            error: {error.message}
           </p>
         )
       });
@@ -1665,13 +1423,13 @@ export default {
       //   this.state = response.data
       // })
     },
-    showPassword() {
-      if (this.passw == "password") this.passw = "text";
-      else this.passw = "password";
+    showPassword(){
+      if(this.passw=="password") this.passw="text";
+      else this.passw="password";
     },
-    showConfirmPw() {
-      if (this.passwCon == "password") this.passwCon = "text";
-      else this.passwCon = "password";
+    showConfirmPw(){
+      if(this.passwCon=="password") this.passwCon="text";
+      else this.passwCon="password";
     },
     async getPosition() {
       const responsePosition = await this.$axios("position");
@@ -1698,24 +1456,25 @@ export default {
         if (!err) {
           // console.log("Datos recibidos: ", values);
           try {
-            const response = await this.$axios.post("user/naos", {
-              name: values.name.toUpperCase(),
-              lastName: values.lastName.toUpperCase(),
-              nickName: values.nickName,
-              photo:
-                this.fileList.length > 0
-                  ? this.fileList[0].response
-                  : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
-              birthDate: values.birthDate,
-              gender: values.gender == 1 ? false : true,
-              phone: values.phone,
-              email: values.email.toLowerCase(),
-              password: values.password,
-              state: values.state,
-              city: values.city,
-              naosPosition: values.naosPosition,
-              userToken: this.userToken
-            });
+  
+              const response = await this.$axios.post(
+              "user/naos",
+              {
+                name: values.name.toUpperCase(),
+                lastName: values.lastName.toUpperCase(),
+                nickName: values.nickName,
+                photo: this.fileList.length > 0 ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
+                birthDate: values.birthDate,
+                gender: values.gender == 1 ? false : true,
+                phone: values.phone,
+                email: values.email.toLowerCase(),
+                password: values.password,
+                state: values.state,
+                city: values.city,
+                naosPosition: values.naosPosition,
+                userToken: this.userToken
+              }
+            );
 
             if (response.data.status == 0) {
               this.success();
@@ -1742,29 +1501,29 @@ export default {
         if (!err) {
           // console.log("Datos recibidos: ", values);
           try {
-            const response = await this.$axios.post("user/drugstore", {
-              name: values.name.toUpperCase(),
-              lastName: values.lastName.toUpperCase(),
-              nickName: values.nickName,
-              photo:
-                this.fileList.length > 0
-                  ? this.fileList[0].response
-                  : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
-              birthDate: values.birthDate,
-              gender: values.gender == 1 ? false : true,
-              phone: values.phone,
-              email: values.email.toLowerCase(),
-              password: values.password,
-              postalCode: values.postalCode,
-              state: values.state,
-              city: values.city,
-              chain: values.chain,
-              drugStore: values.drugStore,
-              town: values.town,
-              mayoralty: values.mayoralty,
-              charge: values.charge,
-              userToken: this.userToken
-            });
+            const response = await this.$axios.post(
+              "user/drugstore",
+              {
+                name: values.name.toUpperCase(),
+                lastName: values.lastName.toUpperCase(),
+                nickName: values.nickName,
+                photo: this.fileList.length > 0  ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
+                birthDate: values.birthDate,
+                gender: values.gender == 1 ? false : true,
+                phone: values.phone,
+                email: values.email.toLowerCase(),
+                password: values.password,
+                postalCode: values.postalCode,
+                state: values.state,
+                city: values.city,
+                chain: values.chain,
+                drugStore: values.drugStore,
+                town: values.town,
+                mayoralty: values.mayoralty,
+                charge: values.charge,
+                userToken: this.userToken
+              }
+            );
             if (response.data.status == 0) {
               this.success();
             } else if (response.data.status == 5) {
@@ -1782,34 +1541,34 @@ export default {
         }
       });
     },
-    handleSubmitEsthederm(e) {
+     handleSubmitEsthederm(e) {
       e.preventDefault();
       this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
-          console.log("Datos recibidos: ", values);
+           console.log("Datos recibidos: ", values);
           try {
-            const response = await this.$axios.post("user/esthederm", {
-              name: values.name.toUpperCase(),
-              lastName: values.lastName.toUpperCase(),
-              nickName: values.nickName,
-              photo:
-                this.fileList.length > 0
-                  ? this.fileList[0].response
-                  : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
-              birthDate: values.birthDate,
-              gender: values.gender == 1 ? false : true,
-              phone: values.phone,
-              email: values.email.toLowerCase(),
-              password: values.password,
-              postalCode: values.postalCode,
-              state: values.state,
-              city: values.city,
-              clinic: values.chain,
-              town: values.town,
-              mayoralty: values.mayoralty,
-              charge: values.charge,
-              userToken: this.userToken
-            });
+            const response = await this.$axios.post(
+              "user/esthederm",
+              {
+                name: values.name.toUpperCase(),
+                lastName: values.lastName.toUpperCase(),
+                nickName: values.nickName,
+                photo: this.fileList.length > 0  ? this.fileList[0].response : "https://bioderma-space.sfo2.cdn.digitaloceanspaces.com/assets/Usuario.png",
+                birthDate: values.birthDate,
+                gender: values.gender == 1 ? false : true,
+                phone: values.phone,
+                email: values.email.toLowerCase(),
+                password: values.password,
+                postalCode: values.postalCode,
+                state: values.state,
+                city: values.city,
+                clinic: values.chain,
+                town: values.town,
+                mayoralty: values.mayoralty,
+                charge: values.charge,
+                userToken: this.userToken
+              }
+            );
             if (response.data.status == 0) {
               this.success();
             } else if (response.data.status == 5) {
@@ -1827,6 +1586,8 @@ export default {
         }
       });
     },
+
+
 
     onSubmitPictureForm() {
       //alert("Subir");
@@ -1883,15 +1644,15 @@ export default {
 }
 
 .imgSize {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  max-height: 20%;
-}
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 20%;
+  }
 
 .imgPosition {
-  margin-top: 2.5rem !important;
-}
+    margin-top: 2.5rem !important;
+  }
 
 @media (min-width: 1200px) {
   /* .forms {
