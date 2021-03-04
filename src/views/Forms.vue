@@ -1258,6 +1258,26 @@
                       />
                     </a-form-item>
                   </a-col>
+                  <a-col :span="20" :offset="2">
+                    <a-form-item>
+                      <a-input
+                        placeholder="Ciudad"
+                        setFieldsValue="town"
+                        v-decorator="[
+                          'town',
+                          {
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Ingrese su Ciudad',
+                                whitespace: true
+                              }
+                            ]
+                          }
+                        ]"
+                      />
+                    </a-form-item>
+                  </a-col>
                   <!-- Colonia -->
                   <a-col
                     :lg="{ span: 9 }"
@@ -1487,16 +1507,17 @@
     </div>
 
     <FormPerfilExterno
+      v-if="Convenio"
       :success="success"
       :failEmail="failEmail"
       :failIncorrect="failIncorrect"
       :failToken="failToken"
       :fail="fail"
-      :titleCard="Convenio"
+      titleCard="Convenio"
       :onStateChange="onStateChange"
       :states="states"
       :cities="cities"
-      :workPositions="workPositions"
+      :business="convenios"
       :isEmailInputDisable="isEmailInputDisable"
       :userEmail="userEmail"
       :userToken="userToken"
@@ -1543,6 +1564,7 @@ export default {
       cities: [],
       chains: [],
       clinics: [],
+      convenios: [],
       confirmDirty: false,
       autoCompleteResult: [],
       userEmail: this.$route.query.email,
@@ -1561,6 +1583,7 @@ export default {
     this.getPosition();
     this.getChains();
     this.getClinics();
+    this.getConvenios();
     // console.log("userToken: ", this.userToken);
     // this.success();
     // this.successRegisterModal = true;
@@ -1577,12 +1600,7 @@ export default {
       }
     },
     async onStateChange(stateid) {
-      // console.log("stateid: ", stateid);
       this.getCities(stateid);
-      /*const direction = "city/" + stateid;
-      const responseCity = await this.$axios(direction);
-      console.log("ResponseCity: ", responseCity.data);
-      this.cities = responseCity.data.name;*/
     },
     onSubmitFileForm() {},
     success() {
@@ -1684,6 +1702,11 @@ export default {
     async getClinics() {
       const responseClinics = await this.$axios("clinic");
       this.clinics = responseClinics.data.clinics;
+    },
+    async getConvenios() {
+      const responseConvenios = await this.$axios("convenio");
+      console.log({ responseConvenios });
+      this.convenios = responseConvenios.data.convenios;
     },
     async getCities(num) {
       const direction = "city/" + num;
@@ -1871,6 +1894,10 @@ export default {
     Esthederm() {
       return this.$route.query.type === "3";
       // return true;
+    },
+    Convenio() {
+      return this.$route.query.type === "4";
+      // return true;
     }
   }
 };
@@ -1894,64 +1921,11 @@ export default {
 }
 
 @media (min-width: 1200px) {
-  /* .forms {
-    width: 70% !important;
-  } */
-  /* .imgPosition {
-    width: 300px;
-    height: 300px;
-    margin-left: 22rem !important;
-    margin-top: 2.5rem !important;
-  }
-  .imgSize {
-    width: 180px;
-    height: 180px;
-  } */
 }
 @media (min-width: 993px) and (max-width: 1199px) {
-  /* .forms {
-    width: 70% !important;
-  } */
-  /* .imgPosition {
-    width: 300px;
-    height: 280px;
-    margin-left: 4.5rem !important;
-    margin-top: 2.5rem !important;
-  }
-  .imgSize {
-    width: 180px;
-    height: 180px;
-  } */
 }
 @media (min-width: 577px) and (max-width: 992px) {
-  /* .forms {
-    width: 100% !important;
-  } */
-  /* .imgPosition {
-    width: 17rem;
-    height: 13rem;
-    margin-left: 15rem !important;
-    margin-top: 2.5rem !important;
-    margin: auto;
-  }
-  .imgSize {
-    width: 8rem;
-    height: 8rem;
-  } */
 }
 @media (max-width: 576px) {
-  /* .forms {
-    width: 100% !important;
-  }
-  .imgPosition {
-    width: 17rem;
-    height: 13rem;
-    margin-top: 2.5rem !important;
-    margin: auto;
-  }
-  .imgSize {
-    width: 8rem;
-    height: 8rem;
-  } */
 }
 </style>

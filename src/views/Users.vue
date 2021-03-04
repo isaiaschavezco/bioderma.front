@@ -586,6 +586,9 @@ export default {
       try {
         this.isLoadingTable = true;
         const response = await this.$axios("user");
+        console.log("====================================");
+        console.log("RESPUESTAAAA");
+        console.log("====================================");
         const usersList = response.data.users.map((val, index) => {
           return {
             key: val.id,

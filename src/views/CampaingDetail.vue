@@ -4,16 +4,25 @@
       <a-col :xs="{ span: 15 }">
         <a-card :title="campaingName">
           <a-skeleton :loading="loadingQuizz" active>
-            <a-table :columns="columns" :dataSource="quizz" style="margin-top: 0rem;" size="small">
+            <a-table
+              :columns="columns"
+              :dataSource="quizz"
+              style="margin-top: 0rem;"
+              size="small"
+            >
               <span slot="action" slot-scope="text, record">
                 <a-button
+                  v-if="text.status !== 'Eliminada'"
                   shape="circle"
                   icon="edit"
                   size="large"
-                  @click="() => editQuizz(record.quizzId, record.name, text.status)"
+                  @click="
+                    () => editQuizz(record.quizzId, record.name, text.status)
+                  "
                 />
                 <a-divider type="vertical" />
                 <a-button
+                  v-if="text.status !== 'Eliminada'"
                   shape="circle"
                   icon="delete"
                   size="large"
@@ -23,14 +32,26 @@
                 <a-divider type="vertical" />
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>{{record.isSend ? 'Esta trivia ha sido enviada' : (record.questions <= 0 ? 'Esta trivia no tiene preguntas asignadas' : 'Enviar') }}</span>
+                    <span>{{
+                      record.isSend
+                        ? "Esta trivia ha sido enviada"
+                        : record.questions <= 0
+                        ? "Esta trivia no tiene preguntas asignadas"
+                        : "Enviar"
+                    }}</span>
                   </template>
                   <a-button
+                    v-if="text.status !== 'Eliminada'"
                     shape="circle"
                     icon="caret-right"
                     size="large"
                     :disabled="record.isSend ? true : record.questions <= 0"
-                    @click="() => {validityModalForm = true; currentModalId = record.quizzId;}"
+                    @click="
+                      () => {
+                        validityModalForm = true;
+                        currentModalId = record.quizzId;
+                      }
+                    "
                   />
                 </a-tooltip>
               </span>
@@ -48,15 +69,26 @@
               :pagination="pagination"
               :dataSource="usersTop"
             >
-              <a-list-item slot="renderItem" slot-scope="item, index" key="item.id">
+              <a-list-item
+                slot="renderItem"
+                slot-scope="item, index"
+                key="item.id"
+              >
                 <a-list-item-meta>
-                  <a slot="title">{{item.name.toUpperCase() + " " + item.lastName.toUpperCase()}}</a>
+                  <a slot="title">{{
+                    item.name.toUpperCase() + " " + item.lastName.toUpperCase()
+                  }}</a>
                   <a-avatar
                     style="color: #f56a00; backgroundColor: #fde3cf"
                     slot="avatar"
-                  >{{ actualUsersTopPage == 1 ? index + 1 : (actualUsersTopPage-1) * 10 + index + 1 }}</a-avatar>
+                    >{{
+                      actualUsersTopPage == 1
+                        ? index + 1
+                        : (actualUsersTopPage - 1) * 10 + index + 1
+                    }}</a-avatar
+                  >
                 </a-list-item-meta>
-                <div>{{item.totalPoints}}</div>
+                <div>{{ item.totalPoints }}</div>
               </a-list-item>
             </a-list>
           </a-card>
@@ -70,7 +102,7 @@
                 shape="circle"
                 icon="plus"
                 size="large"
-                @click="() => quizzModalRegister = true"
+                @click="() => (quizzModalRegister = true)"
               />
             </a-col>
             <a-col>Añadir trivia</a-col>
@@ -91,13 +123,19 @@
             <a-col>
               <download-csv
                 :data="dataToExport"
-                :name="'Campaing_' + campaingName + '_' + (new Date()).getTime().toString() + '.csv'"
+                :name="
+                  'Campaing_' +
+                    campaingName +
+                    '_' +
+                    new Date().getTime().toString() +
+                    '.csv'
+                "
               >
                 <a-button
                   shape="circle"
                   icon="download"
                   size="large"
-                  @click="() => isCSVReady = false"
+                  @click="() => (isCSVReady = false)"
                 />
               </download-csv>
             </a-col>
@@ -121,9 +159,16 @@
           <a-input
             placeholder="Titulo de la trivia"
             v-decorator="[
-          'quizzTitle',
-          {rules: [{ required: true, message: 'Favor de asignar un titulo a la trivia' }]}
-        ]"
+              'quizzTitle',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Favor de asignar un titulo a la trivia'
+                  }
+                ]
+              }
+            ]"
           />
         </a-form-item>
       </a-form>
@@ -134,7 +179,8 @@
           style="background-color:#009FD1; border-radius: 24px; width: 200px; margin: 0 auto 20px auto; display:block"
           :loading="inviteUserLoading"
           @click="onSubmitQuizz"
-        >SIGUIENTE</a-button>
+          >SIGUIENTE</a-button
+        >
       </template>
     </a-modal>
 
@@ -156,7 +202,6 @@
           :disabledDate="disabledStartValidityDate"
           :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
           format="DD-MM-YYYY HH:mm:ss"
-          
           v-model="startValidityDate"
           placeholder="Inicio de trivia"
           @openChange="handleStartOpenChange"
@@ -179,15 +224,17 @@
             class="validity-form__button"
             type="primary"
             size="large"
-            @click="() => validityModalForm = false"
-          >Cancelar</a-button>
+            @click="() => (validityModalForm = false)"
+            >Cancelar</a-button
+          >
           <a-button
             class="validity-form__button"
             type="primary"
             size="large"
             v-if="continueBtnValidity"
             @click="onSubmitValidityForm"
-          >Enviar</a-button>
+            >Enviar</a-button
+          >
         </div>
       </template>
     </a-modal>
@@ -545,7 +592,9 @@ export default {
     async onGenerateReportClick() {
       this.exportCSVLoading = true;
       try {
-        const response = await this.$axios(`campaing/report/${this.campaingId}`);
+        const response = await this.$axios(
+          `campaing/report/${this.campaingId}`
+        );
         this.dataToExport = response.data.report;
         this.exportCSVLoading = false;
         this.isCSVReady = true;

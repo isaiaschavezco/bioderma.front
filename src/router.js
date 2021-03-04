@@ -27,8 +27,7 @@ export default new Router({
     {
       path: "/Main",
       name: "main",
-      // component: Main,
-      component: Forms,
+      component: Main,
       children: [
         {
           path: "Users",

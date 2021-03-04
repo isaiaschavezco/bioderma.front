@@ -170,11 +170,47 @@
               </a-radio-group>
             </a-form-item>
           </a-col>
+
           <a-col
-            :lg="{ span: 8 }"
-            :md="{ span: 8 }"
-            :sm="{ span: 20 }"
-            :xs="{ span: 20 }"
+            :span="5"
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
+            :offset="2"
+          >
+            <a-form-item style="margin-botton: 15px">
+              <a-select
+                optionFilterProp="children"
+                setFieldsValue="business"
+                v-decorator="[
+                  'business',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Seleccione su empresa'
+                      }
+                    ]
+                  }
+                ]"
+                placeholder="Empresa"
+                @change="handleSelectChange"
+              >
+                <a-select-option
+                  :value="position.id"
+                  v-for="position in business"
+                  :key="position.id"
+                  >{{ position.name }}</a-select-option
+                >
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
             :offset="2"
           >
             <a-form-item style="margin-bottom: 15px">
@@ -199,11 +235,39 @@
               </a-select>
             </a-form-item>
           </a-col>
+
           <a-col
-            :lg="{ span: 8 }"
-            :md="{ span: 8 }"
-            :sm="{ span: 20 }"
-            :xs="{ span: 20 }"
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
+            :offset="2"
+          >
+            <a-form-item>
+              <a-input
+                pattern="[0-9]{5}"
+                setFieldsValue="postalCode"
+                placeholder="Código Postal"
+                v-decorator="[
+                  'postalCode',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Ingrese su Còdigo Postal',
+                        whitespace: true
+                      }
+                    ]
+                  }
+                ]"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
             :offset="2"
           >
             <a-form-item style="margin-botton: 15px">
@@ -231,41 +295,95 @@
             </a-form-item>
           </a-col>
           <a-col
-            :span="5"
-            :lg="{ span: 12 }"
-            :md="{ span: 12 }"
-            :sm="{ span: 20 }"
-            :xs="{ span: 20 }"
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
             :offset="2"
           >
             <a-form-item style="margin-botton: 15px">
-              <a-select
-                optionFilterProp="children"
-                setFieldsValue="naosPosition"
+              <a-input
+                setFieldsValue="street"
+                placeholder="Calle "
                 v-decorator="[
-                  'naosPosition',
+                  'street',
                   {
                     rules: [
                       {
                         required: true,
-                        message: 'Seleccione su posicición NAOS'
+                        message: 'Ingrese su calle',
+                        whitespace: true
                       }
                     ]
                   }
                 ]"
-                placeholder="Posición NAOS"
-                @change="handleSelectChange"
-              >
-                <a-select-option
-                  :value="position.id"
-                  v-for="position in workPositions"
-                  :key="position.id"
-                  >{{ position.name }}</a-select-option
-                >
-              </a-select>
+              />
+            </a-form-item>
+          </a-col>
+          <a-col
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
+            :offset="2"
+          >
+            <a-form-item style="margin-botton: 15px; width:100%;">
+              <a-input-number
+                style="width:100%;"
+                placeholder="Número interior"
+                v-decorator="['inner_number']"
+              />
             </a-form-item>
           </a-col>
 
+          <a-col
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 9 }"
+            :xs="{ span: 9 }"
+            :offset="2"
+          >
+            <a-form-item style="margin-botton: 15px; width:100%;">
+              <a-input-number
+                style="width:100%;"
+                placeholder="Número exterior"
+                v-decorator="[
+                  'outdoor_number',
+                  {
+                    rules: [
+                      { required: true, message: 'Favor de llenar el campo' }
+                    ]
+                  }
+                ]"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col
+            :lg="{ span: 9 }"
+            :md="{ span: 9 }"
+            :sm="{ span: 20 }"
+            :xs="{ span: 20 }"
+            :offset="2"
+          >
+            <a-form-item>
+              <a-input
+                placeholder="Colonia"
+                setFieldsValue="mayoralty"
+                v-decorator="[
+                  'mayoralty',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Ingrese su Colonia',
+                        whitespace: true
+                      }
+                    ]
+                  }
+                ]"
+              />
+            </a-form-item>
+          </a-col>
           <a-col :span="20" :offset="2">
             <a-form-item>
               <a-input
@@ -385,7 +503,12 @@
               />
             </a-form-item>
           </a-col>
-          <a-col :span="24">
+          <a-col
+            :xs="{ span: 24 }"
+            :sm="{ span: 24 }"
+            :md="{ span: 16, offset: 4 }"
+            :lg="{ span: 16, offset: 4 }"
+          >
             <a-form-item>
               <a-button
                 type="primary"
@@ -411,12 +534,7 @@ import moment from "moment";
 
 export default {
   props: {
-    success: Function,
-    failEmail: Function,
-    failIncorrect: Function,
-    failToken: Function,
     fail: Function,
-    fileList: Array,
     titleCard: String,
     success: Function,
     failEmail: Function,
@@ -425,7 +543,7 @@ export default {
     onStateChange: Function,
     states: Array,
     cities: Array,
-    workPositions: Array,
+    business: Array,
     isEmailInputDisable: Boolean,
     userEmail: String,
     userToken: String,
@@ -449,8 +567,9 @@ export default {
       this.form.validateFieldsAndScroll(async (err, values) => {
         if (!err) {
           console.log("Datos recibidos: ", values);
+          console.log(this.fileList[0].response);
           try {
-            const response = await this.$axios.post("user/esthederm", {
+            const response = await this.$axios.post("user/convenio", {
               name: values.name.toUpperCase(),
               lastName: values.lastName.toUpperCase(),
               nickName: values.nickName,
@@ -465,13 +584,15 @@ export default {
               password: values.password,
               postalCode: values.postalCode,
               state: values.state,
+              business: values.business,
               city: values.city,
-              clinic: values.chain,
-              town: values.town,
+              inner_number: values.inner_number,
+              outdoor_number: values.outdoor_number,
               mayoralty: values.mayoralty,
-              charge: values.charge,
+              street: values.street,
               userToken: this.userToken
             });
+            console.log({ response });
             if (response.data.status == 0) {
               this.success();
             } else if (response.data.status == 5) {

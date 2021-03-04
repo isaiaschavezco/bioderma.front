@@ -1,175 +1,118 @@
 <template>
   <div class="fl">
-    <a-menu
-      style="background: #526987; "
-      theme="dark"
-      mode="inline"
-      :selectedKeys="defaultKey"
-      @click="onMenuSelect"
-    >
-      <a-menu-item class="item" key="1">
-        <img
-          src="../assets/icons/Club_Bioderma_Inactivo.png"
-          class="icon"
-          alt
-        />
-        <span v-if="!collapsed">TIENDA</span>
-      </a-menu-item>
-      <a-menu-item class="item" key="2">
-        <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
-        <span v-if="!collapsed">CAMPAÑAS</span>
-      </a-menu-item>
-    </a-menu>
-
-    <a-col :xs="{ span: 20 }">
+    <a-layout :xs="{ span: 24 }" style="max-width: 78vw;">
+      <a-layout-sider>
+        <a-menu
+          style="background: #526987; margin-top:5rem; "
+          theme="dark"
+          mode="inline"
+          :selectedKeys="defaultKey"
+          @click="onMenuSelect"
+        >
+          <a-menu-item class="item" key="1">
+            <img
+              src="../assets/icons/Club_Bioderma_Inactivo.png"
+              class="icon"
+              alt
+            />
+            <span v-if="!collapsed">TIENDA</span>
+          </a-menu-item>
+          <a-menu-item class="item" key="2">
+            <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
+            <span v-if="!collapsed">CAMPAÑAS</span>
+          </a-menu-item>
+        </a-menu>
+      </a-layout-sider>
       <a-tabs
         default-active-key="1"
         tab-position="top"
-        style="background:white;"
+        style="background:white; min-width:85%; max-width:80%;"
+        class="ant-tabs-bar"
       >
         <a-tab-pane key="1" tab="NAOS">
           <a-layout>
-            <a-layout-header style="background:white; height:120px; ">
+            <a-layout-header class="header-tab">
               <a-row>
-                <a-col :span="12"> </a-col>
-                <a-col :span="12" style="">
+                <a-col :span="23" style="">
                   <a-form-item
                     label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; "
+                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
                   >
                     <a-switch default-checked />
                   </a-form-item>
                 </a-col>
               </a-row>
-              <a-row>
+              <a-row class="anuncio">
                 <a-col
                   :span="24"
-                  style=" text-align:center; display:flex; justify-items:center; "
+                  style=" text-align:center; display:flex; justify-content:center; "
                 >
-                  <p style="text-align:center; width:100%;">
+                  <a-tag color="rgb(202, 202, 202)" class="anuncio-tag">
                     Actualmente no tienes una campaña activa, ingresa al
                     apartado "Campañas" para generar una nueva.
-                  </p>
+                  </a-tag>
                 </a-col>
               </a-row>
             </a-layout-header>
-
-            <a-layout-content
-              class="card-container"
-              style="height: 50rem; margin-top: 10px;"
-            >
-              <a-skeleton
-                v-if="defaultKey[0] === '1'"
-                :loading="isLoagindProducts"
-                active
+            <a-layout>
+              <a-layout-content
+                class="card-container"
+                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
               >
-                <a-list
-                  :grid="{ gutter: 16, column: 4 }"
-                  :dataSource="proudcts"
-                  :style="{ overflow: 'scroll' }"
-                  style="height: 100%;"
+                <a-skeleton
+                  v-if="defaultKey[0] === '1'"
+                  :loading="isLoagindProducts"
+                  active
                 >
-                  <a-list-item slot="renderItem" slot-scope="item">
-                    <a-card style="min-height: 30rem;">
-                      <div class="campaing__header">
-                        <a-row :gutter="12">
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '15' }">
-                            <h2>
-                              {{
-                                item.title.length > 19
-                                  ? item.title.substring(0, 18) + "..."
-                                  : item.title
-                              }}
-                            </h2>
-                          </a-col>
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '9' }">
-                            <a-row
-                              class="camapaing__actions"
-                              type="flex"
-                              justify="space-between"
-                            >
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="edit"
-                                  @click="
-                                    gettingId(item.id),
-                                      gettingData(
-                                        item.title,
-                                        item.description,
-                                        item.points,
-                                        item.image
-                                      )
-                                  "
-                                />
-                              </a-col>
-
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="delete"
-                                  @click="
-                                    (deleteProductModal = true),
-                                      gettingId(item.id)
-                                  "
-                                />
-                              </a-col>
-                            </a-row>
-                          </a-col>
-                        </a-row>
-                      </div>
-                      <a-divider />
-                      <p class="center">
-                        <strong>{{ item.points }} puntos</strong>
-                      </p>
-                      <div style="height:9rem; text-align:center;">
-                        <img
-                          class="campaing__img"
-                          alt="example"
-                          :src="item.image"
-                        />
-                      </div>
-                      <div style="height: 5rem;" class="productDescription">
-                        <span style="font-weight: 700;">{{
-                          item.description
-                        }}</span>
-                      </div>
-                    </a-card>
-                  </a-list-item>
-                </a-list>
-              </a-skeleton>
-              <!-- ////////////////// -->
-              <a-table
-                v-if="defaultKey[0] === '2'"
-                :columns="columns"
-                :data-source="data"
-              >
-                <a slot="name" slot-scope="text">{{ text }}</a>
-                <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                <span slot="status">
-                  Finalizada
-                </span>
-                <span slot="order">
-                  <a>Ver pedido</a>
-                </span>
-                <span slot="close">
-                  <a-switch default-checked @change="onCloseCampaing" />
-                </span>
-                <span slot="action">
-                  <!-- @click="onShowUserInfo(record.email)" -->
-                  <!-- @change="onChange" -->
-                  <a-button shape="circle" icon="info" size="large" />
-                  <a-divider type="vertical" />
-                  <a-button
-                    shape="circle"
-                    icon="delete"
-                    size="large"
-                    @click="onCloseCampaing()"
-                  />
-                </span>
-              </a-table>
-            </a-layout-content>
+                  <a-list
+                    :grid="{ gutter: 16, column: 4 }"
+                    :dataSource="proudcts"
+                    :style="{ overflow: 'scroll' }"
+                    style="height: 100%;"
+                  >
+                    <a-list-item slot="renderItem" slot-scope="item">
+                      <CardProduct
+                        :item="item"
+                        :gettingId="gettingId"
+                        :gettingData="gettingData"
+                        :onDeleteProductModal="onDeleteProductModal"
+                      />
+                    </a-list-item>
+                  </a-list>
+                </a-skeleton>
+                <!-- ////////////////// -->
+                <a-table
+                  v-if="defaultKey[0] === '2'"
+                  :columns="columns"
+                  :data-source="data"
+                >
+                  <a slot="name" slot-scope="text">{{ text }}</a>
+                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
+                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
+                  <span slot="status">
+                    Finalizada
+                  </span>
+                  <span slot="order">
+                    <a>Ver pedido</a>
+                  </span>
+                  <span slot="close">
+                    <a-switch default-checked @change="onCloseCampaing" />
+                  </span>
+                  <span slot="action">
+                    <!-- @click="onShowUserInfo(record.email)" -->
+                    <!-- @change="onChange" -->
+                    <a-button shape="circle" icon="info" size="large" />
+                    <a-divider type="vertical" />
+                    <a-button
+                      shape="circle"
+                      icon="delete"
+                      size="large"
+                      @click="onCloseCampaing()"
+                    />
+                  </span>
+                </a-table>
+              </a-layout-content>
+            </a-layout>
           </a-layout>
         </a-tab-pane>
         <a-tab-pane
@@ -178,296 +121,178 @@
           style="height: 50rem; margin-top: 10px;"
         >
           <a-layout>
-            <a-layout-header style="background:white; height:120px; ">
+            <a-layout-header class="header-tab">
               <a-row>
-                <a-col :span="12"> </a-col>
-                <a-col :span="12" style="">
+                <a-col :span="23" style="">
                   <a-form-item
                     label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; "
+                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
                   >
                     <a-switch default-checked />
                   </a-form-item>
                 </a-col>
               </a-row>
-              <a-row>
+              <a-row class="anuncio">
                 <a-col
                   :span="24"
-                  style=" text-align:center; display:flex; justify-items:center; "
+                  style=" text-align:center; display:flex; justify-content:center; "
                 >
-                  <p style="text-align:center; width:100%;">
+                  <a-tag color="orange" class="anuncio-tag">
                     Actualmente no tienes una campaña activa, ingresa al
                     apartado "Campañas" para generar una nueva.
-                  </p>
+                  </a-tag>
                 </a-col>
               </a-row>
             </a-layout-header>
-
-            <a-layout-content
-              class="card-container"
-              style="height: 50rem; margin-top: 10px;"
-            >
-              <a-skeleton
-                v-if="defaultKey[0] === '1'"
-                :loading="isLoagindProducts"
-                active
+            <a-layout>
+              <a-layout-content
+                class="card-container"
+                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
               >
-                <a-list
-                  :grid="{ gutter: 16, column: 4 }"
-                  :dataSource="proudcts"
-                  :style="{ overflow: 'scroll' }"
-                  style="height: 100%;"
+                <a-skeleton
+                  v-if="defaultKey[0] === '1'"
+                  :loading="isLoagindProducts"
+                  active
                 >
-                  <a-list-item slot="renderItem" slot-scope="item">
-                    <a-card style="min-height: 30rem;">
-                      <div class="campaing__header">
-                        <a-row :gutter="12">
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '15' }">
-                            <h2>
-                              {{
-                                item.title.length > 19
-                                  ? item.title.substring(0, 18) + "..."
-                                  : item.title
-                              }}
-                            </h2>
-                          </a-col>
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '9' }">
-                            <a-row
-                              class="camapaing__actions"
-                              type="flex"
-                              justify="space-between"
-                            >
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="edit"
-                                  @click="
-                                    gettingId(item.id),
-                                      gettingData(
-                                        item.title,
-                                        item.description,
-                                        item.points,
-                                        item.image
-                                      )
-                                  "
-                                />
-                              </a-col>
-
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="delete"
-                                  @click="
-                                    (deleteProductModal = true),
-                                      gettingId(item.id)
-                                  "
-                                />
-                              </a-col>
-                            </a-row>
-                          </a-col>
-                        </a-row>
-                      </div>
-                      <a-divider />
-                      <p class="center">
-                        <strong>{{ item.points }} puntos</strong>
-                      </p>
-                      <div style="height:9rem; text-align:center;">
-                        <img
-                          class="campaing__img"
-                          alt="example"
-                          :src="item.image"
-                        />
-                      </div>
-                      <div style="height: 5rem;" class="productDescription">
-                        <span style="font-weight: 700;">{{
-                          item.description
-                        }}</span>
-                      </div>
-                    </a-card>
-                  </a-list-item>
-                </a-list>
-              </a-skeleton>
-              <!-- ////////////////// -->
-              <a-table
-                v-if="defaultKey[0] === '2'"
-                :columns="columns"
-                :data-source="data"
-              >
-                <a slot="name" slot-scope="text">{{ text }}</a>
-                <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                <span slot="status">
-                  Finalizada
-                </span>
-                <span slot="order">
-                  <a>Ver pedido</a>
-                </span>
-                <span slot="close">
-                  <a-switch default-checked @change="onCloseCampaing" />
-                </span>
-                <span slot="action">
-                  <!-- @click="onShowUserInfo(record.email)" -->
-                  <!-- @change="onChange" -->
-                  <a-button shape="circle" icon="info" size="large" />
-                  <a-divider type="vertical" />
-                  <a-button
-                    shape="circle"
-                    icon="delete"
-                    size="large"
-                    @click="onCloseCampaing()"
-                  />
-                </span>
-              </a-table>
-            </a-layout-content>
+                  <a-list
+                    :grid="{ gutter: 16, column: 4 }"
+                    :dataSource="proudcts"
+                    :style="{ overflow: 'scroll' }"
+                    style="height: 100%;"
+                  >
+                    <a-list-item slot="renderItem" slot-scope="item">
+                      <CardProduct
+                        :item="item"
+                        :gettingId="gettingId"
+                        :gettingData="gettingData"
+                        :onDeleteProductModal="onDeleteProductModal"
+                      />
+                    </a-list-item>
+                  </a-list>
+                </a-skeleton>
+                <!-- ////////////////// -->
+                <a-table
+                  v-if="defaultKey[0] === '2'"
+                  :columns="columns"
+                  :data-source="data"
+                >
+                  <a slot="name" slot-scope="text">{{ text }}</a>
+                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
+                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
+                  <span slot="status">
+                    Finalizada
+                  </span>
+                  <span slot="order">
+                    <a>Ver pedido</a>
+                  </span>
+                  <span slot="close">
+                    <a-switch default-checked @change="onCloseCampaing" />
+                  </span>
+                  <span slot="action">
+                    <!-- @click="onShowUserInfo(record.email)" -->
+                    <!-- @change="onChange" -->
+                    <a-button shape="circle" icon="info" size="large" />
+                    <a-divider type="vertical" />
+                    <a-button
+                      shape="circle"
+                      icon="delete"
+                      size="large"
+                      @click="onCloseCampaing()"
+                    />
+                  </span>
+                </a-table>
+              </a-layout-content>
+            </a-layout>
           </a-layout>
         </a-tab-pane>
         <a-tab-pane key="3" tab="CONVENIOS">
           <a-layout>
-            <a-layout-header style="background:white; height:120px; ">
+            <a-layout-header class="header-tab">
               <a-row>
-                <a-col :span="12"> </a-col>
-                <a-col :span="12" style="">
+                <a-col :span="23" style="">
                   <a-form-item
                     label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; "
+                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
                   >
                     <a-switch default-checked />
                   </a-form-item>
                 </a-col>
               </a-row>
-              <a-row>
+              <a-row class="anuncio">
                 <a-col
                   :span="24"
-                  style=" text-align:center; display:flex; justify-items:center; "
+                  style=" text-align:center; display:flex; justify-content:center; "
                 >
-                  <p style="text-align:center; width:100%;">
+                  <a-tag color="orange" class="anuncio-tag">
                     Actualmente no tienes una campaña activa, ingresa al
                     apartado "Campañas" para generar una nueva.
-                  </p>
+                  </a-tag>
                 </a-col>
               </a-row>
             </a-layout-header>
-
-            <a-layout-content
-              class="card-container"
-              style="height: 50rem; margin-top: 10px;"
-            >
-              <a-skeleton
-                v-if="defaultKey[0] === '1'"
-                :loading="isLoagindProducts"
-                active
+            <a-layout>
+              <a-layout-content
+                class="card-container"
+                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
               >
-                <a-list
-                  :grid="{ gutter: 16, column: 4 }"
-                  :dataSource="proudcts"
-                  :style="{ overflow: 'scroll' }"
-                  style="height: 100%;"
+                <a-skeleton
+                  v-if="defaultKey[0] === '1'"
+                  :loading="isLoagindProducts"
+                  active
                 >
-                  <a-list-item slot="renderItem" slot-scope="item">
-                    <a-card style="min-height: 30rem;">
-                      <div class="campaing__header">
-                        <a-row :gutter="12">
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '15' }">
-                            <h2>
-                              {{
-                                item.title.length > 19
-                                  ? item.title.substring(0, 18) + "..."
-                                  : item.title
-                              }}
-                            </h2>
-                          </a-col>
-                          <a-col :lg="{ span: '24' }" :xl="{ span: '9' }">
-                            <a-row
-                              class="camapaing__actions"
-                              type="flex"
-                              justify="space-between"
-                            >
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="edit"
-                                  @click="
-                                    gettingId(item.id),
-                                      gettingData(
-                                        item.title,
-                                        item.description,
-                                        item.points,
-                                        item.image
-                                      )
-                                  "
-                                />
-                              </a-col>
-
-                              <a-col span="8">
-                                <a-icon
-                                  class="campaing__action"
-                                  type="delete"
-                                  @click="
-                                    (deleteProductModal = true),
-                                      gettingId(item.id)
-                                  "
-                                />
-                              </a-col>
-                            </a-row>
-                          </a-col>
-                        </a-row>
-                      </div>
-                      <a-divider />
-                      <p class="center">
-                        <strong>{{ item.points }} puntos</strong>
-                      </p>
-                      <div style="height:9rem; text-align:center;">
-                        <img
-                          class="campaing__img"
-                          alt="example"
-                          :src="item.image"
-                        />
-                      </div>
-                      <div style="height: 5rem;" class="productDescription">
-                        <span style="font-weight: 700;">{{
-                          item.description
-                        }}</span>
-                      </div>
-                    </a-card>
-                  </a-list-item>
-                </a-list>
-              </a-skeleton>
-              <!-- ////////////////// -->
-              <a-table
-                v-if="defaultKey[0] === '2'"
-                :columns="columns"
-                :data-source="data"
-              >
-                <a slot="name" slot-scope="text">{{ text }}</a>
-                <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                <span slot="status">
-                  Finalizada
-                </span>
-                <span slot="order">
-                  <a>Ver pedido</a>
-                </span>
-                <span slot="close">
-                  <a-switch default-checked @change="onCloseCampaing" />
-                </span>
-                <span slot="action">
-                  <!-- @click="onShowUserInfo(record.email)" -->
-                  <!-- @change="onChange" -->
-                  <a-button shape="circle" icon="info" size="large" />
-                  <a-divider type="vertical" />
-                  <a-button
-                    shape="circle"
-                    icon="delete"
-                    size="large"
-                    @click="onCloseCampaing()"
-                  />
-                </span>
-              </a-table>
-            </a-layout-content>
+                  <a-list
+                    :grid="{ gutter: 16, column: 4 }"
+                    :dataSource="proudcts"
+                    :style="{ overflow: 'scroll' }"
+                    style="height: 100%;"
+                  >
+                    <a-list-item slot="renderItem" slot-scope="item">
+                      <CardProduct
+                        :item="item"
+                        :gettingId="gettingId"
+                        :gettingData="gettingData"
+                        :onDeleteProductModal="onDeleteProductModal"
+                      />
+                    </a-list-item>
+                  </a-list>
+                </a-skeleton>
+                <!-- ////////////////// -->
+                <a-table
+                  v-if="defaultKey[0] === '2'"
+                  :columns="columns"
+                  :data-source="data"
+                >
+                  <a slot="name" slot-scope="text">{{ text }}</a>
+                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
+                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
+                  <span slot="status">
+                    Finalizada
+                  </span>
+                  <span slot="order">
+                    <a>Ver pedido</a>
+                  </span>
+                  <span slot="close">
+                    <a-switch default-checked @change="onCloseCampaing" />
+                  </span>
+                  <span slot="action">
+                    <!-- @click="onShowUserInfo(record.email)" -->
+                    <!-- @change="onChange" -->
+                    <a-button shape="circle" icon="info" size="large" />
+                    <a-divider type="vertical" />
+                    <a-button
+                      shape="circle"
+                      icon="delete"
+                      size="large"
+                      @click="onCloseCampaing()"
+                    />
+                  </span>
+                </a-table>
+              </a-layout-content>
+            </a-layout>
           </a-layout>
         </a-tab-pane>
       </a-tabs>
-    </a-col>
+    </a-layout>
     <a-col
       class="column-right-club"
       :xs="{ span: 2 }"
@@ -786,6 +611,7 @@
 <script>
 import { ok } from "assert";
 import moment from "moment";
+import CardProduct from "../components/stores/CardProduct";
 
 const columns = [
   {
@@ -850,6 +676,7 @@ const data = [
 
 export default {
   components: {
+    CardProduct
     //  FormFilter
   },
 
@@ -918,6 +745,9 @@ export default {
           description: "Ha ocurrido un error al cargar los productos."
         });
       }
+    },
+    onDeleteProductModal() {
+      this.deleteProductModal = true;
     },
     onMenuSelect(e) {
       switch (e.key) {
@@ -1176,7 +1006,9 @@ export default {
   object-fit: contain;
   cursor: pointer;
 }
-
+.ant-tabs-bar {
+  margin-bottom: 0 !important;
+}
 .side_inner {
   max-height: 100%;
   height: 100%;
@@ -1187,5 +1019,20 @@ export default {
 }
 .fl {
   display: flex;
+  min-width: 100%;
+}
+.anuncio {
+  width: 100%;
+}
+.anuncio-tag {
+  width: 100%;
+  height: 100%;
+  padding: 0.2rem 0;
+  margin-right: 0;
+}
+.header-tab {
+  background: white;
+  height: 80px;
+  padding: 0;
 }
 </style>

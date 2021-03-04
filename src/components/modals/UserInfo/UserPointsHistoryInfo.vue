@@ -14,7 +14,7 @@
             <p class="name-history-info">{{ record.name.toUpperCase() }}</p>
           </a-col>
           <a-col class="amount-history-info" span="12">
-            <p>
+            <p style="margin-right:14px;">
               {{ record.points }} PTS
               <Space size="middle">
                 <a-tag
@@ -26,8 +26,15 @@
                 </a-tag>
               </Space>
             </p>
+            <p>
+              <Space size="middle">
+                <a-tag class="ml-4" v-if="record.isDeleted" color="red">
+                  Terminada
+                </a-tag>
+              </Space>
+            </p>
           </a-col>
-          <a-col class="amount-history-info" span="12">
+          <a-col v-if="!record.isDeleted" class="amount-history-info" span="12">
             <Space size="middle">
               <a-button
                 class="mt-4"
@@ -64,7 +71,7 @@ export default {
   },
   methods: {
     handleRestartTrivia(id, record) {
-      let restart = this.restartPointsUser
+      let restart = this.restartPointsUser;
       this.$confirm({
         title: "¿Estás seguro que deseas eliminar estos puntos?",
         okText: "Si, lo estoy",
@@ -72,7 +79,7 @@ export default {
         cancelText: "CANCELAR",
         centered: true,
         onOk() {
-          restart(id,record.quizz_id.id);
+          restart(id, record.quizz_id.id);
         },
         onCancel() {}
       });
