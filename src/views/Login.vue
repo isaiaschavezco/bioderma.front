@@ -3,9 +3,23 @@
     <a-layout-content>
       <a-row type="flex" justify="center" style="height: 100%;">
         <a-col :xs="{ span: 11 }" style="height: 100%;">
-          <a-card class="container-logos" style="padding: 2rem; height: 100%;" align="middle">
-            <img class="logo-naos" alt="logo-naos" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/Logo_NAOS.png" width="300" />
-            <img class="logo-bioderma" alt="example" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/logo.png" width="130" />
+          <a-card
+            class="container-logos"
+            style="padding: 2rem; height: 100%;"
+            align="middle"
+          >
+            <img
+              class="logo-naos"
+              alt="logo-naos"
+              src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/Logo_NAOS.png"
+              width="300"
+            />
+            <img
+              class="logo-bioderma"
+              alt="example"
+              src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/logo.png"
+              width="130"
+            />
             <div class="form-login">
               <a-form
                 id="components-form-demo-normal-login"
@@ -16,24 +30,46 @@
                 <a-form-item>
                   <a-input
                     v-decorator="[
-          'user',
-          { rules: [{ required: true, message: 'Favor de ingresar su usuario.' }] }
-        ]"
+                      'user',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Favor de ingresar su usuario.'
+                          }
+                        ]
+                      }
+                    ]"
                     placeholder="Usuario"
                   >
-                    <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
+                    <a-icon
+                      slot="prefix"
+                      type="user"
+                      style="color: rgba(0,0,0,.25)"
+                    />
                   </a-input>
                 </a-form-item>
                 <a-form-item>
                   <a-input
                     v-decorator="[
-          'password',
-          { rules: [{ required: true, message: 'Favor de ingresar su contraseña.' }] }
-        ]"
+                      'password',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Favor de ingresar su contraseña.'
+                          }
+                        ]
+                      }
+                    ]"
                     type="password"
                     placeholder="Contraseña"
                   >
-                    <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
+                    <a-icon
+                      slot="prefix"
+                      type="lock"
+                      style="color: rgba(0,0,0,.25)"
+                    />
                   </a-input>
                 </a-form-item>
                 <a-form-item>
@@ -44,7 +80,8 @@
                       class="login-form-button"
                       style="background-color:#526987; border: 1px solid #707070;"
                       :loading="loadingSignIn"
-                    >ENTRAR</a-button>
+                      >ENTRAR</a-button
+                    >
                   </a-row>
                 </a-form-item>
               </a-form>
@@ -53,7 +90,11 @@
         </a-col>
         <a-col :xs="{ span: 13 }" style="height: 100%;">
           <div class="container-logo-pretty">
-            <img class="logo-pretty" alt="bg_naosapp" src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/bg_naosapp.jpg" />
+            <img
+              class="logo-pretty"
+              alt="bg_naosapp"
+              src="https://bioderma-space.sfo2.digitaloceanspaces.com/assets/bg_naosapp.jpg"
+            />
           </div>
         </a-col>
       </a-row>
@@ -78,7 +119,7 @@ export default {
           this.loadingSignIn = true;
           try {
             const loginInfo = {
-              email: values.user,
+              email: values.user.trim(),
               password: values.password
             };
 

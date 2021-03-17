@@ -14,16 +14,35 @@
                 <a-card style="min-height: 30rem;">
                   <div class="campaing__header">
                     <a-row :gutter="12">
-                      <a-col :lg="{span:'24'}" :xl="{span:'15'}">
-                        <h2>{{ item.title.length > 19 ? item.title.substring(0, 18) + '...': item.title }}</h2>
+                      <a-col :lg="{ span: '24' }" :xl="{ span: '15' }">
+                        <h2>
+                          {{
+                            item.title.length > 19
+                              ? item.title.substring(0, 18) + "..."
+                              : item.title
+                          }}
+                        </h2>
                       </a-col>
-                      <a-col :lg="{span:'24'}" :xl="{span:'9'}">
-                        <a-row class="camapaing__actions" type="flex" justify="space-between">
+                      <a-col :lg="{ span: '24' }" :xl="{ span: '9' }">
+                        <a-row
+                          class="camapaing__actions"
+                          type="flex"
+                          justify="space-between"
+                        >
                           <a-col span="8">
                             <a-icon
                               class="campaing__action"
                               type="edit"
-                              @click="gettingId(item.id), gettingData(item.title,item.description,item.points,item.image)"
+                              @click="
+                                gettingId(item.id),
+                                  gettingData(
+                                    item.title,
+                                    item.description,
+                                    item.points,
+                                    item.price,
+                                    item.image
+                                  )
+                              "
                             />
                           </a-col>
 
@@ -31,7 +50,9 @@
                             <a-icon
                               class="campaing__action"
                               type="delete"
-                              @click="(deleteProductModal=true), gettingId(item.id)"
+                              @click="
+                                (deleteProductModal = true), gettingId(item.id)
+                              "
                             />
                           </a-col>
                         </a-row>
@@ -42,11 +63,20 @@
                   <p class="center">
                     <strong>{{ item.points }} puntos</strong>
                   </p>
+                  <p class="center">
+                    <strong>{{ item.price }} pesos</strong>
+                  </p>
                   <div style="height:9rem; text-align:center;">
-                    <img class="campaing__img" alt="example" :src="item.image" />
+                    <img
+                      class="campaing__img"
+                      alt="example"
+                      :src="item.image"
+                    />
                   </div>
                   <div style="height: 5rem;" class="productDescription">
-                    <span style="font-weight: 700;">{{ item.description }}</span>
+                    <span style="font-weight: 700;">{{
+                      item.description
+                    }}</span>
                   </div>
                   <!-- <template class="ant-card-actions" slot="actions">
                   <a-icon
@@ -68,7 +98,12 @@
       >
         <a-row>
           <a-col>
-            <a-button shape="circle" icon="plus" size="large" @click="onOpenNewProductModal" />
+            <a-button
+              shape="circle"
+              icon="plus"
+              size="large"
+              @click="onOpenNewProductModal"
+            />
           </a-col>
           <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
         </a-row>
@@ -85,7 +120,12 @@
     >
       <p>¿Estás seguro de querer eliminar este producto?</p>
     </a-modal>
-    <a-modal title="EDITAR PRODUCTO" v-model="editProductModal" :maskClosable="false" centered>
+    <a-modal
+      title="EDITAR PRODUCTO"
+      v-model="editProductModal"
+      :maskClosable="false"
+      centered
+    >
       <a-form :form="fileFormEdit">
         <a-form-item>
           <a-input
@@ -135,13 +175,22 @@
               :fileList="fileList"
             >
               <p class="ant-upload-drag-icon">
-                <img style="max-width:13rem; max-height:8rem;" alt="example" :src="this.newImage" />
+                <img
+                  style="max-width:13rem; max-height:8rem;"
+                  alt="example"
+                  :src="this.newImage"
+                />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
-              <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+              <p class="ant-upload-text">
+                Selecciona o suelta una imagen para tu producto
+              </p>
+              <p class="ant-upload-hint">
+                Unicamente archivos .png, .jpg o .jpge
+              </p>
             </a-upload-dragger>
           </div>
         </a-form-item>
+
         <a-form-item class="center">
           Costo
           <a-input-number
@@ -154,10 +203,27 @@
               'points',
               {
                 initialValue: this.newPoints,
-                rules: [{ required: true, message: 'Favor de llenar el campo'}]
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
             ]"
           />&nbsp;Pts
+        </a-form-item>
+        <a-form-item class="center">
+          Precio
+          <a-input-number
+            type="number"
+            setFieldsValue="price"
+            :min="0"
+            class="input-cost"
+            size="small"
+            v-decorator="[
+              'price',
+              {
+                initialValue: this.newPrice,
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+          />&nbsp;pesos.
         </a-form-item>
       </a-form>
       <template slot="footer">
@@ -166,11 +232,17 @@
             type="primary"
             style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
             @click="onSubmitEditProduct"
-          >EDITAR</a-button>
+            >EDITAR</a-button
+          >
         </div>
       </template>
     </a-modal>
-    <a-modal title="NUEVO PRODUCTO" v-model="addProductModal" :maskClosable="false" centered>
+    <a-modal
+      title="NUEVO PRODUCTO"
+      v-model="addProductModal"
+      :maskClosable="false"
+      centered
+    >
       <a-form :form="fileForm">
         <a-form-item>
           <a-input
@@ -222,8 +294,12 @@
               <p class="ant-upload-drag-icon">
                 <a-icon type="picture" />
               </p>
-              <p class="ant-upload-text">Selecciona o suelta una imagen para tu producto</p>
-              <p class="ant-upload-hint">Unicamente archivos .png, .jpg o .jpge</p>
+              <p class="ant-upload-text">
+                Selecciona o suelta una imagen para tu producto
+              </p>
+              <p class="ant-upload-hint">
+                Unicamente archivos .png, .jpg o .jpge
+              </p>
             </a-upload-dragger>
           </div>
         </a-form-item>
@@ -239,10 +315,27 @@
             v-decorator="[
               'points',
               {
-                rules: [{ required: true,  message: 'Favor de llenar el campo' }],
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
               }
             ]"
           />&nbsp;Pts
+        </a-form-item>
+        <a-form-item class="center">
+          Precio (sin decimales)
+          <a-input-number
+            type="number"
+            :min="1"
+            setFieldsValue="price"
+            placeholder="$"
+            class="input-cost"
+            size="small"
+            v-decorator="[
+              'price',
+              {
+                rules: [{ required: true, message: 'Favor de llenar el campo' }]
+              }
+            ]"
+          />&nbsp;pesos.
         </a-form-item>
       </a-form>
       <template slot="footer">
@@ -251,7 +344,8 @@
             type="primary"
             style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
             @click="onSubmitPictureForm"
-          >PUBLICAR</a-button>
+            >PUBLICAR</a-button
+          >
         </div>
       </template>
     </a-modal>
@@ -271,11 +365,13 @@ export default {
         "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
       description: "",
       points: "",
+      price: "",
       productId: "",
       newId: "",
       newTitle: "",
       newDescription: "",
       newPoints: "",
+      newPrice: "",
       newImage: "",
       proudcts: [
         {
@@ -284,6 +380,7 @@ export default {
           image: "",
           description: "",
           points: 0,
+          price: 0,
           isActive: true
         }
       ],
@@ -305,7 +402,7 @@ export default {
       try {
         this.isLoagindProducts = true;
         const responseList = await this.$axios.get("product");
-        //console.log(responseList.data.products);
+        console.log(responseList.data.products);
         this.proudcts = responseList.data.products;
         this.isLoagindProducts = false;
       } catch (err) {
@@ -325,12 +422,15 @@ export default {
       this.deleteProduct(this.newId);
       this.deleteProductModal = false;
     },
-    gettingData(title, description, points, image) {
+    gettingData(title, description, points, price, image) {
+      console.log({ price });
       this.fileList = [];
       this.newTitle = title;
       this.newDescription = description;
       this.newPoints = points;
+      this.newPrice = price;
       this.newImage = image;
+      console.log(this.newPrice);
       this.fileFormEdit.resetFields();
       this.editProductModal = true;
     },
@@ -351,7 +451,7 @@ export default {
           // console.log("Datos recibidos: ", image);
           try {
             // console.log("VALUES: ", values);
-            const response = await this.$axios.put("product", {
+            const editProductDTO = {
               productId: this.newId,
               title: values.title,
               image:
@@ -360,8 +460,14 @@ export default {
                   ? this.newImage
                   : values.upload.fileList[0].response,
               description: values.description,
-              points: values.points
-            });
+              points: values.points,
+              price: values.price
+            };
+
+            console.log(editProductDTO);
+
+            const response = await this.$axios.put("product", editProductDTO);
+
             if (response.data.status == 0) {
               this.fileFormEdit.resetFields();
               this.fileList = [];
@@ -373,7 +479,7 @@ export default {
           } catch (error) {
             this.$notification["error"]({
               message: "Ha ocurrido un error",
-              description: "Ha ocurdido un error durante esta acción."
+              description: `Ha ocurdido un error durante esta acción. ${error.message}`
             });
           }
         }
@@ -421,12 +527,15 @@ export default {
         if (!err) {
           // console.log("Datos recibidos: ", values);
           try {
-            const response = await this.$axios.post("product", {
+            const newProductDTO = {
               title: values.title,
               image: values.upload.fileList[0].response,
               description: values.description,
-              points: values.points
-            });
+              points: values.points,
+              price: values.price
+            };
+            console.log({ newProductDTO });
+            const response = await this.$axios.post("product", newProductDTO);
             if (response.data.status == 0) {
               this.success();
               this.fileForm.resetFields();
@@ -438,7 +547,7 @@ export default {
           } catch (error) {
             this.$notification["error"]({
               message: "Ha ocurrido un error",
-              description: "Ha ocurdido un error para esta acción."
+              description: `Ha ocurdido un error para esta acción. ${error.message}`
             });
           }
         }

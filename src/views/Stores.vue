@@ -1,295 +1,57 @@
 <template>
   <div class="fl">
-    <a-layout :xs="{ span: 24 }" style="max-width: 78vw;">
-      <a-layout-sider>
-        <a-menu
-          style="background: #526987; margin-top:5rem; "
-          theme="dark"
-          mode="inline"
-          :selectedKeys="defaultKey"
-          @click="onMenuSelect"
-        >
-          <a-menu-item class="item" key="1">
-            <img
-              src="../assets/icons/Club_Bioderma_Inactivo.png"
-              class="icon"
-              alt
-            />
-            <span v-if="!collapsed">TIENDA</span>
-          </a-menu-item>
-          <a-menu-item class="item" key="2">
-            <img src="../assets/icons/Trivia_Inactivo.png" class="icon" alt />
-            <span v-if="!collapsed">CAMPAÑAS</span>
-          </a-menu-item>
-        </a-menu>
-      </a-layout-sider>
+    <a-layout :xs="{ span: 24 }" style="min-width:78vw; max-width: 78vw;">
       <a-tabs
         default-active-key="1"
         tab-position="top"
-        style="background:white; min-width:85%; max-width:80%;"
+        style="background:white; min-width:100%; max-width:100%;"
         class="ant-tabs-bar"
+        @change="onChangeTab"
       >
-        <a-tab-pane key="1" tab="NAOS">
-          <a-layout>
-            <a-layout-header class="header-tab">
-              <a-row>
-                <a-col :span="23" style="">
-                  <a-form-item
-                    label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
-                  >
-                    <a-switch default-checked />
-                  </a-form-item>
-                </a-col>
-              </a-row>
-              <a-row class="anuncio">
-                <a-col
-                  :span="24"
-                  style=" text-align:center; display:flex; justify-content:center; "
-                >
-                  <a-tag color="rgb(202, 202, 202)" class="anuncio-tag">
-                    Actualmente no tienes una campaña activa, ingresa al
-                    apartado "Campañas" para generar una nueva.
-                  </a-tag>
-                </a-col>
-              </a-row>
-            </a-layout-header>
-            <a-layout>
-              <a-layout-content
-                class="card-container"
-                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
-              >
-                <a-skeleton
-                  v-if="defaultKey[0] === '1'"
-                  :loading="isLoagindProducts"
-                  active
-                >
-                  <a-list
-                    :grid="{ gutter: 16, column: 4 }"
-                    :dataSource="proudcts"
-                    :style="{ overflow: 'scroll' }"
-                    style="height: 100%;"
-                  >
-                    <a-list-item slot="renderItem" slot-scope="item">
-                      <CardProduct
-                        :item="item"
-                        :gettingId="gettingId"
-                        :gettingData="gettingData"
-                        :onDeleteProductModal="onDeleteProductModal"
-                      />
-                    </a-list-item>
-                  </a-list>
-                </a-skeleton>
-                <!-- ////////////////// -->
-                <a-table
-                  v-if="defaultKey[0] === '2'"
-                  :columns="columns"
-                  :data-source="data"
-                >
-                  <a slot="name" slot-scope="text">{{ text }}</a>
-                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                  <span slot="status">
-                    Finalizada
-                  </span>
-                  <span slot="order">
-                    <a>Ver pedido</a>
-                  </span>
-                  <span slot="close">
-                    <a-switch default-checked @change="onCloseCampaing" />
-                  </span>
-                  <span slot="action">
-                    <!-- @click="onShowUserInfo(record.email)" -->
-                    <!-- @change="onChange" -->
-                    <a-button shape="circle" icon="info" size="large" />
-                    <a-divider type="vertical" />
-                    <a-button
-                      shape="circle"
-                      icon="delete"
-                      size="large"
-                      @click="onCloseCampaing()"
-                    />
-                  </span>
-                </a-table>
-              </a-layout-content>
-            </a-layout>
-          </a-layout>
+        <a-tab-pane
+          key="1"
+          tab="NAOS"
+          :disabled="blockStores && activeTab !== 1"
+        >
+          <store
+            :typeStore="1"
+            :stepStore="stepStore"
+            :changeRestartSteps="changeRestartSteps"
+            :changeStepStore="changeStepStore"
+            :proudcts="proudcts"
+            :changeBlockState="changeBlockState"
+            :setProductsList="setProductsList"
+          />
         </a-tab-pane>
         <a-tab-pane
           key="2"
           tab="FARMACIAS"
-          style="height: 50rem; margin-top: 10px;"
+          :disabled="blockStores && activeTab !== 2"
         >
-          <a-layout>
-            <a-layout-header class="header-tab">
-              <a-row>
-                <a-col :span="23" style="">
-                  <a-form-item
-                    label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
-                  >
-                    <a-switch default-checked />
-                  </a-form-item>
-                </a-col>
-              </a-row>
-              <a-row class="anuncio">
-                <a-col
-                  :span="24"
-                  style=" text-align:center; display:flex; justify-content:center; "
-                >
-                  <a-tag color="orange" class="anuncio-tag">
-                    Actualmente no tienes una campaña activa, ingresa al
-                    apartado "Campañas" para generar una nueva.
-                  </a-tag>
-                </a-col>
-              </a-row>
-            </a-layout-header>
-            <a-layout>
-              <a-layout-content
-                class="card-container"
-                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
-              >
-                <a-skeleton
-                  v-if="defaultKey[0] === '1'"
-                  :loading="isLoagindProducts"
-                  active
-                >
-                  <a-list
-                    :grid="{ gutter: 16, column: 4 }"
-                    :dataSource="proudcts"
-                    :style="{ overflow: 'scroll' }"
-                    style="height: 100%;"
-                  >
-                    <a-list-item slot="renderItem" slot-scope="item">
-                      <CardProduct
-                        :item="item"
-                        :gettingId="gettingId"
-                        :gettingData="gettingData"
-                        :onDeleteProductModal="onDeleteProductModal"
-                      />
-                    </a-list-item>
-                  </a-list>
-                </a-skeleton>
-                <!-- ////////////////// -->
-                <a-table
-                  v-if="defaultKey[0] === '2'"
-                  :columns="columns"
-                  :data-source="data"
-                >
-                  <a slot="name" slot-scope="text">{{ text }}</a>
-                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                  <span slot="status">
-                    Finalizada
-                  </span>
-                  <span slot="order">
-                    <a>Ver pedido</a>
-                  </span>
-                  <span slot="close">
-                    <a-switch default-checked @change="onCloseCampaing" />
-                  </span>
-                  <span slot="action">
-                    <!-- @click="onShowUserInfo(record.email)" -->
-                    <!-- @change="onChange" -->
-                    <a-button shape="circle" icon="info" size="large" />
-                    <a-divider type="vertical" />
-                    <a-button
-                      shape="circle"
-                      icon="delete"
-                      size="large"
-                      @click="onCloseCampaing()"
-                    />
-                  </span>
-                </a-table>
-              </a-layout-content>
-            </a-layout>
-          </a-layout>
+          <store
+            :typeStore="2"
+            :stepStore="stepStore"
+            :changeRestartSteps="changeRestartSteps"
+            :changeStepStore="changeStepStore"
+            :proudcts="proudcts"
+            :changeBlockState="changeBlockState"
+            :setProductsList="setProductsList"
+          />
         </a-tab-pane>
-        <a-tab-pane key="3" tab="CONVENIOS">
-          <a-layout>
-            <a-layout-header class="header-tab">
-              <a-row>
-                <a-col :span="23" style="">
-                  <a-form-item
-                    label="Activar/Desactivar"
-                    style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:0; margin-top:0; "
-                  >
-                    <a-switch default-checked />
-                  </a-form-item>
-                </a-col>
-              </a-row>
-              <a-row class="anuncio">
-                <a-col
-                  :span="24"
-                  style=" text-align:center; display:flex; justify-content:center; "
-                >
-                  <a-tag color="orange" class="anuncio-tag">
-                    Actualmente no tienes una campaña activa, ingresa al
-                    apartado "Campañas" para generar una nueva.
-                  </a-tag>
-                </a-col>
-              </a-row>
-            </a-layout-header>
-            <a-layout>
-              <a-layout-content
-                class="card-container"
-                style="height: 50rem; padding:3rem;background:white; padding-top: 10px;"
-              >
-                <a-skeleton
-                  v-if="defaultKey[0] === '1'"
-                  :loading="isLoagindProducts"
-                  active
-                >
-                  <a-list
-                    :grid="{ gutter: 16, column: 4 }"
-                    :dataSource="proudcts"
-                    :style="{ overflow: 'scroll' }"
-                    style="height: 100%;"
-                  >
-                    <a-list-item slot="renderItem" slot-scope="item">
-                      <CardProduct
-                        :item="item"
-                        :gettingId="gettingId"
-                        :gettingData="gettingData"
-                        :onDeleteProductModal="onDeleteProductModal"
-                      />
-                    </a-list-item>
-                  </a-list>
-                </a-skeleton>
-                <!-- ////////////////// -->
-                <a-table
-                  v-if="defaultKey[0] === '2'"
-                  :columns="columns"
-                  :data-source="data"
-                >
-                  <a slot="name" slot-scope="text">{{ text }}</a>
-                  <span slot="customTitle"> NOMBRE DE LA CAMPAÑA</span>
-                  <span slot="validity"> DEL 01/01/2020 AL 29/02/2022</span>
-                  <span slot="status">
-                    Finalizada
-                  </span>
-                  <span slot="order">
-                    <a>Ver pedido</a>
-                  </span>
-                  <span slot="close">
-                    <a-switch default-checked @change="onCloseCampaing" />
-                  </span>
-                  <span slot="action">
-                    <!-- @click="onShowUserInfo(record.email)" -->
-                    <!-- @change="onChange" -->
-                    <a-button shape="circle" icon="info" size="large" />
-                    <a-divider type="vertical" />
-                    <a-button
-                      shape="circle"
-                      icon="delete"
-                      size="large"
-                      @click="onCloseCampaing()"
-                    />
-                  </span>
-                </a-table>
-              </a-layout-content>
-            </a-layout>
-          </a-layout>
+        <a-tab-pane
+          :disabled="blockStores && activeTab !== 3"
+          key="3"
+          tab="CONVENIOS"
+        >
+          <store
+            :typeStore="4"
+            :stepStore="stepStore"
+            :changeRestartSteps="changeRestartSteps"
+            :changeStepStore="changeStepStore"
+            :proudcts="proudcts"
+            :changeBlockState="changeBlockState"
+            :setProductsList="setProductsList"
+          />
         </a-tab-pane>
       </a-tabs>
     </a-layout>
@@ -298,404 +60,43 @@
       :xs="{ span: 2 }"
       style="text-align:center; margin-top: 78px"
     >
-      <a-row v-if="defaultKey[0] === '1'">
+      <a-row v-if="stepStore === null">
         <a-col>
           <a-button
             shape="circle"
             icon="plus"
             size="large"
-            @click="onOpenNewProductModal"
-          />
-        </a-col>
-        <a-col class="title-span-tag">AÑADIR PRODUCTO</a-col>
-      </a-row>
-      <br />
-      <a-row v-if="defaultKey[0] === '2'">
-        <a-col>
-          <a-button
-            shape="circle"
-            icon="plus"
-            size="large"
-            @click="onOpenNewCampaingModal"
+            @click="onOpenNewCampaing"
           />
         </a-col>
         <a-col class="title-span-tag"> NUEVA CAMPAÑA</a-col>
       </a-row>
     </a-col>
-    <a-modal
-      title="ELIMINAR PRODUCTO"
-      v-model="deleteProductModal"
-      @ok="deletingModal"
-      okText="ELIMINAR"
-      cancelText="CANCELAR"
-      okType="danger"
-    >
-      <p>¿Estás seguro de querer eliminar este producto?</p>
-    </a-modal>
-    <a-modal
-      title="ELIMINAR CAMPAÑA"
-      v-model="deleteProductModal"
-      @ok="deletingModal"
-      okText="ELIMINAR"
-      cancelText="CANCELAR"
-      okType="danger"
-    >
-      <p>¿Estás seguro de querer eliminar este producto?</p>
-    </a-modal>
-    <a-modal
-      title="CERRAR CAMPAÑA"
-      v-model="closeCampaingModal"
-      @ok="closingModal"
-      okText="ACEPTAR"
-      cancelText="CANCELAR"
-      okType="primary"
-    >
-      <p>
-        Si cierras la campaña la tienda ya no se mostrará dentro de la
-        aplicación.
-      </p>
-      <p>¿Estás seguro que deseas cerrar la campaña?</p>
-    </a-modal>
-    <a-modal
-      title="EDITAR PRODUCTO"
-      v-model="editProductModal"
-      :maskClosable="false"
-      centered
-    >
-      <a-form :form="fileFormEdit">
-        <a-form-item>
-          <a-input
-            setFieldsValue="title"
-            v-decorator="[
-              'title',
-              {
-                initialValue: this.newTitle,
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-textarea
-            setFieldsValue="description"
-            :rows="4"
-            v-decorator="[
-              'description',
-              {
-                initialValue: this.newDescription,
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <div class="dropbox">
-            <a-upload-dragger
-              v-decorator="[
-                'upload',
-                {
-                  rules: [
-                    {
-                      required: false,
-                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
-                    }
-                  ]
-                }
-              ]"
-              name="upload"
-              action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
-              accept=".png, .jpg, jpge"
-              listType="picture"
-              @change="handleChangeFileUpload"
-              :beforeUpload="beforeUpload"
-              :fileList="fileList"
-            >
-              <p class="ant-upload-drag-icon">
-                <img
-                  style="max-width:13rem; max-height:8rem;"
-                  alt="example"
-                  :src="this.newImage"
-                />
-              </p>
-              <p class="ant-upload-text">
-                Selecciona o suelta una imagen para tu producto
-              </p>
-              <p class="ant-upload-hint">
-                Unicamente archivos .png, .jpg o .jpge
-              </p>
-            </a-upload-dragger>
-          </div>
-        </a-form-item>
-        <a-form-item class="center">
-          Costo
-          <a-input-number
-            type="number"
-            :min="1"
-            setFieldsValue="points"
-            class="input-cost"
-            size="small"
-            v-decorator="[
-              'points',
-              {
-                initialValue: this.newPoints,
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />&nbsp;Pts
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <div style="text-align:center;">
-          <a-button
-            type="primary"
-            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="onSubmitEditProduct"
-            >EDITAR</a-button
-          >
-        </div>
-      </template>
-    </a-modal>
-    <a-modal
-      title="NUEVO PRODUCTO"
-      v-model="addProductModal"
-      :maskClosable="false"
-      centered
-    >
-      <a-form :form="fileForm">
-        <a-form-item>
-          <a-input
-            setFieldsValue="title"
-            placeholder="Ingresa el nombre del producto"
-            v-decorator="[
-              'title',
-              {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-textarea
-            setFieldsValue="description"
-            placeholder="Ingresa la descripcion del producto"
-            :rows="4"
-            v-decorator="[
-              'description',
-              {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item>
-          <div class="dropbox">
-            <a-upload-dragger
-              v-decorator="[
-                'upload',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Favor de cargar un archivo JPG, PNG o JPGE'
-                    }
-                  ]
-                }
-              ]"
-              name="upload"
-              action="https://bioderma-api-inmersys.herokuapp.com/upload/2"
-              accept=".png, .jpg, jpge"
-              @change="handleChangeFileUpload"
-              :beforeUpload="beforeUpload"
-              :fileList="fileList"
-              listType="picture"
-            >
-              <p class="ant-upload-drag-icon">
-                <a-icon type="picture" />
-              </p>
-              <p class="ant-upload-text">
-                Selecciona o suelta una imagen para tu producto
-              </p>
-              <p class="ant-upload-hint">
-                Unicamente archivos .png, .jpg o .jpge
-              </p>
-            </a-upload-dragger>
-          </div>
-        </a-form-item>
-        <a-form-item class="center">
-          Costo
-          <a-input-number
-            type="number"
-            :min="1"
-            setFieldsValue="points"
-            placeholder="Pts"
-            class="input-cost"
-            size="small"
-            v-decorator="[
-              'points',
-              {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />&nbsp;Pts
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <div style="text-align: center;">
-          <a-button
-            type="primary"
-            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="onSubmitPictureForm"
-            >PUBLICAR</a-button
-          >
-        </div>
-      </template>
-    </a-modal>
-
-    <a-modal
-      title="CREAR NUEVA CAMPAÑA"
-      v-model="addCampaingModal"
-      :maskClosable="false"
-      centered
-    >
-      <a-form :form="fileFormCampaing">
-        <span>Nombre de la campaña:</span>
-        <a-form-item>
-          <a-input
-            setFieldsValue="title"
-            placeholder="Ingresa el nombre de la campaña"
-            v-decorator="[
-              'title',
-              {
-                rules: [{ required: true, message: 'Favor de llenar el campo' }]
-              }
-            ]"
-          />
-        </a-form-item>
-        <span>Vigencia de la campaña:</span>
-        <a-form-item class="modal-validity__form">
-          <a-date-picker
-            :disabledDate="disabledStartValidityDate"
-            :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
-            format="DD-MM-YYYY HH:mm:ss"
-            v-model="startValidityDate"
-            placeholder="Del"
-            @openChange="handleStartOpenChange"
-          />
-
-          <span> </span>
-
-          <a-date-picker
-            :disabledDate="disabledEndValidityDate"
-            :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
-            format="DD-MM-YYYY HH:mm:ss"
-            placeholder="Al"
-            v-model="endValidityDate"
-            :open="endOpenDate"
-            @openChange="handleEndOpenChange"
-          />
-        </a-form-item>
-      </a-form>
-      <template slot="footer">
-        <div style="text-align: center;">
-          <a-button
-            type="primary"
-            style="background-color:#009FD1; border-radius: 24px; width: 200px; margin-bottom: 20px;"
-            @click="onSubmitPictureForm"
-            >CREAR CAMPAÑA</a-button
-          >
-        </div>
-      </template>
-    </a-modal>
   </div>
 </template>
 <script>
-import { ok } from "assert";
 import moment from "moment";
 import CardProduct from "../components/stores/CardProduct";
-
-const columns = [
-  {
-    dataIndex: "name",
-    key: "name",
-    slots: { title: "customTitle" },
-    scopedSlots: { customRender: "name" }
-  },
-
-  {
-    title: "VIGENCIA",
-    dataIndex: "address",
-    key: "address",
-    scopedSlots: { customRender: "validity" }
-  },
-  {
-    title: "STATUS",
-    key: "tags",
-    dataIndex: "tags",
-    scopedSlots: { customRender: "status" }
-  },
-  {
-    title: "PEDIDO",
-    dataIndex: "age",
-    key: "age",
-    scopedSlots: { customRender: "order" }
-  },
-  {
-    title: "CERRRAR/ACTIVAR CAMPAÑA",
-    key: "action",
-    scopedSlots: { customRender: "close" }
-  },
-  {
-    key: "action",
-    scopedSlots: { customRender: "action" }
-  }
-];
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"]
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"]
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    tags: ["cool", "teacher"]
-  }
-];
+import AddCampaing from "../components/stores/AddCampaing.vue";
+import Store from "../components/stores/Store.vue";
 
 export default {
   components: {
-    CardProduct
-    //  FormFilter
+    CardProduct,
+    AddCampaing,
+    Store
   },
 
   data() {
     return {
       title: "",
-      defaultKey: ["1"],
-      data,
-      columns,
+      stepStore: null,
       image:
         "http://dev.fuxcorp.net/memo/Bioderma/Imgs/nuestrapiel_con_marcaDagua.jpg",
       description: "",
       points: "",
       productId: "",
-      newId: "",
-      newTitle: "",
-      newDescription: "",
       newPoints: "",
-      newImage: "",
       proudcts: [
         {
           id: 0,
@@ -706,38 +107,30 @@ export default {
           isActive: true
         }
       ],
-      fileForm: this.$form.createForm(this),
-      fileFormCampaing: this.$form.createForm(this),
-      fileFormEdit: this.$form.createForm(this),
-      addProductModal: false,
-      addCampaingModal: false,
-      editProductModal: false,
-      deleteProductModal: false,
-      closeCampaingModal: false,
-      fileList: [],
-      uploadFileStatus: true,
-      isLoagindProducts: false,
-      startValidityDate: null,
-      endValidityDate: null,
-
-      endOpenDate: false
+      blockStores: false,
+      activeTab: 1,
+      isLoagindProducts: false
     };
+  },
+  created() {
+    this.blockStores = false;
   },
 
   mounted() {
     this.getListProducts();
-    this.defaultKey = ["1"];
   },
-
   methods: {
     moment,
+    onChangeTab(activeTabKey) {
+      this.activeTab = activeTabKey;
+    },
     async getListProducts() {
       try {
         this.isLoagindProducts = true;
         const responseList = await this.$axios.get("product");
-        //console.log(responseList.data.products);
         this.proudcts = responseList.data.products;
         this.isLoagindProducts = false;
+        console.log({ responseList });
       } catch (err) {
         this.isLoagindProducts = false;
         this.$notification["error"]({
@@ -746,218 +139,22 @@ export default {
         });
       }
     },
-    onDeleteProductModal() {
-      this.deleteProductModal = true;
+    setProductsList(products) {
+      this.proudcts = products;
     },
-    onMenuSelect(e) {
-      switch (e.key) {
-        case "1":
-          this.defaultKey = ["1"];
-          break;
-        case "2":
-          this.defaultKey = ["2"];
-          break;
-
-        default:
-          break;
-      }
+    onOpenNewCampaing() {
+      this.stepStore = 0;
+      this.blockStores = true;
     },
-    onOpenNewProductModal() {
-      this.fileForm.resetFields();
-      this.fileList = [];
-      this.addProductModal = true;
+    changeRestartSteps() {
+      this.stepStore = null;
+      this.blockStores = false;
     },
-
-    onOpenNewCampaingModal() {
-      this.fileFormCampaing.resetFields();
-      this.addCampaingModal = true;
+    changeBlockState(state) {
+      this.blockStores = state;
     },
-    onCloseCampaing(active) {
-      if (!active) {
-        this.closeCampaingModal = true;
-      }
-    },
-    deletingModal() {
-      this.deleteProduct(this.newId);
-      this.deleteProductModal = false;
-    },
-    closingModal() {
-      this.closeCampaingModal = false;
-    },
-    gettingData(title, description, points, image) {
-      this.fileList = [];
-      this.newTitle = title;
-      this.newDescription = description;
-      this.newPoints = points;
-      this.newImage = image;
-      this.fileFormEdit.resetFields();
-      this.editProductModal = true;
-    },
-    gettingId(id) {
-      this.newId = id;
-    },
-    async deleteProduct(id) {
-      const responseDelete = await this.$axios.delete(`product/${id}`);
-      if (responseDelete.data.status == 0) {
-        this.successDeletingProduct();
-      } else {
-        this.failDeletingProduct();
-      }
-    },
-    onSubmitEditProduct(id) {
-      this.fileFormEdit.validateFields(async (err, values) => {
-        if (!err) {
-          // console.log("Datos recibidos: ", image);
-          try {
-            // console.log("VALUES: ", values);
-            const response = await this.$axios.put("product", {
-              productId: this.newId,
-              title: values.title,
-              image:
-                typeof this.fileList === "undefined" ||
-                this.fileList.length == 0
-                  ? this.newImage
-                  : values.upload.fileList[0].response,
-              description: values.description,
-              points: values.points
-            });
-            if (response.data.status == 0) {
-              this.fileFormEdit.resetFields();
-              this.fileList = [];
-              this.getListProducts();
-            } else {
-              this.failEditingProduct();
-            }
-            this.editProductModal = false;
-          } catch (error) {
-            this.$notification["error"]({
-              message: "Ha ocurrido un error",
-              description: "Ha ocurdido un error durante esta acción."
-            });
-          }
-        }
-      });
-    },
-    handleChange() {},
-    confirmClose() {},
-    cancelPictureForm() {
-      alert("Cancelar");
-    },
-    success() {
-      this.getListProducts();
-    },
-    failAddingProduct() {
-      this.$notification["error"]({
-        message: "Error al añadir un producto",
-        description:
-          "Se ha producido un error al añadir un producto, favor de intentarlo más tarde."
-      });
-    },
-    failEditingProduct() {
-      this.$notification["error"]({
-        message: "Error al editar el producto",
-        description:
-          "Se ha producido un error al editar este producto, favor de intentarlo más tarde."
-      });
-    },
-    successDeletingProduct() {
-      this.$notification["success"]({
-        message: "Producto eliminado",
-        description: "El producto se elimino correctamente."
-      });
-      this.getListProducts();
-    },
-    failDeletingProduct() {
-      this.$notification["error"]({
-        message: "Error al eliminar el producto",
-        description:
-          "Se ha producido un error al eliminar este producto, favor de intentarlo más tarde."
-      });
-    },
-    onSubmitPictureForm() {
-      //alert("Subir");
-      this.fileForm.validateFields(async (err, values) => {
-        if (!err) {
-          // console.log("Datos recibidos: ", values);
-          try {
-            const response = await this.$axios.post("product", {
-              title: values.title,
-              image: values.upload.fileList[0].response,
-              description: values.description,
-              points: values.points
-            });
-            if (response.data.status == 0) {
-              this.success();
-              this.fileForm.resetFields();
-              this.fileList = [];
-            } else {
-              this.failAddingProduct();
-            }
-            this.addProductModal = false;
-          } catch (error) {
-            this.$notification["error"]({
-              message: "Ha ocurrido un error",
-              description: "Ha ocurdido un error para esta acción."
-            });
-          }
-        }
-      });
-    },
-    handleChangeFileUpload(info) {
-      if (this.uploadFileStatus) {
-        let fileList = [...info.fileList];
-        fileList = fileList.slice(-1);
-        this.fileList = fileList;
-      }
-    },
-    beforeUpload(file) {
-      let status = true;
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
-
-      if (!isJPG && !isPNG) {
-        this.$message.error("Este formato no esta permido.");
-        status = false;
-      }
-
-      if (isJPG || isPNG) {
-        const isLt2M = file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-          this.$message.error("La imagen debe ser menor a 2MB.");
-          status = false;
-        }
-      }
-
-      // console.log("STATUS: ", status);
-      this.uploadFileStatus = status;
-      return status;
-    },
-    handleStartOpenChange(open) {
-      if (!open) {
-        this.endOpenDate = true;
-      }
-    },
-
-    disabledValidityDate(current) {
-      // Can not select days before today and today
-      return current && current < moment().endOf("day");
-    },
-    disabledStartValidityDate(startValidityDate) {
-      const endValidityDate = this.endValidityDate;
-      if (!startValidityDate || !endValidityDate) {
-        return false;
-      }
-      return (
-        startValidityDate.valueOf() > endValidityDate.valueOf() &&
-        disabledValidityDate(startValidityDate)
-      );
-    },
-    disabledEndValidityDate(endValidityDate) {
-      const startValidityDate = this.startValidityDate;
-      if (!endValidityDate || !startValidityDate) {
-        return false;
-      }
-      return startValidityDate.valueOf() >= endValidityDate.valueOf();
+    changeStepStore(step) {
+      this.stepStore = step;
     }
   }
 };
@@ -1009,30 +206,12 @@ export default {
 .ant-tabs-bar {
   margin-bottom: 0 !important;
 }
-.side_inner {
-  max-height: 100%;
-  height: 100%;
-  flex: 1;
-  background: #526987;
-  /* padding-right: 12px;
-  padding-left: 8px; */
-}
 .fl {
   display: flex;
   min-width: 100%;
+  min-height: 100vh;
 }
-.anuncio {
-  width: 100%;
-}
-.anuncio-tag {
-  width: 100%;
-  height: 100%;
-  padding: 0.2rem 0;
-  margin-right: 0;
-}
-.header-tab {
-  background: white;
-  height: 80px;
-  padding: 0;
+*::-webkit-scrollbar {
+  opacity: 0;
 }
 </style>
