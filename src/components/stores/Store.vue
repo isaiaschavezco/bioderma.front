@@ -427,6 +427,7 @@ export default {
         const { data, status } = await this.$axios.get(
           `campaingstore/${this.typeStore}`
         );
+        console.log({ data });
         if (data.status === 0) {
           this.campaings = data.campaings;
         }
